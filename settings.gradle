@@ -1,0 +1,4 @@
+rootProject.name = 'JK Movie Info Dodo'
+
+include 'observer'
+
