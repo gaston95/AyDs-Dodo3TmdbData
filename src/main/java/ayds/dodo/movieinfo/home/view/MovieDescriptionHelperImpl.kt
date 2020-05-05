@@ -32,10 +32,11 @@ internal class MovieDescriptionHelperImpl : MovieDescriptionHelper {
             if (movie.isLocallyStoraged) {
                 title = "[*]" + movie.title
             }
-            (title + " - " + movie.year + "\n\n"
-                    + "Director: " + movie.director + "\n\n"
-                    + "Actors: " + movie.actors + "\n\n"
-                    + "Ratings: \n" + ratings.toString() + "\n"
+            ("<html><body style='width: 400px'>" +
+                    title + " - " + movie.year + "<br><br>"
+                    + "Director: " + movie.director + "<br><br>"
+                    + "Actors: " + movie.actors + "<br><br>"
+                    + "Ratings: <br>" + ratings.toString() + "<br>"
                     + movie.plot)
         }
     }

@@ -8,16 +8,17 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 
 public class MainWindow implements HomeView {
   private static final String WINDOW_TITLE = "Movies Info Dodo";
 
-  private JTextField descriptionTextField;
+  private JTextField termTextField;
   private JButton searchButton;
   private JPanel contentPanel;
-  private JTextPane descriptionPanel;
+  private JTextPane descriptionPane;
   private JPanel posterPanel;
   private JButton modeDetailsButton;
   private JLabel posterImageLabel;
@@ -34,6 +35,7 @@ public class MainWindow implements HomeView {
     this.homeModel = homeModel;
     this.movieDescriptionHelper = movieDescriptionHelper;
 
+    buildUi();
     initUi();
     initListeners();
     initObservers();
@@ -43,6 +45,7 @@ public class MainWindow implements HomeView {
   public void openView() {
     JFrame frame = new JFrame(WINDOW_TITLE);
     frame.setContentPane(this.contentPanel);
+    frame.setMinimumSize(new Dimension(600, 800));
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     frame.pack();
     frame.setVisible(true);
@@ -51,13 +54,53 @@ public class MainWindow implements HomeView {
   @NotNull
   @Override
   public String getMovieTitle() {
-    return descriptionTextField.getText();
+    return termTextField.getText();
   }
 
   @NotNull
   @Override
   public Observable<UiEvent> onUiEvent() {
     return onActionSubject;
+  }
+
+  private void buildUi() {
+    contentPanel = new JPanel();
+    contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS));
+
+    JPanel searchTermPanel = new JPanel();
+    searchTermPanel.setLayout(new BorderLayout());
+    searchTermPanel.setMaximumSize(new Dimension(400, 12));
+    termTextField = new JFormattedTextField();
+    searchTermPanel.add(termTextField);
+    contentPanel.add(searchTermPanel);
+
+    JPanel searchButtonPanel = new JPanel();
+    searchButtonPanel.setLayout(new BorderLayout());
+    searchButtonPanel.setMaximumSize(new Dimension(400, 12));
+    searchButton = new JButton("Search");
+    searchButtonPanel.add(searchButton);
+    contentPanel.add(searchButtonPanel);
+
+    JPanel descriptionPanel = new JPanel();
+    descriptionPane = new JTextPane();
+    descriptionPane.setEditable(false);
+    descriptionPane.setContentType("text/html");
+    descriptionPane.setMaximumSize(new Dimension(600, 400));
+    descriptionPanel.add(descriptionPane);
+    contentPanel.add(descriptionPanel);
+
+    JPanel moreDetailsButtonPanel = new JPanel();
+    moreDetailsButtonPanel.setLayout(new BorderLayout());
+    moreDetailsButtonPanel.setMaximumSize(new Dimension(400, 12));
+    modeDetailsButton = new JButton("More Details");
+    modeDetailsButton.setEnabled(false);
+    moreDetailsButtonPanel.add(modeDetailsButton);
+    descriptionPanel.add(moreDetailsButtonPanel);
+    contentPanel.add(moreDetailsButtonPanel);
+
+    posterPanel = new JPanel();
+    contentPanel.add(posterPanel);
+
   }
 
   private void initUi() {
@@ -89,7 +132,7 @@ public class MainWindow implements HomeView {
   }
 
   private void updateMovieDescription(OmdbMovie movie) {
-    descriptionPanel.setText(movieDescriptionHelper.getMovieDescriptionText(movie));
+    descriptionPane.setText(movieDescriptionHelper.getMovieDescriptionText(movie));
   }
 
   private void updateMoviePoster(String url) {

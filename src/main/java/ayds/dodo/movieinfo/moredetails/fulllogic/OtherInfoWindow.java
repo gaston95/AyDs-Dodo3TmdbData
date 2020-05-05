@@ -155,7 +155,26 @@ public class OtherInfoWindow {
 
     OtherInfoWindow win = new OtherInfoWindow();
 
+    win.contentPane = new JPanel();
+    win.contentPane.setLayout(new BoxLayout(win.contentPane, BoxLayout.PAGE_AXIS));
+
+    JLabel label = new JLabel();
+    label.setText("Data from The Movie Data Base");
+    win.contentPane.add(label);
+
+    win.imagePanel = new JPanel();
+    win.contentPane.add(win.imagePanel);
+
+    JPanel descriptionPanel = new JPanel();
+    win.textPane2 = new JTextPane();
+    win.textPane2.setEditable(false);
+    win.textPane2.setContentType("text/html");
+    win.textPane2.setMaximumSize(new Dimension(600, 400));
+    descriptionPanel.add( win.textPane2);
+    win.contentPane.add(descriptionPanel);
+
     JFrame frame = new JFrame("Movie Info Dodo");
+    frame.setMinimumSize(new Dimension(600, 600));
     frame.setContentPane(win.contentPane);
     frame.pack();
     frame.setVisible(true);
@@ -173,7 +192,7 @@ public class OtherInfoWindow {
 
   public static String textToHtml(String text, String term) {
 
-    StringBuilder builder = new StringBuilder();
+    StringBuilder builder = new StringBuilder("<html><body style='width: 400px'>");
 
     builder.append("<font face=\"arial\">");
 
