@@ -54,7 +54,6 @@ public class OtherInfoWindow {
         String path = DataBase.getImageUrl(movie.getTitle());
 
         if (text != null && path != null) { // exists in db
-
           text = "[*]" + text;
         } else { // get from service
           Response<String> callResponse;
@@ -192,7 +191,7 @@ public class OtherInfoWindow {
 
   public static String textToHtml(String text, String term) {
 
-    StringBuilder builder = new StringBuilder("<html><body style='width: 400px'>");
+    StringBuilder builder = new StringBuilder("<html><body style=\"width: 400px\">");
 
     builder.append("<font face=\"arial\">");
 

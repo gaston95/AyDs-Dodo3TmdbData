@@ -32,7 +32,7 @@ internal class MovieDescriptionHelperImpl : MovieDescriptionHelper {
             if (movie.isLocallyStoraged) {
                 title = "[*]" + movie.title
             }
-            ("<html><body style='width: 400px'>" +
+            ("<html><body style=\"width: 400px\">" +
                     title + " - " + movie.year + "<br><br>"
                     + "Director: " + movie.director + "<br><br>"
                     + "Actors: " + movie.actors + "<br><br>"
