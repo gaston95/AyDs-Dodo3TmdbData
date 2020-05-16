@@ -117,7 +117,10 @@ public class MainWindow implements HomeView {
       onActionSubject.notify(UiEvent.SEARCH_ACTION);
       modeDetailsButton.setEnabled(false);
     });
-
+    termTextField.addActionListener( e-> {
+      onActionSubject.notify(UiEvent.SEARCH_ACTION);
+      modeDetailsButton.setEnabled(false);
+    });
     modeDetailsButton.addActionListener(e -> onActionSubject.notify(UiEvent.MORE_DETAILS_ACTION));
   }
 
