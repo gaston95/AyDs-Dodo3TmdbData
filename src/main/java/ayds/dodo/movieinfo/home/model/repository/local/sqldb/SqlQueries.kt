@@ -22,6 +22,7 @@ internal interface SqlQueries {
         const val TITLE_COLUMN = "title"
         const val YEAR_COLUMN = "year"
         const val PLOT_COLUMN = "plot"
+        const val RUNTIME_COLUMN = "runtime"
         const val DIRECTOR_COLUMN = "director"
         const val ACTORS_COLUMN = "actors"
         const val POSTER_URL_COLUMN = "posterUrl"
@@ -33,6 +34,7 @@ internal interface SqlQueries {
                 TITLE_COLUMN + " string, " +
                 YEAR_COLUMN + " integer," +
                 PLOT_COLUMN + " string, " +
+                RUNTIME_COLUMN + " string, " +
                 DIRECTOR_COLUMN + " string, " +
                 ACTORS_COLUMN + " string, " +
                 POSTER_URL_COLUMN + " string" +
