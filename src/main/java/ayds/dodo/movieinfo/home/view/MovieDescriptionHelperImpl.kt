@@ -22,44 +22,42 @@ internal class MovieDescriptionHelperImpl : MovieDescriptionHelper {
                 + "Runtime: " + movie.runtime + "<br><br>"
                 + "Director: " + movie.director + "<br><br>"
                 + "Actors: " + movie.actors + "<br><br>"
-                + "Ratings: <br>" + getRatingBuilder(movie).toString() + "<br>"
+                + "Ratings: <br>" + getRatings(movie) + "<br>"
                 + movie.plot)
 
     private fun getTitle(movie: OmdbMovie): String {
-        var title = movie.title
-        if (movie.isLocallyStoraged)
-            title = "[*]" + movie.title
+        var title = if (movie.isLocallyStoraged) "[*]" else ""
+        title += movie.title
         return title
     }
 
-    private fun getRatingBuilder(movie: OmdbMovie): StringBuilder {
-        val allRatings = StringBuilder()
+    private fun getRatings(movie: OmdbMovie): String {
+        var allRatings = ""
         for (rating in movie.ratings) {
-            allRatings.append(getRating(rating))
+            allRatings += getRating(rating)
         }
         return allRatings
     }
 
     private fun getRating(rating: Rating): String {
-        var stringRating = ""
-        when (rating.source) {
-            "Internet Movie Database" -> return setIMDBRating(rating)
+        return when (rating.source) {
+            "Internet Movie Database" -> getIMDBRating(rating)
 
-            "Metacritic" -> return setMetacriticRating(rating)
+            "Metacritic" -> getMetacriticRating(rating)
 
-            else -> return setOtherRating(rating)
+            else -> getOtherRating(rating)
         }
     }
 
-    private fun setIMDBRating(rating: Rating): String {
+    private fun getIMDBRating(rating: Rating): String {
         return "IMDB ${(rating.value.split("/").toTypedArray())[0]} \n"
     }
 
-    private fun setMetacriticRating(rating: Rating): String {
+    private fun getMetacriticRating(rating: Rating): String {
         return "${rating.source} ${(rating.value.split("/").toTypedArray())[0]}% \n"
     }
 
-    private fun setOtherRating(rating: Rating): String {
+    private fun getOtherRating(rating: Rating): String {
         return "${rating.source} ${rating.value} \n"
     }
 }
