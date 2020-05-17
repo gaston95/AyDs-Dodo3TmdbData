@@ -125,13 +125,18 @@ public class MainWindow implements HomeView {
   }
 
   private void initObservers() {
+    homeModel.connectionObservable().subscribe(this::showDialog);
     homeModel.movieObservable().subscribe(this::updateMovieInfo);
   }
 
+  private void showDialog(UiEvent event){
+    JOptionPane.showMessageDialog(descriptionPane, "No se pudo conectar con el servidor.");
+  }
+
   private void updateMovieInfo(OmdbMovie movie) {
-    updateMovieDescription(movie);
-    updateMoviePoster(movie.getPosterUrl());
-    enableMoreDetails(movie);
+      updateMovieDescription(movie);
+      updateMoviePoster(movie.getPosterUrl());
+      enableMoreDetails(movie);
   }
 
   private void updateMovieDescription(OmdbMovie movie) {

@@ -1,5 +1,5 @@
 package ayds.dodo.movieinfo.home.view
 
 enum class UiEvent {
-    SEARCH_ACTION, MORE_DETAILS_ACTION
+    SEARCH_ACTION, MORE_DETAILS_ACTION, NO_INTERNET
 }
