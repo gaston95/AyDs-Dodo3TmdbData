@@ -8,15 +8,8 @@ interface MovieDescriptionHelper {
 }
 
 internal class MovieDescriptionHelperImpl : MovieDescriptionHelper {
-    override fun getMovieDescriptionText(movie: OmdbMovie): String {
-        return if (movie.title.isEmpty()) {
-            "Movie not found"
-        } else {
-            createMovieString(movie)
-        }
-    }
 
-    private fun createMovieString(movie: OmdbMovie) =
+    override fun getMovieDescriptionText(movie: OmdbMovie) =
         ("<html><body style=\"width: 400px\">"
                 + getTitle(movie) + " - " + movie.year + "<br><br>"
                 + "Runtime: " + movie.runtime + "<br><br>"
