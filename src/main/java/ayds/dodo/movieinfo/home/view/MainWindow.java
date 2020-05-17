@@ -26,7 +26,7 @@ public class MainWindow implements HomeView {
   private final HomeModel homeModel;
   private final MovieDescriptionHelper movieDescriptionHelper;
 
-  private Subject<UiEvent> onActionSubject = new Subject<>();
+  private final Subject<UiEvent> onActionSubject = new Subject<>();
 
   private final static String SPLASH_URL = "https://springfieldfiles.com/albums/books/0373.JPG";
 

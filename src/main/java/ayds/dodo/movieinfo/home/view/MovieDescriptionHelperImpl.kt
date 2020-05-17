@@ -25,11 +25,8 @@ internal class MovieDescriptionHelperImpl : MovieDescriptionHelper {
                 + "Ratings: <br>" + getRatings(movie) + "<br>"
                 + movie.plot)
 
-    private fun getTitle(movie: OmdbMovie): String {
-        var title = if (movie.isLocallyStoraged) "[*]" else ""
-        title += movie.title
-        return title
-    }
+    private fun getTitle(movie: OmdbMovie) =
+            (if (movie.isLocallyStoraged) "[*]" else "") + movie.title
 
     private fun getRatings(movie: OmdbMovie): String {
         var allRatings = ""
@@ -49,15 +46,12 @@ internal class MovieDescriptionHelperImpl : MovieDescriptionHelper {
         }
     }
 
-    private fun getIMDBRating(rating: Rating): String {
-        return "IMDB ${(rating.value.split("/").toTypedArray())[0]} \n"
-    }
+    private fun getIMDBRating(rating: Rating) =
+            "IMDB ${(rating.value.split("/").toTypedArray())[0]} \n"
 
-    private fun getMetacriticRating(rating: Rating): String {
-        return "${rating.source} ${(rating.value.split("/").toTypedArray())[0]}% \n"
-    }
+    private fun getMetacriticRating(rating: Rating) =
+            "${rating.source} ${(rating.value.split("/").toTypedArray())[0]}% \n"
 
-    private fun getOtherRating(rating: Rating): String {
-        return "${rating.source} ${rating.value} \n"
-    }
+    private fun getOtherRating(rating: Rating) =
+            "${rating.source} ${rating.value} \n"
 }
