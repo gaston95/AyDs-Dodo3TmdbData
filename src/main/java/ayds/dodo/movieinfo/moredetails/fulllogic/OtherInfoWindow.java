@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -58,7 +59,7 @@ public class OtherInfoWindow {
         } else { // get from service
           Response<String> callResponse;
           try {
-            text = "More details not found";
+            text = "Error while searching for more details";
             callResponse = tmdbAPI.getTerm(movie.getTitle()).execute();
 
             System.out.println("JSON " + callResponse.body());

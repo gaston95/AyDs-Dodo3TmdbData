@@ -135,12 +135,7 @@ public class MainWindow implements HomeView {
   }
 
   private void updateMovieDescription(OmdbMovie movie) {
-    descriptionPane.setText(getDescription((movie)));
-  }
-
-  private String getDescription(OmdbMovie movie){
-      return movie.getTitle().isEmpty() ? "Movie not found" :
-              movieDescriptionHelper.getMovieDescriptionText(movie);
+    descriptionPane.setText(movieDescriptionHelper.getMovieDescriptionText(movie));
   }
 
   private void updateMoviePoster(String url) {
