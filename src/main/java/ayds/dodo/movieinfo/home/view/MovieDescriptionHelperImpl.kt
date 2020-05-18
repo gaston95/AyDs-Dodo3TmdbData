@@ -46,7 +46,7 @@ internal class MovieDescriptionHelperImpl : MovieDescriptionHelper {
         val allRatings = StringBuilder()
 
         movie.ratings.forEach{
-            val ratingView = RatingViewFactory.get(it)
+            val ratingView = RatingViewFactory.getRatingViews(it)
             allRatings.append(ratingView.getRatingTitle())
                 .append(ratingSeparator)
                 .append(ratingView.getRatingScore())

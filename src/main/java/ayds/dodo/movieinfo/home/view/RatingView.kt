@@ -10,7 +10,7 @@ interface RatingView {
 
 object RatingViewFactory {
 
-    fun get(rating: Rating): RatingView =
+    fun getRatingViews(rating: Rating): RatingView =
             when(rating.source) {
                 "Internet Movie Database" -> IMDBRatingView(rating)
                 "Metacritic" -> MetacriticView(rating)
@@ -18,24 +18,18 @@ object RatingViewFactory {
             }
 }
 
-class IMDBRatingView(private val rating: Rating): RatingView {
+class IMDBRatingView(private val rating: Rating) : RatingView {
 
     override fun getRatingTitle(): String = "IMDB"
 
-    override fun getRatingScore(): String {
-        val score = rating.value.split("/").toTypedArray()
-        return score[0]
-    }
+    override fun getRatingScore(): String = rating.value.split("/").toTypedArray()[0]
 }
 
 class MetacriticView(private val rating: Rating): RatingView {
 
     override fun getRatingTitle(): String = "Metacritic"
 
-    override fun getRatingScore(): String {
-        val score = rating.value.split("/").toTypedArray()
-        return score[0] + "%"
-    }
+    override fun getRatingScore(): String = rating.value.split("/").toTypedArray()[0] + "%"
 }
 
 class DefaultRatingview(private val rating: Rating): RatingView {
