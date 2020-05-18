@@ -2,7 +2,7 @@ package ayds.dodo.movieinfo.home.model.entities
 
 import java.util.*
 
-class OmdbMovie {
+open class OmdbMovie {
     var title = ""
     var year = ""
     var plot = ""
@@ -13,3 +13,5 @@ class OmdbMovie {
     var isLocallyStoraged = false
     var ratings: List<Rating> = ArrayList()
 }
+
+object EmptyMovie: OmdbMovie()
