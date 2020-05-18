@@ -15,8 +15,12 @@ class OmdbRepositoryImpl(
         when {
             movie != null -> markMovieAsLocal(movie)
             else -> {
-                movie = externalService.getMovie(title)
-                localStorage.saveMovie(title, movie)
+                try {
+                    movie = externalService.getMovie(title)
+                    localStorage.saveMovie(title, movie)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
         return movie
