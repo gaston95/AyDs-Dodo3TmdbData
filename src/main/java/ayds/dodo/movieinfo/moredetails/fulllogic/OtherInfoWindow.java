@@ -13,7 +13,6 @@ import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -60,11 +59,11 @@ public class OtherInfoWindow {
         } else { // get from service
           Response<String> callResponse;
           try {
-            text = "Error while searching for more details";
             callResponse = tmdbAPI.getTerm(movie.getTitle()).execute();
 
             System.out.println("JSON " + callResponse.body());
 
+            
             Gson gson = new Gson();
             JsonObject jobj = gson.fromJson(callResponse.body(), JsonObject.class);
 
@@ -111,6 +110,7 @@ public class OtherInfoWindow {
                 path = "https://www.themoviedb.org/assets/2/v4/logos/256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png";
               }
 
+              
               // save to DB  <o/
 
               DataBase.saveMovieInfo(movie.getTitle(), text, path);
@@ -122,6 +122,7 @@ public class OtherInfoWindow {
 
         textPane2.setText(text);
 
+        
         // set image
         try {
           UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
