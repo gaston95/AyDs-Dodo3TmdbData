@@ -16,14 +16,7 @@ internal class MovieDescriptionHelperImpl : MovieDescriptionHelper {
     private val ratingSeparator = ": "
 
     override fun getMovieDescriptionText(movie: OmdbMovie): String =
-       when {
-           movie.isNullMovie() -> "Connection error"
-           movie.isEmptyMovie() -> "Movie not found"
-           else -> movie.createMovieString()
-       }
-
-
-    private fun OmdbMovie.isNullMovie() = this == EmptyMovie
+       if (movie.isEmptyMovie()) "Movie not found" else movie.createMovieString()
 
     private fun OmdbMovie.isEmptyMovie() = this.title.isEmpty()
 
@@ -52,9 +45,6 @@ internal class MovieDescriptionHelperImpl : MovieDescriptionHelper {
                 .append(ratingView.getRatingScore())
                 .append(singleLineBreak)
         }
-
         return allRatings.toString()
     }
-
-
 }
