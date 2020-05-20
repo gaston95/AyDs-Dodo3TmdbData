@@ -54,12 +54,10 @@ object DataBase {
             val statement = connection.createStatement()
             statement.queryTimeout = 30 // set timeout to 30 sec.
             val rs = statement.executeQuery("select * from info WHERE title = '$title'")
-            if(!rs.isClosed) {
-                rs.next()
-                return rs.getString("plot")
-            }
+            rs.next()
+            return rs.getString("plot")
         } catch (e: SQLException) { // if the error message is "out of memory",
-            // it probably means no database file is found
+// it probably means no database file is found
             System.err.println("Get title error " + e.message)
         } finally {
             try {
