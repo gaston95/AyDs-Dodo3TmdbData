@@ -186,6 +186,12 @@ public class OtherInfoWindow {
     frame.setVisible(true);
 
     DataBase.createNewDatabase();
+    DataBase.saveMovieInfo("test", "sarasa", "");
+
+
+    System.out.println(DataBase.getOverview("test"));
+    System.out.println(DataBase.getOverview("nada"));
+
 
     win.getMoviePlot(movie);
   }
