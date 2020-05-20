@@ -171,7 +171,7 @@ public class OtherInfoWindow {
     win.imagePanel = new JPanel();
     win.contentPane.add(win.imagePanel);
 
-    JPanel descriptionPanel = new JPanel(new BorderLayout());
+    JPanel descriptionPanel = new JPanel();
     win.textPane2 = new JTextPane();
     win.textPane2.setEditable(false);
     win.textPane2.setContentType("text/html");
