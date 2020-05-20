@@ -1,6 +1,6 @@
 package ayds.dodo.movieinfo.home.view
 
-import ayds.dodo.movieinfo.home.model.entities.NullMovie
+import ayds.dodo.movieinfo.home.model.entities.EmptyMovie
 import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
 
 interface MovieDescriptionHelper {
@@ -23,7 +23,7 @@ internal class MovieDescriptionHelperImpl : MovieDescriptionHelper {
        }
 
 
-    private fun OmdbMovie.isNullMovie() = this == NullMovie
+    private fun OmdbMovie.isNullMovie() = this == EmptyMovie
 
     private fun OmdbMovie.isEmptyMovie() = this.title.isEmpty()
 

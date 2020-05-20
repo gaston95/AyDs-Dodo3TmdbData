@@ -1,6 +1,6 @@
 package ayds.dodo.movieinfo.home.model.repository
 
-import ayds.dodo.movieinfo.home.model.entities.NullMovie
+import ayds.dodo.movieinfo.home.model.entities.EmptyMovie
 import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
 import ayds.dodo.movieinfo.home.model.repository.external.ExternalService
 import ayds.dodo.movieinfo.home.model.repository.local.LocalStorage
@@ -21,7 +21,7 @@ class OmdbRepositoryImpl(
                     localStorage.saveMovie(title, movie)
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    movie = NullMovie
+                    movie = EmptyMovie
                 }
             }
         }

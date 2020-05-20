@@ -14,4 +14,4 @@ open class OmdbMovie {
     var ratings: List<Rating> = ArrayList()
 }
 
-object NullMovie: OmdbMovie()
+object EmptyMovie: OmdbMovie()
