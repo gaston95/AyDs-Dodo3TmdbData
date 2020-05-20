@@ -13,7 +13,6 @@ import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -59,7 +58,6 @@ public class OtherInfoWindow {
         } else { // get from service
           Response<String> callResponse;
           try {
-            text = "Error while searching for more details";
             callResponse = tmdbAPI.getTerm(movie.getTitle()).execute();
 
             System.out.println("JSON " + callResponse.body());
@@ -188,7 +186,7 @@ public class OtherInfoWindow {
 
   public static String textToHtml(String text, String term) {
 
-    StringBuilder builder = new StringBuilder("<html><body style=\"width: 400px\">");
+    StringBuilder builder = new StringBuilder("<html><body style='width: 400px'>");
 
     builder.append("<font face=\"arial\">");
 
