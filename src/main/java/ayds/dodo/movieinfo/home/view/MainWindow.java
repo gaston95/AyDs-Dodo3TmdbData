@@ -26,7 +26,7 @@ public class MainWindow implements HomeView {
   private final HomeModel homeModel;
   private final MovieDescriptionHelper movieDescriptionHelper;
 
-  private Subject<UiEvent> onActionSubject = new Subject<>();
+  private final Subject<UiEvent> onActionSubject = new Subject<>();
 
   private final static String SPLASH_URL = "https://springfieldfiles.com/albums/books/0373.JPG";
 
@@ -117,7 +117,6 @@ public class MainWindow implements HomeView {
       onActionSubject.notify(UiEvent.SEARCH_ACTION);
       modeDetailsButton.setEnabled(false);
     });
-
     modeDetailsButton.addActionListener(e -> onActionSubject.notify(UiEvent.MORE_DETAILS_ACTION));
   }
 

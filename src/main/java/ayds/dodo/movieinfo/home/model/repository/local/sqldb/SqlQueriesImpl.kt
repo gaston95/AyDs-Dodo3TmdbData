@@ -14,6 +14,7 @@ internal class SqlQueriesImpl : SqlQueries {
                 "'${getEscapedString(movie.title)}', " +
                 "'${movie.year}'," +
                 " '${getEscapedString(movie.plot)}', " +
+                " '${getEscapedString(movie.runtime)}', " +
                 "'${getEscapedString(movie.director)}'," +
                 " '${getEscapedString(movie.actors)}', " +
                 "'${movie.posterUrl}')"
@@ -34,6 +35,7 @@ internal class SqlQueriesImpl : SqlQueries {
                     title = resultSet.getString(SqlQueries.TITLE_COLUMN)
                     year = resultSet.getString(SqlQueries.YEAR_COLUMN)
                     plot = resultSet.getString(SqlQueries.PLOT_COLUMN)
+                    runtime = resultSet.getString(SqlQueries.RUNTIME_COLUMN)
                     director = resultSet.getString(SqlQueries.DIRECTOR_COLUMN)
                     actors = resultSet.getString(SqlQueries.ACTORS_COLUMN)
                     posterUrl = resultSet.getString(SqlQueries.POSTER_URL_COLUMN)

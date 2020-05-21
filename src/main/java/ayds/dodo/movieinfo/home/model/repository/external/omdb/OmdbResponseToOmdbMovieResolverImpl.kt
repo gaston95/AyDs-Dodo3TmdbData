@@ -21,6 +21,7 @@ internal class OmdbResponseToOmdbMovieResolverImpl : OmdbResponseToOmdbMovieReso
         if (response == "True") {
             movie.title = jsonObject["Title"].asString
             movie.year = jsonObject["Year"].asString
+            movie.runtime = jsonObject["Runtime"].asString
             movie.plot = jsonObject["Plot"].asString
             movie.director = jsonObject["Director"].asString
             movie.actors = jsonObject["Actors"].asString

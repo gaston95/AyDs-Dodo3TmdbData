@@ -1,5 +1,6 @@
 package ayds.dodo.movieinfo.home.view
 
+import ayds.dodo.movieinfo.home.model.entities.EmptyMovie
 import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
 
 interface MovieDescriptionHelper {
@@ -7,37 +8,43 @@ interface MovieDescriptionHelper {
 }
 
 internal class MovieDescriptionHelperImpl : MovieDescriptionHelper {
-    override fun getMovieDescriptionText(movie: OmdbMovie): String {
-        return if (movie.title.isEmpty()) {
-            "Movie not found"
-        } else {
-            val ratings = StringBuilder()
-            for (rating in movie.ratings) {
-                when (rating.source) {
-                    "Internet Movie Database" -> {
-                        val score = rating.value.split("/").toTypedArray()
-                        ratings.append("IMDB").append(" ").append(score[0]).append("\n")
-                    }
-                    "Rotten Tomatoes" -> ratings.append(rating.source).append(" ").append(rating.value).append(
-                        "\n"
-                    )
-                    "Metacritic" -> {
-                        val score = rating.value.split("/").toTypedArray()
-                        ratings.append(rating.source).append(" ").append(score[0]).append("%").append("\n")
-                    }
-                    else -> ratings.append(rating.source).append(" ").append(rating.value).append("\n")
-                }
+
+    private val htmlHeading = "<html><body style=\"width: 400px\">"
+    private val singleLineBreak = "<br>"
+    private val doubleLineBreak = "<br><br>"
+    private val localMovie = "[*]"
+    private val ratingSeparator = ": "
+
+    override fun getMovieDescriptionText(movie: OmdbMovie): String =
+       if (movie.isEmptyMovie()) "Movie not found" else movie.createMovieString()
+
+    private fun OmdbMovie.isEmptyMovie() = this == EmptyMovie || this.title.isEmpty()
+
+    private fun OmdbMovie.createMovieString() =
+        (htmlHeading
+                + getTitle() + " - " + year + doubleLineBreak
+                + "Runtime: " + runtime + doubleLineBreak
+                + "Director: " + director + doubleLineBreak
+                + "Actors: " + actors + doubleLineBreak
+                + "Ratings: "+ singleLineBreak + getRatings(this) + doubleLineBreak
+                + plot)
+
+    private fun OmdbMovie.getTitle() =
+            when {
+                isLocallyStoraged -> localMovie + title
+                else -> title
             }
-            var title = movie.title
-            if (movie.isLocallyStoraged) {
-                title = "[*]" + movie.title
-            }
-            ("<html><body style='width: 400px'>" +
-                    title + " - " + movie.year + "<br><br>"
-                    + "Director: " + movie.director + "<br><br>"
-                    + "Actors: " + movie.actors + "<br><br>"
-                    + "Ratings: <br>" + ratings.toString() + "<br>"
-                    + movie.plot)
+
+    private fun getRatings(movie: OmdbMovie): String {
+        val allRatings = StringBuilder()
+
+        movie.ratings.forEach{
+            val ratingView = RatingViewFactory.getRatingViews(it)
+            allRatings.append(ratingView.getRatingTitle())
+                .append(ratingSeparator)
+                .append(ratingView.getRatingScore())
+                .append(singleLineBreak)
         }
+        return allRatings.toString()
     }
 }
