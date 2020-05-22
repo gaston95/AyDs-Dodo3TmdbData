@@ -1,8 +1,10 @@
 package ayds.dodo.movieinfo.moredetails.fulllogic
 
+import ayds.dodo.movieinfo.moredetails.fulllogic.DataBase.getPlot
 import java.sql.*
 
 object DataBase {
+
     @JvmStatic
     fun createNewDatabase() {
         val url = "jdbc:sqlite:./extra_info.db"
@@ -45,14 +47,11 @@ object DataBase {
     @JvmStatic
     fun getOverview(title: String): String? {
         var connection: Connection? = null
-        try { // create a database connection
+        try {
             connection = getConnectionToExtraInfo()
             val statement = createStatement(connection)
-            val rs = statement.executeQuery("select * from info WHERE title = '$title'")
-            if(!rs.isClosed) {
-                rs.next()
-                return rs.getString("plot")
-            }
+            val rs = statement.getTitleResultSet(title)
+            return rs.getPlot()
         } catch (e: SQLException) { // if the error message is "out of memory",
             // it probably means no database file is found
             System.err.println("Get title error " + e.message)
@@ -73,10 +72,7 @@ object DataBase {
             connection = getConnectionToExtraInfo()
             val statement = createStatement(connection)
             val rs = statement.getTitleResultSet(title)
-            if(!rs.isClosed) {
-                rs.next()
-                return rs.getString("image_url")
-            }
+            return rs.getImageURL()
         } catch (e: SQLException) { // if the error message is "out of memory",
             // it probably means no database file is found
             System.err.println("Get image error " + e.message)
@@ -90,14 +86,30 @@ object DataBase {
         return null
     }
 
-    fun getConnectionToExtraInfo(): Connection = DriverManager.getConnection("jdbc:sqlite:./extra_info.db")
+    private fun getConnectionToExtraInfo(): Connection = DriverManager.getConnection("jdbc:sqlite:./extra_info.db")
 
-    fun createStatement(connection: Connection): Statement {
+    private fun createStatement(connection: Connection): Statement {
         val statement = connection.createStatement()
-        statement.queryTimeout = 30 // set timeout to 30 sec.
+        statement.queryTimeout = 30
         return statement
     }
 
-    fun Statement.getTitleResultSet(title: String): ResultSet =
+    private fun Statement.getTitleResultSet(title: String): ResultSet =
         this.executeQuery("select * from info WHERE title = '$title'")
+
+    fun ResultSet.getPlot(): String? {
+        return if(!this.isClosed) {
+            this.next()
+            this.getString("plot")
+        } else
+            null
+    }
+
+    private fun ResultSet.getImageURL(): String? {
+        return if(!this.isClosed) {
+            this.next()
+            this.getString("image_url")
+        } else
+            null
+    }
 }
