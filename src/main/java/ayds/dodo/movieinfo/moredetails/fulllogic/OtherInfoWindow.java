@@ -187,17 +187,24 @@ public class OtherInfoWindow {
     win.getMoviePlot(movie);
   }
 
+  private static final String html_open = "<html>";
+  private static final String body_style_width_400 = "<body style=\"width: 400px\">";
+  private static final String font_open_arial = "<font face=\"arial\">";
+  private static final String font_close = "</font>";
+  private static final String bold_open = "<b>";
+  private static final String bold_close = "</b>";
+
   public static String textToHtml(String text, String term) {
 
-    StringBuilder builder = new StringBuilder("<html><body style=\"width: 400px\">");
-    builder.append("<font face=\"arial\">");
+    StringBuilder builder = new StringBuilder(html_open + body_style_width_400);
+    builder.append(font_open_arial);
 
     String textWithBold = text
             .replace("'", "`")
-            .replaceAll("(?i)" + term, "<b>" + term.toUpperCase() + "</b>");
+            .replaceAll("(?i)" + term, bold_open + term.toUpperCase() + bold_close);
 
     builder.append(textWithBold);
-    builder.append("</font>");
+    builder.append(font_close);
     return builder.toString();
   }
 }
