@@ -184,7 +184,7 @@ public class OtherInfoWindow {
 
   public static String textToHtml(String text, String term) {
 
-    StringBuilder builder = new StringBuilder("<html><body style='width: 400px'>");
+    StringBuilder builder = new StringBuilder("<html><body style=\"width: 400px\">");
 
     builder.append("<font face=\"arial\">");
 
