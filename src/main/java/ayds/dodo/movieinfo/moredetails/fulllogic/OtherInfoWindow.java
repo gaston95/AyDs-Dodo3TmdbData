@@ -131,10 +131,7 @@ public class OtherInfoWindow {
         descriptionTextPane.setText(text);
 
         // set image
-        try {
-          UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-        }
+        setImage();
 
         try {
           System.out.println("Get Image from " + path);
@@ -156,6 +153,13 @@ public class OtherInfoWindow {
     }).start();
   }
 
+  private void setImage(){
+    try {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+    }
+  }
+
   private boolean movieExistsInDb(String text, String path) {
     return text != null && path != null;
   }
@@ -173,6 +177,7 @@ public class OtherInfoWindow {
     win.contentPane.add(new JLabel("Data from The Movie Data Base"));
 
     win.imagePanel = new JPanel();
+    win.contentPane.add(win.imagePanel);
 
     JPanel descriptionPanel = new JPanel(new BorderLayout());
     win.descriptionTextPane = new JTextPane();
@@ -181,7 +186,7 @@ public class OtherInfoWindow {
     win.descriptionTextPane.setMaximumSize(new Dimension(600, 400));
     descriptionPanel.add(win.descriptionTextPane);
     win.contentPane.add(descriptionPanel);
-    win.contentPane.add(win.imagePanel);
+
 
     JFrame frame = new JFrame("Movie Info Dodo");
     frame.setMinimumSize(new Dimension(600, 600));
