@@ -16,7 +16,7 @@ object DataBase {
                     println("A new database has been created.")
                     val statement = connection.createStatement()
                     statement.queryTimeout = 30 // set timeout to 30 sec.
-                    statement.executeUpdate("create table info (id INTEGER PRIMARY KEY AUTOINCREMENT, title string, plot string, image_url string, source integer)")
+                    statement.executeUpdate("create table if not exists info (id INTEGER PRIMARY KEY AUTOINCREMENT, title string, plot string, image_url string, source integer)")
                 }
             }
         } catch (e: SQLException) {
