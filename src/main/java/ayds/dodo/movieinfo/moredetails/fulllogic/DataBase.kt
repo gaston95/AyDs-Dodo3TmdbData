@@ -1,8 +1,6 @@
 package ayds.dodo.movieinfo.moredetails.fulllogic
 
-import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.SQLException
+import java.sql.*
 
 object DataBase {
     @JvmStatic
@@ -28,9 +26,8 @@ object DataBase {
     fun saveMovieInfo(title: String, plot: String, imageUrl: String) {
         var connection: Connection? = null
         try { // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:./extra_info.db")
-            val statement = connection.createStatement()
-            statement.queryTimeout = 30 // set timeout to 30 sec.
+            connection = getConnectionToExtraInfo()
+            val statement = createStatement(connection)
             println("INSERT  $title, $plot, $imageUrl")
             val plotSql = plot.replace("'","''")
             statement.executeUpdate("insert into info values(null, '$title', '$plotSql', '$imageUrl', 1)")
@@ -49,9 +46,8 @@ object DataBase {
     fun getOverview(title: String): String? {
         var connection: Connection? = null
         try { // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:./extra_info.db")
-            val statement = connection.createStatement()
-            statement.queryTimeout = 30 // set timeout to 30 sec.
+            connection = getConnectionToExtraInfo()
+            val statement = createStatement(connection)
             val rs = statement.executeQuery("select * from info WHERE title = '$title'")
             if(!rs.isClosed) {
                 rs.next()
@@ -74,10 +70,9 @@ object DataBase {
     fun getImageUrl(title: String): String? {
         var connection: Connection? = null
         try { // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:./extra_info.db")
-            val statement = connection.createStatement()
-            statement.queryTimeout = 30 // set timeout to 30 sec.
-            val rs = statement.executeQuery("select * from info WHERE title = '$title'")
+            connection = getConnectionToExtraInfo()
+            val statement = createStatement(connection)
+            val rs = statement.getTitleResultSet(title)
             if(!rs.isClosed) {
                 rs.next()
                 return rs.getString("image_url")
@@ -94,4 +89,15 @@ object DataBase {
         }
         return null
     }
+
+    fun getConnectionToExtraInfo(): Connection = DriverManager.getConnection("jdbc:sqlite:./extra_info.db")
+
+    fun createStatement(connection: Connection): Statement {
+        val statement = connection.createStatement()
+        statement.queryTimeout = 30 // set timeout to 30 sec.
+        return statement
+    }
+
+    fun Statement.getTitleResultSet(title: String): ResultSet =
+        this.executeQuery("select * from info WHERE title = '$title'")
 }
