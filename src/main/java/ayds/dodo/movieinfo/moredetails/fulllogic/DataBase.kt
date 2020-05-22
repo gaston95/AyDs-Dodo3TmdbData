@@ -31,8 +31,9 @@ object DataBase {
             connection = DriverManager.getConnection("jdbc:sqlite:./extra_info.db")
             val statement = connection.createStatement()
             statement.queryTimeout = 30 // set timeout to 30 sec.
-            println("INSERT  $title', '$plot', '$plot")
-            statement.executeUpdate("insert into info values(null, '$title', '$plot', '$imageUrl', 1)")
+            println("INSERT  $title, $plot, $imageUrl")
+            val plotSql = plot.replace("'","''")
+            statement.executeUpdate("insert into info values(null, '$title', '$plotSql', '$imageUrl', 1)")
         } catch (e: SQLException) {
             System.err.println("Error saving " + e.message)
         } finally {
