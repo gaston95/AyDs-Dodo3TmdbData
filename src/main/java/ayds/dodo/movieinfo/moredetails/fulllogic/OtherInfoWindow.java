@@ -18,7 +18,7 @@ import java.util.Iterator;
 
 public class OtherInfoWindow {
   private JPanel contentPane;
-  private JTextPane textPane2;
+  private JTextPane descriptionTextPane;
   private JPanel imagePanel;
 
   public void getMoviePlot(OmdbMovie movie) {
@@ -30,10 +30,10 @@ public class OtherInfoWindow {
 
     TheMovieDBAPI tmdbAPI = retrofit.create(TheMovieDBAPI.class);
 
-    textPane2.setContentType("text/html");
+    descriptionTextPane.setContentType("text/html");
 
     // this is needed to open a link in the browser
-    textPane2.addHyperlinkListener(e -> {
+    descriptionTextPane.addHyperlinkListener(e -> {
       if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
         System.out.println(e.getURL());
         Desktop desktop = Desktop.getDesktop();
@@ -126,7 +126,7 @@ public class OtherInfoWindow {
           }
         }
 
-        textPane2.setText(text);
+        descriptionTextPane.setText(text);
 
         // set image
         try {
@@ -155,26 +155,28 @@ public class OtherInfoWindow {
   }
 
   public static void open(OmdbMovie movie) {
+    OtherInfoWindow win = createWindow();
 
+    win.getMoviePlot(movie);
+  }
+
+  private static OtherInfoWindow createWindow(){
     OtherInfoWindow win = new OtherInfoWindow();
 
     win.contentPane = new JPanel();
     win.contentPane.setLayout(new BoxLayout(win.contentPane, BoxLayout.PAGE_AXIS));
-
-    JLabel label = new JLabel();
-    label.setText("Data from The Movie Data Base");
-    win.contentPane.add(label);
+    win.contentPane.add(new JLabel("Data from The Movie Data Base"));
 
     win.imagePanel = new JPanel();
-    win.contentPane.add(win.imagePanel);
 
     JPanel descriptionPanel = new JPanel(new BorderLayout());
-    win.textPane2 = new JTextPane();
-    win.textPane2.setEditable(false);
-    win.textPane2.setContentType("text/html");
-    win.textPane2.setMaximumSize(new Dimension(600, 400));
-    descriptionPanel.add( win.textPane2);
+    win.descriptionTextPane = new JTextPane();
+    win.descriptionTextPane.setEditable(false);
+    win.descriptionTextPane.setContentType("text/html");
+    win.descriptionTextPane.setMaximumSize(new Dimension(600, 400));
+    descriptionPanel.add(win.descriptionTextPane);
     win.contentPane.add(descriptionPanel);
+    win.contentPane.add(win.imagePanel);
 
     JFrame frame = new JFrame("Movie Info Dodo");
     frame.setMinimumSize(new Dimension(600, 600));
@@ -183,8 +185,7 @@ public class OtherInfoWindow {
     frame.setVisible(true);
 
     DataBase.createNewDatabase();
-
-    win.getMoviePlot(movie);
+    return win;
   }
 
   private static final String html_open = "<html>";
