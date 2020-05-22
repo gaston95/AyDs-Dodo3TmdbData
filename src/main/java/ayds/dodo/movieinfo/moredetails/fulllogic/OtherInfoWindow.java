@@ -188,14 +188,14 @@ public class OtherInfoWindow {
   }
 
   private static final String html_open = "<html>";
-  private static final String body_style_width_400 = "<body style=\"width: 400px\">";
+  private static final String body_open_style = "<body style=\"width: 400px\">";
   private static final String font_open_arial = "<font face=\"arial\">";
   private static final String font_close = "</font>";
 
   public static String textToHtml(String text, String term) {
 
     StringBuilder builder = new StringBuilder();
-    builder.append(html_open + body_style_width_400)
+    builder.append(html_open + body_open_style)
             .append(font_open_arial);
 
     String textWithReplacedQuotes = replaceQuotes(text);
