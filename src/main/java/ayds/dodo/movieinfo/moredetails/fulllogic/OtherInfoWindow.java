@@ -200,7 +200,7 @@ public class OtherInfoWindow {
 
     String textWithReplacedQuotes = replaceQuotes(text);
 
-    builder.append(modifyMovieTitle(textWithReplacedQuotes,term))
+    builder.append(makeTermBold(textWithReplacedQuotes,term))
             .append(font_close);
 
     return builder.toString();
@@ -213,7 +213,7 @@ public class OtherInfoWindow {
   private static final String bold_open = "<b>";
   private static final String bold_close = "</b>";
 
-  private static String modifyMovieTitle(String text, String term) {
+  private static String makeTermBold(String text, String term) {
     return text.replaceAll("(?i)" + term, bold_open + term.toUpperCase() + bold_close);
   }
 }
