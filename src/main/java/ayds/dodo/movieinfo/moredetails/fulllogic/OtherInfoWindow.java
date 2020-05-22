@@ -60,6 +60,7 @@ public class OtherInfoWindow {
         } else {
           Response<String> callResponse;
           try {
+            text = "Description not found";
             callResponse = tmdbAPI.getTerm(movie.getTitle()).execute();
 
             System.out.println("JSON " + callResponse.body());
