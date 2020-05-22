@@ -22,21 +22,12 @@ object DataBase {
 
     @JvmStatic
     fun saveMovieInfo(title: String, plot: String, imageUrl: String) {
-        var connection: Connection? = null
-        try { // create a database connection
-            connection = getConnectionToExtraInfo()
-            val statement = connection.createStatement()
-            println("INSERT  $title, $plot, $imageUrl")
-            val plotSql = plot.replace("'","''")
-            statement.executeUpdate("insert into info values(null, '$title', '$plotSql', '$imageUrl', 1)")
-        } catch (e: SQLException) {
-            System.err.println("Error saving " + e.message)
-        } finally {
-            try {
-                connection?.close()
-            } catch (e: SQLException) { // connection close failed.
-                System.err.println(e)
+        try{
+            getConnectionToExtraInfo().use {
+                it.initializeStatement().executeUpdate(getMovieStringToSave(title, plot, imageUrl))
             }
+        } catch (e: Exception) {
+            System.err.println(e)
         }
     }
 
@@ -93,4 +84,9 @@ object DataBase {
         } else
             null
     }
+
+    private fun getMovieStringToSave(title:String, plot: String, imageUrl: String): String =
+            "insert into info values(null, '${title.replaceQuotes()}', '${plot.replaceQuotes()}', '$imageUrl', 1)"
+
+    private fun String.replaceQuotes() = this.replace("'", "''")
 }
