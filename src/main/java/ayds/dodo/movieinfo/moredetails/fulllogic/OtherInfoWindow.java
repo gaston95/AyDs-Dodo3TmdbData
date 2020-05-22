@@ -131,33 +131,30 @@ public class OtherInfoWindow {
 
         descriptionTextPane.setText(text);
 
-        // set image
-        setImage();
-
-        try {
-          System.out.println("Get Image from " + path);
-          URL url = new URL(path);
-          BufferedImage image = ImageIO.read(url);
-          System.out.println("Load image into frame...");
-          JLabel label = new JLabel(new ImageIcon(image));
-          imagePanel.add(label);
-
-          // Refresh panel
-          contentPane.validate();
-          contentPane.repaint();
-
-        } catch (Exception exp) {
-          exp.printStackTrace();
-        }
+        setImage(path);
 
       }
     }).start();
   }
 
-  private void setImage(){
+  private void setImage(String path){
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+    }
+    try {
+      System.out.println("Get Image from " + path);
+      URL url = new URL(path);
+      BufferedImage image = ImageIO.read(url);
+      System.out.println("Load image into frame...");
+      JLabel label = new JLabel(new ImageIcon(image));
+      imagePanel.add(label);
+
+      contentPane.validate();
+      contentPane.repaint();
+
+    } catch (Exception exp) {
+      exp.printStackTrace();
     }
   }
 
