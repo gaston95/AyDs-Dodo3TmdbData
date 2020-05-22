@@ -1,6 +1,5 @@
 package ayds.dodo.movieinfo.moredetails.fulllogic
 
-import ayds.dodo.movieinfo.moredetails.fulllogic.DataBase.getPlot
 import java.sql.*
 
 object DataBase {
@@ -28,7 +27,7 @@ object DataBase {
         var connection: Connection? = null
         try { // create a database connection
             connection = getConnectionToExtraInfo()
-            val statement = createStatement(connection)
+            val statement = connection.createStatement()
             println("INSERT  $title, $plot, $imageUrl")
             val plotSql = plot.replace("'","''")
             statement.executeUpdate("insert into info values(null, '$title', '$plotSql', '$imageUrl', 1)")
@@ -45,58 +44,43 @@ object DataBase {
 
     @JvmStatic
     fun getOverview(title: String): String? {
-        var connection: Connection? = null
-        try {
-            connection = getConnectionToExtraInfo()
-            val statement = createStatement(connection)
-            val rs = statement.getTitleResultSet(title)
-            return rs.getPlot()
-        } catch (e: SQLException) { // if the error message is "out of memory",
-            // it probably means no database file is found
-            System.err.println("Get title error " + e.message)
-        } finally {
-            try {
-                connection?.close()
-            } catch (e: SQLException) { // connection close failed.
-                System.err.println(e)
+        try{
+            getConnectionToExtraInfo().use{
+                return it.initializeTitleResultSet(title).getPlot()
             }
+        } catch (e: Exception){
+            System.err.println(e)
         }
         return null
     }
 
     @JvmStatic
     fun getImageUrl(title: String): String? {
-        var connection: Connection? = null
-        try { // create a database connection
-            connection = getConnectionToExtraInfo()
-            val statement = createStatement(connection)
-            val rs = statement.getTitleResultSet(title)
-            return rs.getImageURL()
-        } catch (e: SQLException) { // if the error message is "out of memory",
-            // it probably means no database file is found
-            System.err.println("Get image error " + e.message)
-        } finally {
-            try {
-                connection?.close()
-            } catch (e: SQLException) { // connection close failed.
-                System.err.println(e)
+        try{
+            getConnectionToExtraInfo().use{
+                return it.initializeTitleResultSet(title).getImageURL()
             }
+        } catch (e: Exception){
+            System.err.println(e)
         }
         return null
     }
 
     private fun getConnectionToExtraInfo(): Connection = DriverManager.getConnection("jdbc:sqlite:./extra_info.db")
 
-    private fun createStatement(connection: Connection): Statement {
-        val statement = connection.createStatement()
+    private fun Connection.initializeStatement(): Statement {
+        val statement = this.createStatement()
         statement.queryTimeout = 30
         return statement
     }
 
+    private fun Connection.initializeTitleResultSet(title: String) =
+            this.initializeStatement().getTitleResultSet(title)
+
     private fun Statement.getTitleResultSet(title: String): ResultSet =
         this.executeQuery("select * from info WHERE title = '$title'")
 
-    fun ResultSet.getPlot(): String? {
+    private fun ResultSet.getPlot(): String? {
         return if(!this.isClosed) {
             this.next()
             this.getString("plot")
