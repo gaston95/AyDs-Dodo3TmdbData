@@ -39,7 +39,8 @@ internal class SqlDBImpl(private val sqlQueries: SqlQueries) : SqlDB(), LocalSto
 
     private fun insertMovie(term: String, movie: OmdbMovie) {
         try {
-            statement?.executeUpdate(sqlQueries.getInsertMovieQuery(term, movie))
+            val termSql = term.replace("'","''")
+            statement?.executeUpdate(sqlQueries.getInsertMovieQuery(termSql, movie))
             movie.ratings.forEach {
                 statement?.executeUpdate(sqlQueries.getInsertRatingQuery(movie, it))
             }
@@ -58,7 +59,8 @@ internal class SqlDBImpl(private val sqlQueries: SqlQueries) : SqlDB(), LocalSto
     private fun selectMovieByTerm(term: String): OmdbMovie? {
         var movie: OmdbMovie? = null
         try {
-            val moviesResultSet = statement?.executeQuery(sqlQueries.getSelectMoviesByTermQuery(term))
+            val termSql = term.replace("'","''")
+            val moviesResultSet = statement?.executeQuery(sqlQueries.getSelectMoviesByTermQuery(termSql))
             movie = moviesResultSet?.let { sqlQueries.resultSetToMovieMapper(it) }
             movie?.apply {
                 val ratingsResultSet = statement?.executeQuery(sqlQueries.getSelectRatingsByMovieQuery(movie))
