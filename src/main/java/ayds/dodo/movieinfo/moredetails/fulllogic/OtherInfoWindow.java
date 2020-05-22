@@ -21,6 +21,8 @@ public class OtherInfoWindow {
   private JTextPane descriptionTextPane;
   private JPanel imagePanel;
 
+  private static final String movie_in_db = "[*]";
+
   public void getMoviePlot(OmdbMovie movie) {
 
     Retrofit retrofit = new Retrofit.Builder()
@@ -53,9 +55,9 @@ public class OtherInfoWindow {
 
         String path = DataBase.getImageUrl(movie.getTitle());
 
-        if (text != null && path != null) { // exists in db
-          text = "[*]" + text;
-        } else { // get from service
+        if (movieExistsInDb(text,path)) {
+          text = movie_in_db + text;
+        } else {
           Response<String> callResponse;
           try {
             callResponse = tmdbAPI.getTerm(movie.getTitle()).execute();
@@ -154,6 +156,9 @@ public class OtherInfoWindow {
     }).start();
   }
 
+  private boolean movieExistsInDb(String text, String path) {
+    return text != null && path != null;
+  }
   public static void open(OmdbMovie movie) {
     OtherInfoWindow win = createWindow();
 
