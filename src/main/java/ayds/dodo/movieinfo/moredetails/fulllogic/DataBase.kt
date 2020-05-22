@@ -9,13 +9,11 @@ object DataBase {
 
         try {
             getConnectionToExtraInfo().use { connection ->
-                if (connection != null) {
-                    val meta = connection.metaData
-                    println("The driver name is " + meta.driverName)
-                    println("A new database has been created.")
-                    val statement = createStatement(connection)
-                    statement.executeUpdate("create table if not exists info (id INTEGER PRIMARY KEY AUTOINCREMENT, title string, plot string, image_url string, source integer)")
-                }
+                val meta = connection.metaData
+                println("The driver name is " + meta.driverName)
+                println("A new database has been created.")
+                val statement = connection.initializeStatement()
+                statement.executeUpdate("create table if not exists info (id INTEGER PRIMARY KEY AUTOINCREMENT, title string, plot string, image_url string, source integer)")
             }
         } catch (e: SQLException) {
             println(e.message)
