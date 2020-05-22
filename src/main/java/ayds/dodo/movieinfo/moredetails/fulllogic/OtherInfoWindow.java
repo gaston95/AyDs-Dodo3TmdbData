@@ -191,20 +191,29 @@ public class OtherInfoWindow {
   private static final String body_style_width_400 = "<body style=\"width: 400px\">";
   private static final String font_open_arial = "<font face=\"arial\">";
   private static final String font_close = "</font>";
-  private static final String bold_open = "<b>";
-  private static final String bold_close = "</b>";
 
   public static String textToHtml(String text, String term) {
 
-    StringBuilder builder = new StringBuilder(html_open + body_style_width_400);
-    builder.append(font_open_arial);
+    StringBuilder builder = new StringBuilder();
+    builder.append(html_open + body_style_width_400)
+            .append(font_open_arial);
 
-    String textWithBold = text
-            .replace("'", "`")
-            .replaceAll("(?i)" + term, bold_open + term.toUpperCase() + bold_close);
+    String textWithReplacedQuotes = replaceQuotes(text);
 
-    builder.append(textWithBold);
-    builder.append(font_close);
+    builder.append(modifyMovieTitle(textWithReplacedQuotes,term))
+            .append(font_close);
+
     return builder.toString();
+  }
+
+  private static String replaceQuotes(String text){
+    return text.replace("'", "`");
+  }
+
+  private static final String bold_open = "<b>";
+  private static final String bold_close = "</b>";
+
+  private static String modifyMovieTitle(String text, String term) {
+    return text.replaceAll("(?i)" + term, bold_open + term.toUpperCase() + bold_close);
   }
 }
