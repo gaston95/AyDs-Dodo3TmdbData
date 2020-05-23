@@ -3,14 +3,19 @@ package ayds.dodo.movieinfo.moredetails.fulllogic
 import java.sql.*
 
 object DataBase {
+    private const val extraInfoDBURL = "jdbc:sqlite:./extra_info.db"
+    private const val plot = "plot"
+    private const val imageUrl = "image_url"
+    private const val createTableQuery = "create table if not exists info (id INTEGER PRIMARY KEY AUTOINCREMENT, title string, plot string, image_url string, source integer)"
+    private const val singleQuote = "'"
+    private const val doubleQuote = "''"
 
     @JvmStatic
     fun createNewDatabase() {
-
         try {
-            getConnectionToExtraInfo().use { connection ->
-                val statement = connection.initializeStatement()
-                statement.createTable() }
+            getConnectionToExtraInfo().use {
+                it.initializeStatement().createTable()
+            }
         } catch (e: SQLException) {
             println(e.message)
         }
@@ -20,7 +25,7 @@ object DataBase {
     fun saveMovieInfo(title: String, plot: String, imageUrl: String) {
         try{
             getConnectionToExtraInfo().use {
-                it.initializeStatement().executeUpdate(getMovieStringToSave(title, plot, imageUrl))
+                it.initializeStatement().executeUpdate(saveMovieStringBuilder(title, plot, imageUrl))
             }
         } catch (e: Exception) {
             System.err.println(e)
@@ -51,7 +56,7 @@ object DataBase {
         return null
     }
 
-    private fun getConnectionToExtraInfo(): Connection = DriverManager.getConnection("jdbc:sqlite:./extra_info.db")
+    private fun getConnectionToExtraInfo(): Connection = DriverManager.getConnection(extraInfoDBURL)
 
     private fun Connection.initializeStatement(): Statement {
         val statement = this.createStatement()
@@ -68,7 +73,7 @@ object DataBase {
     private fun ResultSet.getPlot(): String? {
         return if(!this.isClosed) {
             this.next()
-            this.getString("plot")
+            this.getString(plot)
         } else
             null
     }
@@ -76,15 +81,16 @@ object DataBase {
     private fun ResultSet.getImageURL(): String? {
         return if(!this.isClosed) {
             this.next()
-            this.getString("image_url")
+            this.getString(imageUrl)
         } else
             null
     }
 
-    private fun getMovieStringToSave(title:String, plot: String, imageUrl: String): String =
+    private fun saveMovieStringBuilder(title:String, plot: String, imageUrl: String): String =
             "insert into info values(null, '${title.replaceQuotes()}', '${plot.replaceQuotes()}', '$imageUrl', 1)"
 
-    private fun String.replaceQuotes() = this.replace("'", "''")
-}
+    private fun String.replaceQuotes() = this.replace(singleQuote, doubleQuote)
+
     private fun Statement.createTable(): Int =
-        this.executeUpdate("create table if not exists info (id INTEGER PRIMARY KEY AUTOINCREMENT, title string, plot string, image_url string, source integer)")
+            this.executeUpdate(createTableQuery)
+}
