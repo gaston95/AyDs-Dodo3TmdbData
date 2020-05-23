@@ -9,9 +9,6 @@ object DataBase {
 
         try {
             getConnectionToExtraInfo().use { connection ->
-                //val meta = connection.metaData
-                //println("The driver name is " + meta.driverName)
-                //println("A new database has been created.")
                 val statement = connection.initializeStatement()
                 statement.createTable() }
         } catch (e: SQLException) {
