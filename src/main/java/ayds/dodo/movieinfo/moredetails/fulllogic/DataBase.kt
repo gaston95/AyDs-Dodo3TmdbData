@@ -9,12 +9,11 @@ object DataBase {
 
         try {
             getConnectionToExtraInfo().use { connection ->
-                val meta = connection.metaData
-                println("The driver name is " + meta.driverName)
-                println("A new database has been created.")
+                //val meta = connection.metaData
+                //println("The driver name is " + meta.driverName)
+                //println("A new database has been created.")
                 val statement = connection.initializeStatement()
-                statement.executeUpdate("create table if not exists info (id INTEGER PRIMARY KEY AUTOINCREMENT, title string, plot string, image_url string, source integer)")
-            }
+                statement.createTable() }
         } catch (e: SQLException) {
             println(e.message)
         }
@@ -90,3 +89,5 @@ object DataBase {
 
     private fun String.replaceQuotes() = this.replace("'", "''")
 }
+    private fun Statement.createTable(): Int =
+        this.executeUpdate("create table if not exists info (id INTEGER PRIMARY KEY AUTOINCREMENT, title string, plot string, image_url string, source integer)")
