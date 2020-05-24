@@ -81,8 +81,6 @@ public class OtherInfoWindow {
             text = "Description not found";
             callResponse = tmdbAPI.getTerm(movie.getTitle()).execute();
 
-            System.out.println("JSON " + callResponse.body());
-
             Gson gson = new Gson();
             JsonObject jobj = gson.fromJson(callResponse.body(), JsonObject.class);
 
@@ -115,9 +113,6 @@ public class OtherInfoWindow {
             }
 
             String backdropPath = null;
-
-            System.out.println("backdropPathJson " + backdropPathJson);
-
             if (backdropPathJson != null && !backdropPathJson.isJsonNull()) {
               backdropPath =  backdropPathJson.getAsString();
             }
