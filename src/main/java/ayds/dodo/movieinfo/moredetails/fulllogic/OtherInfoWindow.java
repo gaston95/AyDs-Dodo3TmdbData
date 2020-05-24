@@ -179,7 +179,7 @@ public class OtherInfoWindow {
   private void setImage(String path){
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ignored) {
     }
     try {
       System.out.println("Get Image from " + path);
