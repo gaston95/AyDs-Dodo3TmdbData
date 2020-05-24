@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -59,8 +60,6 @@ public class OtherInfoWindow {
 
   public void getMoviePlot(OmdbMovie movie) {
 
-    TheMovieDBAPI tmdbAPI = createAPI();
-
     descriptionTextPane.setContentType("text/html");
 
     setHyperLinkListener();
@@ -72,7 +71,7 @@ public class OtherInfoWindow {
       String path = DataBase.getImageUrl(movie.getTitle());
 
       if (movieExistsInDb(text,path)) {
-        text = movie_in_db + text;
+        text = getTextInDB(text);
       } else {
         text = "Description not found";
         Response<String> callResponse;
@@ -140,6 +139,10 @@ public class OtherInfoWindow {
 
       setImage(path);
     }).start();
+  }
+
+  private static String getTextInDB(String text) {
+    return movie_in_db + text;
   }
 
   private TheMovieDBAPI createAPI(){
