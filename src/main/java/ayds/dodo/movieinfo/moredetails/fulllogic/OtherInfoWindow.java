@@ -30,7 +30,7 @@ public class OtherInfoWindow {
     win.getMoviePlot(movie);
   }
 
-  private static OtherInfoWindow createWindow(){
+  private static OtherInfoWindow createWindow() {
     OtherInfoWindow win = new OtherInfoWindow();
 
     win.contentPane = new JPanel();
@@ -73,38 +73,17 @@ public class OtherInfoWindow {
       if (movieExistsInDb(text,path)) {
         text = getTextInDB(text);
       } else {
-        text = "Description not found";
-        Response<String> callResponse;
         try {
-          callResponse = tmdbAPI.getTerm(movie.getTitle()).execute();
-
-          Gson gson = new Gson();
-          JsonObject jobj = gson.fromJson(callResponse.body(), JsonObject.class);
-
-          Iterator<JsonElement> resultIterator = jobj.get("results").getAsJsonArray().iterator();
-
-          JsonObject result = null;
-          boolean movieFound = false;
-          while (resultIterator.hasNext()) {
-            result = resultIterator.next().getAsJsonObject();
-
-            JsonElement yearJson = result.get("release_date");
-            String year = yearJson == null ? "" : yearJson.getAsString().split("-")[0];
-
-            if (year.equals(movie.getYear())) {
-              movieFound = true;
-              break;
-            }
-          }
+          JsonObject searchResult = searchMovie(movie);
 
           JsonElement extract = null;
           JsonElement backdropPathJson = null;
           JsonElement posterPath = null;
 
-          if(result != null && movieFound){
-            extract = result.get("overview");
-            backdropPathJson = result.get("backdrop_path");
-            posterPath = result.get("poster_path");
+          if(searchResult != null){
+            extract = searchResult.get("overview");
+            backdropPathJson = searchResult.get("backdrop_path");
+            posterPath = searchResult.get("poster_path");
           }
 
           String backdropPath = null;
@@ -169,6 +148,38 @@ public class OtherInfoWindow {
 
   private boolean movieExistsInDb(String text, String path) {
     return text != null && path != null;
+  }
+
+  private JsonObject searchMovie(OmdbMovie movie) {
+    TheMovieDBAPI tmdbAPI = createAPI();
+    Response<String> callResponse;
+    try {
+      callResponse = tmdbAPI.getTerm(movie.getTitle()).execute();
+
+      Gson gson = new Gson();
+      JsonObject jobj = gson.fromJson(callResponse.body(), JsonObject.class);
+
+      Iterator<JsonElement> resultIterator = jobj.get("results").getAsJsonArray().iterator();
+      JsonObject result;
+
+      while (resultIterator.hasNext()) {
+        result = resultIterator.next().getAsJsonObject();
+
+        if (areSameYear(result,movie.getYear())) {
+          return result;
+        }
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  private boolean areSameYear(JsonObject result, String movieYear) {
+    JsonElement yearJson = result.get("release_date");
+    String year = yearJson == null ? "" : yearJson.getAsString().split("-")[0];
+
+    return year.equals(movieYear);
   }
 
   private void setImage(String path) {
