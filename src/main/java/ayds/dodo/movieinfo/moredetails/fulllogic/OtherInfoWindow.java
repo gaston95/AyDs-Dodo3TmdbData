@@ -74,6 +74,9 @@ public class OtherInfoWindow {
         text = getTextInDB(text);
       } else {
         try {
+          text = "No Results";
+          path = "https://www.themoviedb.org/assets/2/v4/logos/256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png";
+
           JsonObject searchResult = searchMovie(movie);
 
           JsonElement extract = null;
@@ -91,10 +94,7 @@ public class OtherInfoWindow {
             backdropPath =  backdropPathJson.getAsString();
           }
 
-          if (extract == null || extract.isJsonNull()) {
-            text = "No Results";
-            path = "https://www.themoviedb.org/assets/2/v4/logos/256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png";
-          } else {
+          if (extract != null && !extract.isJsonNull()) {
             text = extract.getAsString().replace("\\n", "\n");
             text = textToHtml(text, movie.getTitle());
 
@@ -103,10 +103,6 @@ public class OtherInfoWindow {
 
             if(backdropPath != null)
               path = "https://image.tmdb.org/t/p/w400/" + backdropPath;
-
-            if (path == null) {
-              path = "https://www.themoviedb.org/assets/2/v4/logos/256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png";
-            }
 
             DataBase.saveMovieInfo(movie.getTitle(), text, path);
           }
