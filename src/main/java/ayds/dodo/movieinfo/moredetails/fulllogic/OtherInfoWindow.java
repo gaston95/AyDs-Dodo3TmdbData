@@ -164,16 +164,18 @@ public class OtherInfoWindow {
     });
   }
 
-  private void setImage(String path){
+  private boolean movieExistsInDb(String text, String path) {
+    return text != null && path != null;
+  }
+
+  private void setImage(String path) {
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ignored) {
     }
     try {
-      System.out.println("Get Image from " + path);
       URL url = new URL(path);
       BufferedImage image = ImageIO.read(url);
-      System.out.println("Load image into frame...");
       JLabel label = new JLabel(new ImageIcon(image));
       imagePanel.add(label);
 
