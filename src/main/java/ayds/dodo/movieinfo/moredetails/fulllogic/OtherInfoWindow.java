@@ -65,84 +65,80 @@ public class OtherInfoWindow {
 
     setHyperLinkListener();
 
-    new Thread(new Runnable() {
-      @Override
-      public void run() {
+    new Thread(() -> {
 
-        DataBase.createNewDatabase();
-        String text = DataBase.getOverview(movie.getTitle());
-        String path = DataBase.getImageUrl(movie.getTitle());
+      DataBase.createNewDatabase();
+      String text = DataBase.getOverview(movie.getTitle());
+      String path = DataBase.getImageUrl(movie.getTitle());
 
-        if (movieExistsInDb(text,path)) {
-          text = movie_in_db + text;
-        } else {
-          text = "Description not found";
-          Response<String> callResponse;
-          try {
-            callResponse = tmdbAPI.getTerm(movie.getTitle()).execute();
+      if (movieExistsInDb(text,path)) {
+        text = movie_in_db + text;
+      } else {
+        text = "Description not found";
+        Response<String> callResponse;
+        try {
+          callResponse = tmdbAPI.getTerm(movie.getTitle()).execute();
 
-            Gson gson = new Gson();
-            JsonObject jobj = gson.fromJson(callResponse.body(), JsonObject.class);
+          Gson gson = new Gson();
+          JsonObject jobj = gson.fromJson(callResponse.body(), JsonObject.class);
 
-            Iterator<JsonElement> resultIterator = jobj.get("results").getAsJsonArray().iterator();
+          Iterator<JsonElement> resultIterator = jobj.get("results").getAsJsonArray().iterator();
 
-            JsonObject result = null;
-            boolean movieFound = false;
-            while (resultIterator.hasNext()) {
-              result = resultIterator.next().getAsJsonObject();
+          JsonObject result = null;
+          boolean movieFound = false;
+          while (resultIterator.hasNext()) {
+            result = resultIterator.next().getAsJsonObject();
 
-              JsonElement yearJson = result.get("release_date");
-              String year = yearJson == null ? "" : yearJson.getAsString().split("-")[0];
+            JsonElement yearJson = result.get("release_date");
+            String year = yearJson == null ? "" : yearJson.getAsString().split("-")[0];
 
-              if (year.equals(movie.getYear())) {
-                movieFound = true;
-                break;
-              }
+            if (year.equals(movie.getYear())) {
+              movieFound = true;
+              break;
             }
-
-            JsonElement extract = null;
-            JsonElement backdropPathJson = null;
-            JsonElement posterPath = null;
-
-            if(result != null && movieFound){
-              extract = result.get("overview");
-              backdropPathJson = result.get("backdrop_path");
-              posterPath = result.get("poster_path");
-            }
-
-            String backdropPath = null;
-            if (backdropPathJson != null && !backdropPathJson.isJsonNull()) {
-              backdropPath =  backdropPathJson.getAsString();
-            }
-
-            if (extract == null || extract.isJsonNull()) {
-              text = "No Results";
-              path = "https://www.themoviedb.org/assets/2/v4/logos/256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png";
-            } else {
-              text = extract.getAsString().replace("\\n", "\n");
-              text = textToHtml(text, movie.getTitle());
-
-              if(posterPath != null && !posterPath.isJsonNull())
-                text+="\n" + "<a href=https://image.tmdb.org/t/p/w400/" + posterPath.getAsString() +">View Movie Poster</a>";
-
-              if(backdropPath != null)
-                path = "https://image.tmdb.org/t/p/w400/" + backdropPath;
-
-              if (path == null) {
-                path = "https://www.themoviedb.org/assets/2/v4/logos/256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png";
-              }
-
-              DataBase.saveMovieInfo(movie.getTitle(), text, path);
-            }
-          } catch (Exception e1) {
-            e1.printStackTrace();
           }
+
+          JsonElement extract = null;
+          JsonElement backdropPathJson = null;
+          JsonElement posterPath = null;
+
+          if(result != null && movieFound){
+            extract = result.get("overview");
+            backdropPathJson = result.get("backdrop_path");
+            posterPath = result.get("poster_path");
+          }
+
+          String backdropPath = null;
+          if (backdropPathJson != null && !backdropPathJson.isJsonNull()) {
+            backdropPath =  backdropPathJson.getAsString();
+          }
+
+          if (extract == null || extract.isJsonNull()) {
+            text = "No Results";
+            path = "https://www.themoviedb.org/assets/2/v4/logos/256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png";
+          } else {
+            text = extract.getAsString().replace("\\n", "\n");
+            text = textToHtml(text, movie.getTitle());
+
+            if(posterPath != null && !posterPath.isJsonNull())
+              text+="\n" + "<a href=https://image.tmdb.org/t/p/w400/" + posterPath.getAsString() +">View Movie Poster</a>";
+
+            if(backdropPath != null)
+              path = "https://image.tmdb.org/t/p/w400/" + backdropPath;
+
+            if (path == null) {
+              path = "https://www.themoviedb.org/assets/2/v4/logos/256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png";
+            }
+
+            DataBase.saveMovieInfo(movie.getTitle(), text, path);
+          }
+        } catch (Exception e1) {
+          e1.printStackTrace();
         }
-        descriptionTextPane.setText(text);
-
-        setImage(path);
-
       }
+      descriptionTextPane.setText(text);
+
+      setImage(path);
     }).start();
   }
 
