@@ -82,17 +82,17 @@ public class OtherInfoWindow {
           if(searchResult != null){
 
             JsonElement extract = searchResult.get("overview");
-            if (!isNull(extract)) {
+            if (isNotNull(extract)) {
               text = extract.getAsString().replace("\\n", "\n");
               text = textToHtml(text, movie.getTitle());
 
               JsonElement backdropPathJson = searchResult.get("backdrop_path");
-              if (!isNull(backdropPathJson)) {
+              if (isNotNull(backdropPathJson)) {
                 path = "https://image.tmdb.org/t/p/w400/" + backdropPathJson.getAsString();
               }
 
               JsonElement posterPath = searchResult.get("poster_path");
-              if(!isNull(posterPath))
+              if(isNotNull(posterPath))
                 text += "\n" + "<a href=https://image.tmdb.org/t/p/w400/" + posterPath.getAsString() +">View Movie Poster</a>";
 
               DataBase.saveMovieInfo(movie.getTitle(), text, path);
@@ -108,8 +108,8 @@ public class OtherInfoWindow {
     }).start();
   }
 
-  private boolean isNull(JsonElement element) {
-    return element == null || element.isJsonNull();
+  private boolean isNotNull(JsonElement element) {
+    return element != null && !element.isJsonNull();
   }
   private static String getTextInDB(String text) {
     return movie_in_db + text;
