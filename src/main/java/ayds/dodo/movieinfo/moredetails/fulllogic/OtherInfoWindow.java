@@ -166,7 +166,6 @@ public class OtherInfoWindow {
   private void setHyperLinkListener(){
     descriptionTextPane.addHyperlinkListener(e -> {
       if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
-        System.out.println(e.getURL());
         Desktop desktop = Desktop.getDesktop();
         try {
           desktop.browse(e.getURL().toURI());
