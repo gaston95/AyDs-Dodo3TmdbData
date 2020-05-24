@@ -34,18 +34,7 @@ public class OtherInfoWindow {
 
     descriptionTextPane.setContentType("text/html");
 
-    // this is needed to open a link in the browser
-    descriptionTextPane.addHyperlinkListener(e -> {
-      if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
-        System.out.println(e.getURL());
-        Desktop desktop = Desktop.getDesktop();
-        try {
-          desktop.browse(e.getURL().toURI());
-        } catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-    });
+    setHyperLinkListener();
 
     new Thread(new Runnable() {
       @Override
@@ -135,6 +124,20 @@ public class OtherInfoWindow {
 
       }
     }).start();
+  }
+
+  private void setHyperLinkListener(){
+    descriptionTextPane.addHyperlinkListener(e -> {
+      if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
+        System.out.println(e.getURL());
+        Desktop desktop = Desktop.getDesktop();
+        try {
+          desktop.browse(e.getURL().toURI());
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    });
   }
 
   private void setImage(String path){
