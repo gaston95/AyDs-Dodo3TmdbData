@@ -76,9 +76,9 @@ public class OtherInfoWindow {
         if (movieExistsInDb(text,path)) {
           text = movie_in_db + text;
         } else {
+          text = "Description not found";
           Response<String> callResponse;
           try {
-            text = "Description not found";
             callResponse = tmdbAPI.getTerm(movie.getTitle()).execute();
 
             Gson gson = new Gson();
@@ -87,9 +87,7 @@ public class OtherInfoWindow {
             Iterator<JsonElement> resultIterator = jobj.get("results").getAsJsonArray().iterator();
 
             JsonObject result = null;
-
             boolean movieFound = false;
-
             while (resultIterator.hasNext()) {
               result = resultIterator.next().getAsJsonObject();
 
@@ -134,14 +132,12 @@ public class OtherInfoWindow {
                 path = "https://www.themoviedb.org/assets/2/v4/logos/256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png";
               }
 
-              // save to DB  <o/
               DataBase.saveMovieInfo(movie.getTitle(), text, path);
             }
           } catch (Exception e1) {
             e1.printStackTrace();
           }
         }
-
         descriptionTextPane.setText(text);
 
         setImage(path);
@@ -149,6 +145,7 @@ public class OtherInfoWindow {
       }
     }).start();
   }
+
   private TheMovieDBAPI createAPI(){
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://api.themoviedb.org/3/")
@@ -157,6 +154,7 @@ public class OtherInfoWindow {
 
     return retrofit.create(TheMovieDBAPI.class);
   }
+
   private void setHyperLinkListener(){
     descriptionTextPane.addHyperlinkListener(e -> {
       if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
