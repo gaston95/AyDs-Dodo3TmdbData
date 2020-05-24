@@ -201,11 +201,6 @@ public class OtherInfoWindow {
     }
   }
 
-  private boolean movieExistsInDb(String text, String path) {
-    return text != null && path != null;
-  }
-
-
   private static final String html_open = "<html>";
   private static final String body_open = "<body style=\"width: 400px\">";
   private static final String font_open = "<font face=\"arial\">";
