@@ -25,12 +25,7 @@ public class OtherInfoWindow {
 
   public void getMoviePlot(OmdbMovie movie) {
 
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build();
-
-    TheMovieDBAPI tmdbAPI = retrofit.create(TheMovieDBAPI.class);
+    TheMovieDBAPI tmdbAPI = createAPI();
 
     descriptionTextPane.setContentType("text/html");
 
@@ -125,7 +120,14 @@ public class OtherInfoWindow {
       }
     }).start();
   }
+  private TheMovieDBAPI createAPI(){
+    Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl("https://api.themoviedb.org/3/")
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build();
 
+    return retrofit.create(TheMovieDBAPI.class);
+  }
   private void setHyperLinkListener(){
     descriptionTextPane.addHyperlinkListener(e -> {
       if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
