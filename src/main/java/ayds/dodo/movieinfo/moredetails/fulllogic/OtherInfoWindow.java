@@ -81,23 +81,19 @@ public class OtherInfoWindow {
 
           if(searchResult != null){
 
-            JsonElement backdropPathJson = searchResult.get("backdrop_path");
-            String backdropPath = null;
-            if (!isNull(backdropPathJson)) {
-              backdropPath =  backdropPathJson.getAsString();
-            }
-
             JsonElement extract = searchResult.get("overview");
             if (!isNull(extract)) {
               text = extract.getAsString().replace("\\n", "\n");
               text = textToHtml(text, movie.getTitle());
 
+              JsonElement backdropPathJson = searchResult.get("backdrop_path");
+              if (!isNull(backdropPathJson)) {
+                path = "https://image.tmdb.org/t/p/w400/" + backdropPathJson.getAsString();
+              }
+
               JsonElement posterPath = searchResult.get("poster_path");
               if(!isNull(posterPath))
-                text+="\n" + "<a href=https://image.tmdb.org/t/p/w400/" + posterPath.getAsString() +">View Movie Poster</a>";
-
-              if(backdropPath != null)
-                path = "https://image.tmdb.org/t/p/w400/" + backdropPath;
+                text += "\n" + "<a href=https://image.tmdb.org/t/p/w400/" + posterPath.getAsString() +">View Movie Poster</a>";
 
               DataBase.saveMovieInfo(movie.getTitle(), text, path);
             }
