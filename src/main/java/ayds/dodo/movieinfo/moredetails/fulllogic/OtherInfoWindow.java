@@ -79,32 +79,28 @@ public class OtherInfoWindow {
 
           JsonObject searchResult = searchMovie(movie);
 
-          JsonElement extract = null;
-          JsonElement backdropPathJson = null;
-          JsonElement posterPath = null;
-
           if(searchResult != null){
-            extract = searchResult.get("overview");
-            backdropPathJson = searchResult.get("backdrop_path");
-            posterPath = searchResult.get("poster_path");
-          }
 
-          String backdropPath = null;
-          if (backdropPathJson != null && !backdropPathJson.isJsonNull()) {
-            backdropPath =  backdropPathJson.getAsString();
-          }
+            JsonElement backdropPathJson = searchResult.get("backdrop_path");
+            String backdropPath = null;
+            if (!isNull(backdropPathJson)) {
+              backdropPath =  backdropPathJson.getAsString();
+            }
 
-          if (extract != null && !extract.isJsonNull()) {
-            text = extract.getAsString().replace("\\n", "\n");
-            text = textToHtml(text, movie.getTitle());
+            JsonElement extract = searchResult.get("overview");
+            if (!isNull(extract)) {
+              text = extract.getAsString().replace("\\n", "\n");
+              text = textToHtml(text, movie.getTitle());
 
-            if(posterPath != null && !posterPath.isJsonNull())
-              text+="\n" + "<a href=https://image.tmdb.org/t/p/w400/" + posterPath.getAsString() +">View Movie Poster</a>";
+              JsonElement posterPath = searchResult.get("poster_path");
+              if(!isNull(posterPath))
+                text+="\n" + "<a href=https://image.tmdb.org/t/p/w400/" + posterPath.getAsString() +">View Movie Poster</a>";
 
-            if(backdropPath != null)
-              path = "https://image.tmdb.org/t/p/w400/" + backdropPath;
+              if(backdropPath != null)
+                path = "https://image.tmdb.org/t/p/w400/" + backdropPath;
 
-            DataBase.saveMovieInfo(movie.getTitle(), text, path);
+              DataBase.saveMovieInfo(movie.getTitle(), text, path);
+            }
           }
         } catch (Exception e1) {
           e1.printStackTrace();
@@ -116,6 +112,9 @@ public class OtherInfoWindow {
     }).start();
   }
 
+  private boolean isNull(JsonElement element) {
+    return element == null || element.isJsonNull();
+  }
   private static String getTextInDB(String text) {
     return movie_in_db + text;
   }
