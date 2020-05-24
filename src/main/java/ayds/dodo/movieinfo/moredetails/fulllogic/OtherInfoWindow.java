@@ -23,6 +23,41 @@ public class OtherInfoWindow {
 
   private static final String movie_in_db = "[*]";
 
+  public static void open(OmdbMovie movie) {
+    OtherInfoWindow win = createWindow();
+
+    win.getMoviePlot(movie);
+  }
+
+  private static OtherInfoWindow createWindow(){
+    OtherInfoWindow win = new OtherInfoWindow();
+
+    win.contentPane = new JPanel();
+    win.contentPane.setLayout(new BoxLayout(win.contentPane, BoxLayout.PAGE_AXIS));
+    win.contentPane.add(new JLabel("Data from The Movie Data Base"));
+
+    win.imagePanel = new JPanel();
+    win.contentPane.add(win.imagePanel);
+
+    JPanel descriptionPanel = new JPanel(new BorderLayout());
+    win.descriptionTextPane = new JTextPane();
+    win.descriptionTextPane.setEditable(false);
+    win.descriptionTextPane.setContentType("text/html");
+    win.descriptionTextPane.setMaximumSize(new Dimension(600, 400));
+    descriptionPanel.add(win.descriptionTextPane);
+    win.contentPane.add(descriptionPanel);
+
+
+    JFrame frame = new JFrame("Movie Info Dodo");
+    frame.setMinimumSize(new Dimension(600, 600));
+    frame.setContentPane(win.contentPane);
+    frame.pack();
+    frame.setVisible(true);
+
+    DataBase.createNewDatabase();
+    return win;
+  }
+
   public void getMoviePlot(OmdbMovie movie) {
 
     TheMovieDBAPI tmdbAPI = createAPI();
