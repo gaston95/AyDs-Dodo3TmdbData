@@ -54,7 +54,6 @@ public class OtherInfoWindow {
     frame.pack();
     frame.setVisible(true);
 
-    DataBase.createNewDatabase();
     return win;
   }
 
@@ -70,8 +69,8 @@ public class OtherInfoWindow {
       @Override
       public void run() {
 
+        DataBase.createNewDatabase();
         String text = DataBase.getOverview(movie.getTitle());
-
         String path = DataBase.getImageUrl(movie.getTitle());
 
         if (movieExistsInDb(text,path)) {
