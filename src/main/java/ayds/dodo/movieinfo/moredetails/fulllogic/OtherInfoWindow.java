@@ -50,7 +50,6 @@ public class OtherInfoWindow {
     descriptionPanel.add(win.descriptionTextPane);
     win.contentPane.add(descriptionPanel);
 
-
     JFrame frame = new JFrame("Movie Info Dodo");
     frame.setMinimumSize(new Dimension(600, 600));
     frame.setContentPane(win.contentPane);
@@ -104,23 +103,6 @@ public class OtherInfoWindow {
     }).start();
   }
 
-  private boolean isNotNull(JsonElement element) {
-    return element != null && !element.isJsonNull();
-  }
-
-  private static String getTextInDB(String text) {
-    return local_movie + text;
-  }
-
-  private TheMovieDBAPI createAPI(){
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(api_url)
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build();
-
-    return retrofit.create(TheMovieDBAPI.class);
-  }
-
   private void setHyperLinkListener(){
     descriptionTextPane.addHyperlinkListener(e -> {
       if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
@@ -136,6 +118,14 @@ public class OtherInfoWindow {
 
   private boolean movieExistsInDb(String text, String path) {
     return text != null && path != null;
+  }
+
+  private static String getTextInDB(String text) {
+    return local_movie + text;
+  }
+
+  private boolean isNotNull(JsonElement element) {
+    return element != null && !element.isJsonNull();
   }
 
   private JsonObject searchMovie(OmdbMovie movie) {
@@ -161,6 +151,15 @@ public class OtherInfoWindow {
       e.printStackTrace();
     }
     return null;
+  }
+
+  private TheMovieDBAPI createAPI(){
+    Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(api_url)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build();
+
+    return retrofit.create(TheMovieDBAPI.class);
   }
 
   private boolean areSameYear(JsonObject result, String movieYear) {
