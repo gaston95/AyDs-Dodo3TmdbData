@@ -22,7 +22,9 @@ public class OtherInfoWindow {
   private JTextPane descriptionTextPane;
   private JPanel imagePanel;
 
-  private static final String movie_in_db = "[*]";
+  private static final String single_line_break = "\n";
+  private static final String local_movie = "[*]";
+  private static final String api_url = "https://api.themoviedb.org/3/";
 
   public static void open(OmdbMovie movie) {
     OtherInfoWindow win = createWindow();
@@ -81,7 +83,7 @@ public class OtherInfoWindow {
           if(searchResult != null){
             JsonElement extract = searchResult.get("overview");
             if (isNotNull(extract)) {
-              text = extract.getAsString().replace("\\n", "\n");
+              text = extract.getAsString().replace("\\n", single_line_break);
               text = textToHtml(text, movie.getTitle());
 
               JsonElement backdropPathJson = searchResult.get("backdrop_path");
@@ -90,7 +92,7 @@ public class OtherInfoWindow {
 
               JsonElement posterPath = searchResult.get("poster_path");
               if(isNotNull(posterPath))
-                text += "\n" + "<a href=https://image.tmdb.org/t/p/w400/" + posterPath.getAsString() +">View Movie Poster</a>";
+                text += single_line_break + "<a href=https://image.tmdb.org/t/p/w400/" + posterPath.getAsString() +">View Movie Poster</a>";
 
               DataBase.saveMovieInfo(movie.getTitle(), text, path);
             }
@@ -105,13 +107,14 @@ public class OtherInfoWindow {
   private boolean isNotNull(JsonElement element) {
     return element != null && !element.isJsonNull();
   }
+
   private static String getTextInDB(String text) {
-    return movie_in_db + text;
+    return local_movie + text;
   }
 
   private TheMovieDBAPI createAPI(){
     Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
+            .baseUrl(api_url)
             .addConverterFactory(ScalarsConverterFactory.create())
             .build();
 
@@ -190,6 +193,8 @@ public class OtherInfoWindow {
   private static final String body_open = "<body style=\"width: 400px\">";
   private static final String font_open = "<font face=\"arial\">";
   private static final String font_close = "</font>";
+  private static final String bold_open = "<b>";
+  private static final String bold_close = "</b>";
 
   public static String textToHtml(String text, String term) {
 
@@ -208,9 +213,6 @@ public class OtherInfoWindow {
   private static String replaceQuotes(String text){
     return text.replace("'", "`");
   }
-
-  private static final String bold_open = "<b>";
-  private static final String bold_close = "</b>";
 
   private static String makeTermBold(String text, String term) {
     return text.replaceAll("(?i)" + term, bold_open + term.toUpperCase() + bold_close);
