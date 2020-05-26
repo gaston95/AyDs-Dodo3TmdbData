@@ -32,12 +32,18 @@ public class OtherInfoWindow {
     win.getMoviePlot(movie);
   }
 
+  private static final String content_type = "text/html";
+  private static final String frame_title = "Movie Info Dodo";
+  private static final String label_text = "Data from The Movie Data Base";
+  private static final int width = 600;
+  private static final int height = 400;
+
   private static OtherInfoWindow createWindow() {
     OtherInfoWindow win = new OtherInfoWindow();
 
     win.contentPane = new JPanel();
     win.contentPane.setLayout(new BoxLayout(win.contentPane, BoxLayout.PAGE_AXIS));
-    win.contentPane.add(new JLabel("Data from The Movie Data Base"));
+    win.contentPane.add(new JLabel(label_text));
 
     win.imagePanel = new JPanel();
     win.contentPane.add(win.imagePanel);
@@ -45,13 +51,13 @@ public class OtherInfoWindow {
     JPanel descriptionPanel = new JPanel(new BorderLayout());
     win.descriptionTextPane = new JTextPane();
     win.descriptionTextPane.setEditable(false);
-    win.descriptionTextPane.setContentType("text/html");
-    win.descriptionTextPane.setMaximumSize(new Dimension(600, 400));
+    win.descriptionTextPane.setContentType(content_type);
+    win.descriptionTextPane.setMaximumSize(new Dimension(width, height));
     descriptionPanel.add(win.descriptionTextPane);
     win.contentPane.add(descriptionPanel);
 
-    JFrame frame = new JFrame("Movie Info Dodo");
-    frame.setMinimumSize(new Dimension(600, 600));
+    JFrame frame = new JFrame(frame_title);
+    frame.setMinimumSize(new Dimension(width, height));
     frame.setContentPane(win.contentPane);
     frame.pack();
     frame.setVisible(true);
@@ -59,10 +65,9 @@ public class OtherInfoWindow {
     return win;
   }
 
+  private static final String path_url = "https://image.tmdb.org/t/p/w400/";
+
   public void getMoviePlot(OmdbMovie movie) {
-
-    descriptionTextPane.setContentType("text/html");
-
     setHyperLinkListener();
 
     new Thread(() -> {
@@ -87,11 +92,11 @@ public class OtherInfoWindow {
 
               JsonElement backdropPathJson = searchResult.get("backdrop_path");
               if (isNotNull(backdropPathJson))
-                path = "https://image.tmdb.org/t/p/w400/" + backdropPathJson.getAsString();
+                path = path_url + backdropPathJson.getAsString();
 
               JsonElement posterPath = searchResult.get("poster_path");
               if(isNotNull(posterPath))
-                text += single_line_break + "<a href=https://image.tmdb.org/t/p/w400/" + posterPath.getAsString() +">View Movie Poster</a>";
+                text += single_line_break + "<a href=" + path_url + posterPath.getAsString() +">View Movie Poster</a>";
 
               DataBase.saveMovieInfo(movie.getTitle(), text, path);
             }
