@@ -65,7 +65,12 @@ public class OtherInfoWindow {
     return win;
   }
 
+  private static final String path_default = "https://www.themoviedb.org/assets/2/v4/logos/" +
+          "256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png";
   private static final String path_url = "https://image.tmdb.org/t/p/w400/";
+  private static final String link_open = "<a href=";
+  private static final String link_close = "</a>";
+  private static final String hyperlink_text = "View Movie Poster";
 
   public void getMoviePlot(OmdbMovie movie) {
     setHyperLinkListener();
@@ -79,31 +84,32 @@ public class OtherInfoWindow {
       if (movieExistsInDb(text,path)) {
         text = getTextInDB(text);
       } else {
-          text = "No Results";
-          path = "https://www.themoviedb.org/assets/2/v4/logos/256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png";
 
-          JsonObject searchResult = searchMovie(movie);
+        text = "No Results";
+        path = path_default;
 
-          if(searchResult != null){
-            JsonElement extract = searchResult.get("overview");
-            if (isNotNull(extract)) {
-              text = extract.getAsString().replace("\\n", single_line_break);
-              text = textToHtml(text, movie.getTitle());
+        JsonObject searchResult = searchMovie(movie);
+        if(searchResult != null){
 
-              JsonElement backdropPathJson = searchResult.get("backdrop_path");
-              if (isNotNull(backdropPathJson))
-                path = path_url + backdropPathJson.getAsString();
+          JsonElement extract = searchResult.get("overview");
+          if (isNotNull(extract)) {
+            text = extract.getAsString().replace("\\n", single_line_break);
+            text = textToHtml(text, movie.getTitle());
 
-              JsonElement posterPath = searchResult.get("poster_path");
-              if(isNotNull(posterPath))
-                text += single_line_break + "<a href=" + path_url + posterPath.getAsString() +">View Movie Poster</a>";
+            JsonElement backdropPathJson = searchResult.get("backdrop_path");
+            if (isNotNull(backdropPathJson))
+              path = path_url + backdropPathJson.getAsString();
 
-              DataBase.saveMovieInfo(movie.getTitle(), text, path);
-            }
+            JsonElement posterPath = searchResult.get("poster_path");
+            if(isNotNull(posterPath))
+              text += single_line_break + link_open + path_url + posterPath.getAsString() +
+                      ">" + hyperlink_text + link_close;
+
+            DataBase.saveMovieInfo(movie.getTitle(), text, path);
           }
+        }
       }
       descriptionTextPane.setText(text);
-
       setImage(path);
     }).start();
   }
@@ -177,7 +183,8 @@ public class OtherInfoWindow {
   private void setImage(String path) {
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ignored) {
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+            UnsupportedLookAndFeelException ignored) {
     }
     try {
       URL url = new URL(path);
@@ -200,7 +207,7 @@ public class OtherInfoWindow {
   private static final String bold_open = "<b>";
   private static final String bold_close = "</b>";
 
-  public static String textToHtml(String text, String term) {
+  private static String textToHtml(String text, String term) {
 
     StringBuilder builder = new StringBuilder();
     builder.append(html_open + body_open)
