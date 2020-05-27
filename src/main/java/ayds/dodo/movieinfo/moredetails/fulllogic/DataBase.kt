@@ -112,4 +112,13 @@ object DataBase {
             System.err.println(e)
         }
     }
+
+    private fun isInfotableCreated(): Boolean {
+        try {
+            val tables = connection.metaData?.getTables(null, null, "info", null)
+            return tables?.next() ?: false
+        } catch (e: SQLException) {
+        }
+        return false
+    }
 }
