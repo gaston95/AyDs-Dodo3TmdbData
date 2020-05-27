@@ -33,13 +33,9 @@ object DataBase {
 
     @JvmStatic
     fun saveMovieInfo(title: String, plot: String, imageUrl: String) {
-        try{
-            getConnectionToExtraInfo().use {
-                it.initializeStatement().executeUpdate(saveMovieStringBuilder(title, plot, imageUrl))
-            }
-        } catch (e: Exception) {
-            System.err.println(e)
-        }
+        openConnectionToExtraInfo()
+        insertMovieInfo(title,plot,imageUrl)
+        closeConnectionToExtraInfo()
     }
 
     @JvmStatic
@@ -96,13 +92,9 @@ object DataBase {
             null
     }
 
-    private fun saveMovieStringBuilder(title:String, plot: String, imageUrl: String): String =
-            "insert into info values(null, '${title.replaceQuotes()}', '${plot.replaceQuotes()}', '$imageUrl', 1)"
+
 
     private fun String.replaceQuotes() = this.replace(singleQuote, doubleQuote)
-
-    private fun Statement.createTable(): Int =
-            this.executeUpdate(createTableQuery)
 
     //---------------------------------------------------------------------
     private fun openConnectionToExtraInfo() {
@@ -142,4 +134,19 @@ object DataBase {
             println(e.message)
         }
     }
+
+    private fun insertMovieInfo(title:String, plot: String, imageUrl: String){
+        try {
+            statement?.executeUpdate(getInsertMovieInfoQuery(title, plot,imageUrl))
+        } catch (e: SQLException) {
+            println("Error saving " + e.message)
+        }
+    }
+
+    private fun getInsertMovieInfoQuery(title:String, plot: String, imageUrl: String): String =
+            "insert into info values(null," +
+                    " '${title.replaceQuotes()}'," +
+                    " '${plot.replaceQuotes()}'," +
+                    " '$imageUrl'," +
+                    " 1)"
 }
