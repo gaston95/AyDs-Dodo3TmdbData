@@ -3,6 +3,8 @@ package ayds.dodo.movieinfo.moredetails.fulllogic
 import java.sql.*
 
 object DataBase {
+    private lateinit var connection: Connection
+
     private const val extraInfoDBURL = "jdbc:sqlite:./extra_info.db"
     private const val plot = "plot"
     private const val imageUrl = "image_url"
@@ -93,4 +95,21 @@ object DataBase {
 
     private fun Statement.createTable(): Int =
             this.executeUpdate(createTableQuery)
+
+    //---------------------------------------------------------------------
+    private fun openConnectionToExtraInfo() {
+        try {
+            connection = DriverManager.getConnection(extraInfoDBURL)
+        } catch (e: SQLException) {
+            println("Could not create connection $extraInfoDBURL $e")
+        }
+    }
+
+    private fun closeConnectionToExtraInfo() {
+        try {
+            connection.close()
+        } catch (e: SQLException) {
+            System.err.println(e)
+        }
+    }
 }
