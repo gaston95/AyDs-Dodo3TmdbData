@@ -21,8 +21,6 @@ object DataBase {
     private const val plotColumn = "plot"
     private const val imageUrlColumn = "image_url"
     private const val createTableQuery = "create table if not exists info (id INTEGER PRIMARY KEY AUTOINCREMENT, title string, plot string, image_url string, source integer)"
-    private const val singleQuote = "'"
-    private const val doubleQuote = "''"
 
     private fun openConnectionToExtraInfo() {
         try {
@@ -68,8 +66,8 @@ object DataBase {
         createInfoTableIfNeeded()
         closeConnectionToExtraInfo()
     }
-
-    private fun String.replaceQuotes() = this.replace(singleQuote, doubleQuote)
+    
+    private fun String.replaceQuotes() = this.replace("'", "''")
 
     private fun getInsertMovieInfoQuery(title:String, plot: String, imageUrl: String): String =
             "insert into info values(null," +
