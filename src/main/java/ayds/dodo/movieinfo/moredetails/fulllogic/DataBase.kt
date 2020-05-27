@@ -5,6 +5,18 @@ import java.sql.*
 object DataBase {
     private lateinit var connection: Connection
 
+    private val statement: Statement?
+        get() {
+            var statement: Statement? = null
+            try {
+                statement = connection.createStatement()
+                statement.queryTimeout = 30
+            } catch (e: SQLException) {
+                println("Create statement error " + e.message)
+            }
+            return statement
+        }
+
     private const val extraInfoDBURL = "jdbc:sqlite:./extra_info.db"
     private const val plot = "plot"
     private const val imageUrl = "image_url"
@@ -14,13 +26,9 @@ object DataBase {
 
     @JvmStatic
     fun createNewDatabase() {
-        try {
-            getConnectionToExtraInfo().use {
-                it.initializeStatement().createTable()
-            }
-        } catch (e: SQLException) {
-            println(e.message)
-        }
+        openConnectionToExtraInfo()
+        createInfoTableifNeeded()
+        closeConnectionToExtraInfo()
     }
 
     @JvmStatic
@@ -120,5 +128,18 @@ object DataBase {
         } catch (e: SQLException) {
         }
         return false
+    }
+
+    private fun createInfoTableifNeeded(){
+        if(!isInfotableCreated())
+            createInfoTable()
+    }
+
+    private fun createInfoTable(){
+        try {
+            statement?.executeUpdate(createTableQuery)
+        } catch (e: SQLException) {
+            println(e.message)
+        }
     }
 }
