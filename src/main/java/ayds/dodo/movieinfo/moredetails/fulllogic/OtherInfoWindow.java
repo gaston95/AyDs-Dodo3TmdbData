@@ -110,6 +110,7 @@ public class OtherInfoWindow {
         }
       }
       descriptionTextPane.setText(text);
+      setLookAndFeel();
       setImage(path);
     }).start();
   }
@@ -180,12 +181,14 @@ public class OtherInfoWindow {
     return year.equals(movieYear);
   }
 
-  private void setImage(String path) {
+  private void setLookAndFeel(){
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
             UnsupportedLookAndFeelException ignored) {
     }
+  }
+  private void setImage(String path) {
     try {
       URL url = new URL(path);
       BufferedImage image = ImageIO.read(url);
