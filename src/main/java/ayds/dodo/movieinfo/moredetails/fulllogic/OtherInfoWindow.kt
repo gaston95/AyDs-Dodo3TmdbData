@@ -1,19 +1,9 @@
 package ayds.dodo.movieinfo.moredetails.fulllogic
 
 import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
-import ayds.dodo.movieinfo.moredetails.fulllogic.DataBase.createNewDatabase
-import ayds.dodo.movieinfo.moredetails.fulllogic.DataBase.getImageUrl
-import ayds.dodo.movieinfo.moredetails.fulllogic.DataBase.getOverview
-import ayds.dodo.movieinfo.moredetails.fulllogic.DataBase.saveMovieInfo
-import com.google.gson.Gson
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.awt.BorderLayout
 import java.awt.Desktop
 import java.awt.Dimension
-import java.io.IOException
 import java.net.URL
 import javax.imageio.ImageIO
 import javax.swing.*
