@@ -8,7 +8,6 @@ import ayds.dodo.movieinfo.moredetails.fulllogic.DataBase.saveMovieInfo
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.awt.BorderLayout
@@ -111,6 +110,7 @@ class OtherInfoWindow {
                 }
             }
             descriptionTextPane.text = text
+            setLookAndFeel()
             setImage(path)
         }).start()
     }
@@ -130,9 +130,7 @@ class OtherInfoWindow {
 
     private fun movieExistsInDb(text: String?, path: String?): Boolean = text != null && path != null
 
-    private fun getTextInDB(text: String?): String {
-        return local_movie + text
-    }
+    private fun getTextInDB(text: String?): String = local_movie + text
 
     private fun isNotNull(element: JsonElement?): Boolean = element != null && !element.isJsonNull
 
@@ -171,11 +169,14 @@ class OtherInfoWindow {
         return year == movieYear
     }
 
-    private fun setImage(path: String?) {
+    private fun setLookAndFeel() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
         } catch (ignored: Exception) {
         }
+    }
+
+    private fun setImage(path: String?) {
         try {
             val url = URL(path)
             val image = ImageIO.read(url)
