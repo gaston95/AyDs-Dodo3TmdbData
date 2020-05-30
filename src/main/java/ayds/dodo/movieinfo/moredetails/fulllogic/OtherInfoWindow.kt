@@ -36,11 +36,11 @@ class OtherInfoWindow {
             win.getMoviePlot(movie)
         }
 
-        private val content_type = "text/html"
-        private val frame_title = "Movie Info Dodo"
-        private val label_text = "Data from The Movie Data Base"
-        private val width = 600
-        private val height = 400
+        private const val content_type = "text/html"
+        private const val frame_title = "Movie Info Dodo"
+        private const val label_text = "Data from The Movie Data Base"
+        private const val width = 600
+        private const val height = 400
 
         private fun createWindow(): OtherInfoWindow {
             val win = OtherInfoWindow()
