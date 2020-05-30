@@ -32,7 +32,7 @@ class OtherInfoWindow {
         fun open(movie: OmdbMovie) {
             val win = createWindow()
 
-            win.getMoviePlot(movie)
+            win.initWindow(movie)
         }
 
         private const val content_type = "text/html"
@@ -66,27 +66,30 @@ class OtherInfoWindow {
         }
     }
 
-    private val path_default = "https://www.themoviedb.org/assets/2/v4/logos/" +
+    private val image_url_default = "https://www.themoviedb.org/assets/2/v4/logos/" +
             "256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png"
     private val path_url = "https://image.tmdb.org/t/p/w400/"
     private val link_open = "<a href="
     private val link_close = "</a>"
     private val hyperlink_text = "View Movie Poster"
+    private val no_results = "No results"
+
+    private fun initWindow(movie: OmdbMovie) {
+        setHyperLinkListener()
+        getMoviePlot(movie)
+    }
 
     private fun getMoviePlot(movie: OmdbMovie) {
-        setHyperLinkListener()
-
         Thread(Runnable {
-
             createNewDatabase()
             var text = getOverview(movie.title)
-            var path = getImageUrl(movie.title)
+            var imageUrl = getImageUrl(movie.title)
 
-            if (movieExistsInDb(text, path)) {
+            if (movieExistsInDb(text, imageUrl)) {
                 text = getTextInDB(text)
             } else {
-                text = "No Results"
-                path = path_default
+                text = no_results
+                imageUrl = image_url_default
 
                 val searchResult = searchMovie(movie)
                 if (searchResult != null) {
@@ -98,20 +101,20 @@ class OtherInfoWindow {
 
                         val backdropPathJson = searchResult["backdrop_path"]
                         if (isNotNull(backdropPathJson))
-                            path = path_url + backdropPathJson.asString
+                            imageUrl = path_url + backdropPathJson.asString
 
                         val posterPath = searchResult["poster_path"]
                         if (isNotNull(posterPath))
                             text += single_line_break + link_open + path_url + posterPath.asString +
                                 ">" + hyperlink_text + link_close
 
-                        saveMovieInfo(movie.title, text, path)
+                        saveMovieInfo(movie.title, text, imageUrl)
                     }
                 }
             }
             descriptionTextPane.text = text
             setLookAndFeel()
-            setImage(path)
+            setImage(imageUrl)
         }).start()
     }
 
