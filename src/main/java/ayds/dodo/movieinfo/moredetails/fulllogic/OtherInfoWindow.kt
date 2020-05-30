@@ -24,9 +24,10 @@ class OtherInfoWindow {
     private var descriptionTextPane = JTextPane()
     private var imagePanel = JPanel()
 
-    private val singleLineBreak = "\n"
-    private val localMovie = "[*]"
-    private val apiUrl = "https://api.themoviedb.org/3/"
+    private val single_line_break = "\n"
+    private val link_open = "<a href="
+    private val link_close = "</a>"
+    private val hyperlink_text = "View Movie Poster"
 
     companion object {
         fun open(movie: OmdbMovie) {
@@ -66,14 +67,6 @@ class OtherInfoWindow {
         }
     }
 
-    private val imageUrlDefault = "https://www.themoviedb.org/assets/2/v4/logos/" +
-            "256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png"
-    private val pathUrl = "https://image.tmdb.org/t/p/w400/"
-    private val linkOpen = "<a href="
-    private val linkClose = "</a>"
-    private val hyperlinkText = "View Movie Poster"
-    private val noResults = "No results"
-
     private fun initWindow(movie: OmdbMovie) {
         setHyperLinkListener()
         getMoviePlot(movie)
@@ -81,37 +74,12 @@ class OtherInfoWindow {
 
     private fun getMoviePlot(movie: OmdbMovie) {
         Thread(Runnable {
-            createNewDatabase()
-            var text = getOverview(movie.title)
-            var imageUrl = getImageUrl(movie.title)
-
-            if (movieExistsInDb(text, imageUrl)) {
-                text = getTextInDB(text)
-            } else {
-                text = noResults
-                imageUrl = imageUrlDefault
-
-                val searchResult = searchMovie(movie)
-                if (searchResult != null) {
-
-                    val extract = searchResult["overview"]
-                    if (isNotNull(extract)) {
-                        text = extract.asString.replace("\\n", singleLineBreak)
-                        text = textToHtml(text, movie.title)
-
-                        val backdropPathJson = searchResult["backdrop_path"]
-                        if (isNotNull(backdropPathJson))
-                            imageUrl = pathUrl + backdropPathJson.asString
-
-                        val posterPath = searchResult["poster_path"]
-                        if (isNotNull(posterPath))
-                            text += singleLineBreak + linkOpen + pathUrl + posterPath.asString +
-                                ">" + hyperlinkText + linkClose
-
-                        saveMovieInfo(movie.title, text, imageUrl)
-                    }
-                }
-            }
+            val movieData = OtherInfoData(movie)
+            var text = movieData.getText().replace("\\n", single_line_break)
+            val imageUrl = movieData.getImageURL()
+            text = textToHtml(text, movie.title)
+            text += single_line_break + link_open + movieData.getPosterPath() +
+                   ">" + hyperlink_text + link_close
             descriptionTextPane.text = text
             setLookAndFeel()
             setImage(imageUrl)
@@ -129,47 +97,6 @@ class OtherInfoWindow {
                 }
             }
         }
-    }
-
-    private fun movieExistsInDb(text: String?, path: String?): Boolean = text != null && path != null
-
-    private fun getTextInDB(text: String?): String = localMovie + text
-
-    private fun isNotNull(element: JsonElement?): Boolean = element != null && !element.isJsonNull
-
-
-    private fun searchMovie(movie: OmdbMovie): JsonObject? {
-        val tmdbAPI = createAPI()
-        try {
-            val callResponse = tmdbAPI.getTerm(movie.title)?.execute()
-            val gson = Gson()
-            val jobj = gson.fromJson(callResponse?.body(), JsonObject::class.java)
-            val resultIterator: Iterator<JsonElement> = jobj["results"].asJsonArray.iterator()
-            var result: JsonObject
-            while (resultIterator.hasNext()) {
-                result = resultIterator.next().asJsonObject
-                if (areSameYear(result, movie.year)) {
-                    return result
-                }
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return null
-    }
-
-    private fun createAPI(): TheMovieDBAPI {
-        val retrofit = Retrofit.Builder()
-                .baseUrl(apiUrl)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build()
-        return retrofit.create(TheMovieDBAPI::class.java)
-    }
-
-    private fun areSameYear(result: JsonObject, movieYear: String): Boolean {
-        val yearJson = result["release_date"]
-        val year = yearJson?.asString?.split("-")?.toTypedArray()?.get(0) ?: ""
-        return year == movieYear
     }
 
     private fun setLookAndFeel() {
@@ -192,20 +119,20 @@ class OtherInfoWindow {
         }
     }
 
-    private val htmlOpen = "<html>"
-    private val bodyOpen = "<body style=\"width: 400px\">"
-    private val fontOpen = "<font face=\"arial\">"
-    private val fontClose = "</font>"
-    private val boldOpen = "<b>"
-    private val boldClose = "</b>"
+    private val html_open = "<html>"
+    private val body_open = "<body style=\"width: 400px\">"
+    private val font_open = "<font face=\"arial\">"
+    private val font_close = "</font>"
+    private val bold_open = "<b>"
+    private val bold_close = "</b>"
 
     private fun textToHtml(text: String, term: String): String {
         val builder = StringBuilder()
-        builder.append(htmlOpen + bodyOpen)
-                .append(fontOpen)
+        builder.append(html_open + body_open)
+                .append(font_open)
         val textWithReplacedQuotes = replaceQuotes(text)
         builder.append(makeTermBold(textWithReplacedQuotes, term))
-                .append(fontClose)
+                .append(font_close)
         return builder.toString()
     }
 
@@ -214,6 +141,6 @@ class OtherInfoWindow {
     }
 
     private fun makeTermBold(text: String, term: String): String {
-        return text.replace("(?i)" + term.toRegex(), boldOpen + term.toUpperCase() + boldClose)
+        return text.replace("(?i)" + term.toRegex(), bold_open + term.toUpperCase() + bold_close)
     }
 }
