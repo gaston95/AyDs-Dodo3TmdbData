@@ -24,9 +24,9 @@ class OtherInfoWindow {
     private var descriptionTextPane = JTextPane()
     private var imagePanel = JPanel()
 
-    private val single_line_break = "\n"
-    private val local_movie = "[*]"
-    private val api_url = "https://api.themoviedb.org/3/"
+    private val singleLineBreak = "\n"
+    private val localMovie = "[*]"
+    private val apiUrl = "https://api.themoviedb.org/3/"
 
     companion object {
         fun open(movie: OmdbMovie) {
@@ -66,13 +66,13 @@ class OtherInfoWindow {
         }
     }
 
-    private val image_url_default = "https://www.themoviedb.org/assets/2/v4/logos/" +
+    private val imageUrlDefault = "https://www.themoviedb.org/assets/2/v4/logos/" +
             "256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png"
-    private val path_url = "https://image.tmdb.org/t/p/w400/"
-    private val link_open = "<a href="
-    private val link_close = "</a>"
-    private val hyperlink_text = "View Movie Poster"
-    private val no_results = "No results"
+    private val pathUrl = "https://image.tmdb.org/t/p/w400/"
+    private val linkOpen = "<a href="
+    private val linkClose = "</a>"
+    private val hyperlinkText = "View Movie Poster"
+    private val noResults = "No results"
 
     private fun initWindow(movie: OmdbMovie) {
         setHyperLinkListener()
@@ -88,25 +88,25 @@ class OtherInfoWindow {
             if (movieExistsInDb(text, imageUrl)) {
                 text = getTextInDB(text)
             } else {
-                text = no_results
-                imageUrl = image_url_default
+                text = noResults
+                imageUrl = imageUrlDefault
 
                 val searchResult = searchMovie(movie)
                 if (searchResult != null) {
 
                     val extract = searchResult["overview"]
                     if (isNotNull(extract)) {
-                        text = extract.asString.replace("\\n", single_line_break)
+                        text = extract.asString.replace("\\n", singleLineBreak)
                         text = textToHtml(text, movie.title)
 
                         val backdropPathJson = searchResult["backdrop_path"]
                         if (isNotNull(backdropPathJson))
-                            imageUrl = path_url + backdropPathJson.asString
+                            imageUrl = pathUrl + backdropPathJson.asString
 
                         val posterPath = searchResult["poster_path"]
                         if (isNotNull(posterPath))
-                            text += single_line_break + link_open + path_url + posterPath.asString +
-                                ">" + hyperlink_text + link_close
+                            text += singleLineBreak + linkOpen + pathUrl + posterPath.asString +
+                                ">" + hyperlinkText + linkClose
 
                         saveMovieInfo(movie.title, text, imageUrl)
                     }
@@ -133,7 +133,7 @@ class OtherInfoWindow {
 
     private fun movieExistsInDb(text: String?, path: String?): Boolean = text != null && path != null
 
-    private fun getTextInDB(text: String?): String = local_movie + text
+    private fun getTextInDB(text: String?): String = localMovie + text
 
     private fun isNotNull(element: JsonElement?): Boolean = element != null && !element.isJsonNull
 
@@ -160,7 +160,7 @@ class OtherInfoWindow {
 
     private fun createAPI(): TheMovieDBAPI {
         val retrofit = Retrofit.Builder()
-                .baseUrl(api_url)
+                .baseUrl(apiUrl)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build()
         return retrofit.create(TheMovieDBAPI::class.java)
@@ -192,20 +192,20 @@ class OtherInfoWindow {
         }
     }
 
-    private val html_open = "<html>"
-    private val body_open = "<body style=\"width: 400px\">"
-    private val font_open = "<font face=\"arial\">"
-    private val font_close = "</font>"
-    private val bold_open = "<b>"
-    private val bold_close = "</b>"
+    private val htmlOpen = "<html>"
+    private val bodyOpen = "<body style=\"width: 400px\">"
+    private val fontOpen = "<font face=\"arial\">"
+    private val fontClose = "</font>"
+    private val boldOpen = "<b>"
+    private val boldClose = "</b>"
 
     private fun textToHtml(text: String, term: String): String {
         val builder = StringBuilder()
-        builder.append(html_open + body_open)
-                .append(font_open)
+        builder.append(htmlOpen + bodyOpen)
+                .append(fontOpen)
         val textWithReplacedQuotes = replaceQuotes(text)
         builder.append(makeTermBold(textWithReplacedQuotes, term))
-                .append(font_close)
+                .append(fontClose)
         return builder.toString()
     }
 
@@ -214,6 +214,6 @@ class OtherInfoWindow {
     }
 
     private fun makeTermBold(text: String, term: String): String {
-        return text.replace("(?i)" + term.toRegex(), bold_open + term.toUpperCase() + bold_close)
+        return text.replace("(?i)" + term.toRegex(), boldOpen + term.toUpperCase() + boldClose)
     }
 }
