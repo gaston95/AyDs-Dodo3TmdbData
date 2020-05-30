@@ -25,8 +25,9 @@ class OtherInfoWindow {
     private var imagePanel = JPanel()
 
     private val single_line_break = "\n"
-    private val local_movie = "[*]"
-    private val api_url = "https://api.themoviedb.org/3/"
+    private val link_open = "<a href="
+    private val link_close = "</a>"
+    private val hyperlink_text = "View Movie Poster"
 
     companion object {
         fun open(movie: OmdbMovie) {
@@ -66,14 +67,6 @@ class OtherInfoWindow {
         }
     }
 
-    private val image_url_default = "https://www.themoviedb.org/assets/2/v4/logos/" +
-            "256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png"
-    private val path_url = "https://image.tmdb.org/t/p/w400/"
-    private val link_open = "<a href="
-    private val link_close = "</a>"
-    private val hyperlink_text = "View Movie Poster"
-    private val no_results = "No results"
-
     private fun initWindow(movie: OmdbMovie) {
         setHyperLinkListener()
         getMoviePlot(movie)
@@ -81,37 +74,12 @@ class OtherInfoWindow {
 
     private fun getMoviePlot(movie: OmdbMovie) {
         Thread(Runnable {
-            createNewDatabase()
-            var text = getOverview(movie.title)
-            var imageUrl = getImageUrl(movie.title)
-
-            if (movieExistsInDb(text, imageUrl)) {
-                text = getTextInDB(text)
-            } else {
-                text = no_results
-                imageUrl = image_url_default
-
-                val searchResult = searchMovie(movie)
-                if (searchResult != null) {
-
-                    val extract = searchResult["overview"]
-                    if (isNotNull(extract)) {
-                        text = extract.asString.replace("\\n", single_line_break)
-                        text = textToHtml(text, movie.title)
-
-                        val backdropPathJson = searchResult["backdrop_path"]
-                        if (isNotNull(backdropPathJson))
-                            imageUrl = path_url + backdropPathJson.asString
-
-                        val posterPath = searchResult["poster_path"]
-                        if (isNotNull(posterPath))
-                            text += single_line_break + link_open + path_url + posterPath.asString +
-                                ">" + hyperlink_text + link_close
-
-                        saveMovieInfo(movie.title, text, imageUrl)
-                    }
-                }
-            }
+            val movieData = OtherInfoData(movie)
+            var text = movieData.getText().replace("\\n", single_line_break)
+            val imageUrl = movieData.getImageURL()
+            text = textToHtml(text, movie.title)
+            text += single_line_break + link_open + movieData.getPosterPath() +
+                   ">" + hyperlink_text + link_close
             descriptionTextPane.text = text
             setLookAndFeel()
             setImage(imageUrl)
@@ -129,47 +97,6 @@ class OtherInfoWindow {
                 }
             }
         }
-    }
-
-    private fun movieExistsInDb(text: String?, path: String?): Boolean = text != null && path != null
-
-    private fun getTextInDB(text: String?): String = local_movie + text
-
-    private fun isNotNull(element: JsonElement?): Boolean = element != null && !element.isJsonNull
-
-
-    private fun searchMovie(movie: OmdbMovie): JsonObject? {
-        val tmdbAPI = createAPI()
-        try {
-            val callResponse = tmdbAPI.getTerm(movie.title)?.execute()
-            val gson = Gson()
-            val jobj = gson.fromJson(callResponse?.body(), JsonObject::class.java)
-            val resultIterator: Iterator<JsonElement> = jobj["results"].asJsonArray.iterator()
-            var result: JsonObject
-            while (resultIterator.hasNext()) {
-                result = resultIterator.next().asJsonObject
-                if (areSameYear(result, movie.year)) {
-                    return result
-                }
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return null
-    }
-
-    private fun createAPI(): TheMovieDBAPI {
-        val retrofit = Retrofit.Builder()
-                .baseUrl(api_url)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build()
-        return retrofit.create(TheMovieDBAPI::class.java)
-    }
-
-    private fun areSameYear(result: JsonObject, movieYear: String): Boolean {
-        val yearJson = result["release_date"]
-        val year = yearJson?.asString?.split("-")?.toTypedArray()?.get(0) ?: ""
-        return year == movieYear
     }
 
     private fun setLookAndFeel() {
