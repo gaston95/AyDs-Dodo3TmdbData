@@ -18,7 +18,7 @@ internal class MovieDescriptionHelperImpl : MovieDescriptionHelper {
     override fun getMovieDescriptionText(movie: OmdbMovie): String =
        if (movie.isEmptyMovie()) "Movie not found" else movie.createMovieString()
 
-    private fun OmdbMovie.isEmptyMovie() = this == EmptyMovie || this.title.isEmpty()
+    private fun OmdbMovie.isEmptyMovie() = this == EmptyMovie
 
     private fun OmdbMovie.createMovieString() =
         (htmlHeading
