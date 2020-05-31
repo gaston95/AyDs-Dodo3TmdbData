@@ -14,10 +14,10 @@ class OtherInfoWindow {
     private var descriptionTextPane = JTextPane()
     private var imagePanel = JPanel()
 
-    private val single_line_break = "\n"
-    private val link_open = "<a href="
-    private val link_close = "</a>"
-    private val hyperlink_text = "View Movie Poster"
+    private val singleLineBreak = "\n"
+    private val linkOpen = "<a href="
+    private val linkClose = "</a>"
+    private val hyperlinkText = "View Movie Poster"
 
     companion object {
         fun open(movie: OmdbMovie) {
@@ -65,12 +65,11 @@ class OtherInfoWindow {
     private fun getMoviePlot(movie: OmdbMovie) {
         Thread(Runnable {
             val movieData = OtherInfoData(movie)
-            var text = movieData.getText().replace("\\n", single_line_break)
+            var text = movieData.getText().replace("\\n", singleLineBreak)
             val imageUrl = movieData.getImageURL()
-            println(imageUrl)
             text = textToHtml(text, movie.title)
-            text += single_line_break + link_open + movieData.getPosterPath() +
-                   ">" + hyperlink_text + link_close
+            text += singleLineBreak + linkOpen + movieData.getPosterPath() +
+                   ">" + hyperlinkText + linkClose
             descriptionTextPane.text = text
             setLookAndFeel()
             setImage(imageUrl)
@@ -110,28 +109,25 @@ class OtherInfoWindow {
         }
     }
 
-    private val html_open = "<html>"
-    private val body_open = "<body style=\"width: 400px\">"
-    private val font_open = "<font face=\"arial\">"
-    private val font_close = "</font>"
-    private val bold_open = "<b>"
-    private val bold_close = "</b>"
+    private val htmlOpen = "<html>"
+    private val bodyOpen = "<body style=\"width: 400px\">"
+    private val fontOpen = "<font face=\"arial\">"
+    private val fontClose = "</font>"
+    private val boldOpen = "<b>"
+    private val boldClose = "</b>"
 
     private fun textToHtml(text: String, term: String): String {
         val builder = StringBuilder()
-        builder.append(html_open + body_open)
-                .append(font_open)
+        builder.append(htmlOpen + bodyOpen)
+                .append(fontOpen)
         val textWithReplacedQuotes = replaceQuotes(text)
         builder.append(makeTermBold(textWithReplacedQuotes, term))
-                .append(font_close)
+                .append(fontClose)
         return builder.toString()
     }
 
-    private fun replaceQuotes(text: String): String {
-        return text.replace("'", "`")
-    }
+    private fun replaceQuotes(text: String) = text.replace("'", "`")
 
-    private fun makeTermBold(text: String, term: String): String {
-        return text.replace("(?i)" + term.toRegex(), bold_open + term.toUpperCase() + bold_close)
-    }
+    private fun makeTermBold(text: String, term: String) = text.replace("(?i)" + term.toRegex(), boldOpen + term.toUpperCase() + boldClose)
+
 }
