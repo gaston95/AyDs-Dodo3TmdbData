@@ -10,13 +10,13 @@ import java.io.IOException
 
 class OtherInfoData(movie: OmdbMovie) {
 
-    private val image_url_default = "https://www.themoviedb.org/assets/2/v4/logos/" +
+    private val imageUrlDefault = "https://www.themoviedb.org/assets/2/v4/logos/" +
             "256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png"
-    private val path_url = "https://image.tmdb.org/t/p/w400/"
-    private val api_url = "https://api.themoviedb.org/3/"
-    private val local_movie = "[*]"
-    private val no_results = "No results"
-    private var imageUrl:String = ""
+    private val pathUrl = "https://image.tmdb.org/t/p/w400/"
+    private val apiUrl = "https://api.themoviedb.org/3/"
+    private val localMovie = "[*]"
+    private val noResults = "No results"
+    private var imageUrl:String = imageUrlDefault
     private var text:String = ""
     private var posterPath:String = ""
 
@@ -37,9 +37,9 @@ class OtherInfoData(movie: OmdbMovie) {
 
             if (movieExistsInDb(movieText, movieImageUrl)) {
                 text = getTextInDB(movieText)
+                imageUrl = movieImageUrl!!
             } else {
-                text = no_results
-                imageUrl = image_url_default
+                text = noResults
 
                 val searchResult = searchMovie(movie)
 
@@ -53,11 +53,10 @@ class OtherInfoData(movie: OmdbMovie) {
 
                         val backdropPathJson = searchResult["backdrop_path"]
                         if (isNotNull(backdropPathJson))
-                            imageUrl = path_url + backdropPathJson.asString
-
+                            imageUrl = pathUrl + backdropPathJson.asString
                         val posterPathJSon = searchResult["poster_path"]
                         if (isNotNull(posterPathJSon))
-                            posterPath = path_url + posterPathJSon.asString
+                            posterPath = pathUrl + posterPathJSon.asString
 
                         DataBase.saveMovieInfo(movie.title, text, imageUrl)
                     }
@@ -67,7 +66,7 @@ class OtherInfoData(movie: OmdbMovie) {
 
     private fun movieExistsInDb(text: String?, path: String?): Boolean = text != null && path != null
 
-    private fun getTextInDB(text: String?): String = local_movie + text
+    private fun getTextInDB(text: String?): String = localMovie + text
 
     private fun isNotNull(element: JsonElement?): Boolean = element != null && !element.isJsonNull
 
@@ -77,7 +76,7 @@ class OtherInfoData(movie: OmdbMovie) {
             val callResponse = tmdbAPI.getTerm(movie.title)?.execute()
             val gson = Gson()
             val jobj = gson.fromJson(callResponse?.body(), JsonObject::class.java)
-            val resultIterator: Iterator<JsonElement> = jobj["results"].asJsonArray.iterator()
+            val resultIterator = jobj["results"].asJsonArray.iterator()
             var result: JsonObject
             while (resultIterator.hasNext()) {
                 result = resultIterator.next().asJsonObject
@@ -93,7 +92,7 @@ class OtherInfoData(movie: OmdbMovie) {
 
     private fun createAPI(): TheMovieDBAPI {
         val retrofit = Retrofit.Builder()
-                .baseUrl(api_url)
+                .baseUrl(apiUrl)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build()
         return retrofit.create(TheMovieDBAPI::class.java)

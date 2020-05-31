@@ -67,6 +67,7 @@ class OtherInfoWindow {
             val movieData = OtherInfoData(movie)
             var text = movieData.getText().replace("\\n", single_line_break)
             val imageUrl = movieData.getImageURL()
+            println(imageUrl)
             text = textToHtml(text, movie.title)
             text += single_line_break + link_open + movieData.getPosterPath() +
                    ">" + hyperlink_text + link_close
