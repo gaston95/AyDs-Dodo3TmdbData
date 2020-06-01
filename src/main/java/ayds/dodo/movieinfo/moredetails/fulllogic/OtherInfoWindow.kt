@@ -62,8 +62,8 @@ class OtherInfoWindow(val movie: OmdbMovie) {
     private fun getPosterPathText(movieData: OtherInfoData) =
             linkOpen + movieData.getPosterPath() + greaterThanSymbol + hyperlinkText + linkClose
 
-    private fun closeHTML(text: String): String =
-            text + bodyClose + htmlClose
+    private fun closeHTML(): String =
+            bodyClose + htmlClose
 
     private fun getFormattedPlotText(movieData: OtherInfoData): String {
         var formattedText = movieData.getText()
@@ -71,7 +71,7 @@ class OtherInfoWindow(val movie: OmdbMovie) {
         formattedText = textToHtml(formattedText)
         formattedText += singleLineBreak
         formattedText += getPosterPathText(movieData)
-        formattedText = closeHTML(formattedText)
+        formattedText += closeHTML()
         return formattedText
     }
 
