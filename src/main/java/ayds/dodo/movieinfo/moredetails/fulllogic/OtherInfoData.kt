@@ -8,8 +8,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.IOException
 
-class OtherInfoData(movie: OmdbMovie) {
-
+class OtherInfoData(val movie: OmdbMovie) {
+    
+    private val overviewProperty = "overview"
+    private val backdropPathProperty = "backdrop_path"
+    private val posterPathProperty = "poster_path"
     private val imageUrlDefault = "https://www.themoviedb.org/assets/2/v4/logos/" +
             "256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png"
     private val pathUrl = "https://image.tmdb.org/t/p/w400/"
@@ -17,11 +20,11 @@ class OtherInfoData(movie: OmdbMovie) {
     private val localMovie = "[*]"
     private val noResults = "No results"
     private var imageUrl:String = imageUrlDefault
-    private var text:String = ""
+    private var text:String = noResults
     private var posterPath:String = ""
 
     init {
-        buildMovieInfo(movie)
+        buildMovieInfo()
     }
 
     fun getText() = text
@@ -30,7 +33,7 @@ class OtherInfoData(movie: OmdbMovie) {
 
     fun getPosterPath() = posterPath
 
-    private fun buildMovieInfo(movie: OmdbMovie) {
+    private fun buildMovieInfo() {
             DataBase.createNewDatabase()
             val movieText = DataBase.getOverview(movie.title)
             val movieImageUrl = DataBase.getImageUrl(movie.title)
@@ -39,30 +42,31 @@ class OtherInfoData(movie: OmdbMovie) {
                 text = getTextInDB(movieText)
                 imageUrl = movieImageUrl!!
             } else {
-                text = noResults
+                buildMovieInfoFromAPI()
+            }
+    }
 
-                val searchResult = searchMovie(movie)
+    private fun buildMovieInfoFromAPI(){
+        val searchResult = searchMovie(movie)
+        if (searchResult != null) {
 
-                if (searchResult != null) {
+            val extract = searchResult[overviewProperty]
 
-                    val extract = searchResult["overview"]
+            if (isNotNull(extract)) {
 
-                    if (isNotNull(extract)) {
+                text = extract.asString
 
-                        text = extract.asString
+                val backdropPathJson = searchResult[backdropPathProperty]
+                if (isNotNull(backdropPathJson))
+                    imageUrl = pathUrl + backdropPathJson.asString
+                val posterPathJSon = searchResult[posterPathProperty]
+                if (isNotNull(posterPathJSon))
+                    posterPath = pathUrl + posterPathJSon.asString
 
-                        val backdropPathJson = searchResult["backdrop_path"]
-                        if (isNotNull(backdropPathJson))
-                            imageUrl = pathUrl + backdropPathJson.asString
-                        val posterPathJSon = searchResult["poster_path"]
-                        if (isNotNull(posterPathJSon))
-                            posterPath = pathUrl + posterPathJSon.asString
-
-                        DataBase.saveMovieInfo(movie.title, text, imageUrl)
-                    }
-                }
+                DataBase.saveMovieInfo(movie.title, text, imageUrl)
             }
         }
+    }
 
     private fun movieExistsInDb(text: String?, path: String?): Boolean = text != null && path != null
 
