@@ -21,6 +21,8 @@ class OtherInfoWindow(val movie: OmdbMovie) {
     private val linkOpen = "<a href="
     private val linkClose = "</a>"
     private val hyperlinkText = "View Movie Poster"
+    private val htmlClose = "</html>"
+    private val bodyClose = "</body>"
 
     private var contentPane = JPanel()
     private var descriptionTextPane = JTextPane()
@@ -60,6 +62,8 @@ class OtherInfoWindow(val movie: OmdbMovie) {
     private fun getPosterPathText(movieData: OtherInfoData) =
             linkOpen + movieData.getPosterPath() + greaterThanSymbol + hyperlinkText + linkClose
 
+    private fun closeHTML(text: String): String =
+            text + bodyClose + htmlClose
 
     private fun getFormattedPlotText(movieData: OtherInfoData): String {
         var formattedText = movieData.getText()
@@ -67,6 +71,7 @@ class OtherInfoWindow(val movie: OmdbMovie) {
         formattedText = textToHtml(formattedText)
         formattedText += singleLineBreak
         formattedText += getPosterPathText(movieData)
+        formattedText = closeHTML(formattedText)
         return formattedText
     }
 
@@ -139,11 +144,9 @@ class OtherInfoWindow(val movie: OmdbMovie) {
 
     private val quoteSymbol = "'"
     private val doubleQuoteSymbols = "''"
-    private val caseInsensitiveRegexSymbol = "(?i)"
-
     private fun replaceQuotes(text: String) = text.replace(quoteSymbol, doubleQuoteSymbols)
 
     private fun highlightTitle(text: String) =
-            text.replace(caseInsensitiveRegexSymbol + movie.title.toRegex(),
-                         boldOpen + movie.title.toUpperCase() + boldClose)
+            text.replace( movie.title,
+                    boldOpen + movie.title + boldClose)
 }
