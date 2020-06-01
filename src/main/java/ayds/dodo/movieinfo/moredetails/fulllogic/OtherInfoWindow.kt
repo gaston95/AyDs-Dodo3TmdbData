@@ -9,60 +9,53 @@ import javax.imageio.ImageIO
 import javax.swing.*
 import javax.swing.event.HyperlinkEvent
 
-class OtherInfoWindow {
-    private var contentPane = JPanel()
-    private var descriptionTextPane = JTextPane()
-    private var imagePanel = JPanel()
-
+class OtherInfoWindow(val movie: OmdbMovie) {
+    private val contentType = "text/html"
+    private val frameTitle = "Movie Info Dodo"
+    private val labelText = "Data from The Movie Data Base"
+    private val width = 600
+    private val height = 400
     private val singleLineBreak = "\n"
     private val linkOpen = "<a href="
     private val linkClose = "</a>"
     private val hyperlinkText = "View Movie Poster"
 
-    companion object {
-        fun open(movie: OmdbMovie) {
-            val win = createWindow()
+    private var contentPane = JPanel()
+    private var descriptionTextPane = JTextPane()
+    private var imagePanel = JPanel()
 
-            win.initWindow(movie)
-        }
 
-        private const val content_type = "text/html"
-        private const val frame_title = "Movie Info Dodo"
-        private const val label_text = "Data from The Movie Data Base"
-        private const val width = 600
-        private const val height = 400
-
-        private fun createWindow(): OtherInfoWindow {
-            val win = OtherInfoWindow()
-
-            win.contentPane.layout = BoxLayout(win.contentPane, BoxLayout.PAGE_AXIS)
-            win.contentPane.add(JLabel(label_text))
-
-            win.contentPane.add(win.imagePanel)
-
-            val descriptionPanel = JPanel(BorderLayout())
-            win.descriptionTextPane.isEditable = false
-            win.descriptionTextPane.contentType = content_type
-            win.descriptionTextPane.maximumSize = Dimension(width, height)
-            descriptionPanel.add(win.descriptionTextPane)
-            win.contentPane.add(descriptionPanel)
-
-            val frame = JFrame(frame_title)
-            frame.minimumSize = Dimension(width, height)
-            frame.contentPane = win.contentPane
-            frame.pack()
-            frame.isVisible = true
-
-            return win
-        }
+    init {
+        createWindow()
+        initWindow()
     }
 
-    private fun initWindow(movie: OmdbMovie) {
+    private fun createWindow() {
+        contentPane.layout = BoxLayout(contentPane, BoxLayout.PAGE_AXIS)
+        contentPane.add(JLabel(labelText))
+
+        contentPane.add(imagePanel)
+
+        val descriptionPanel = JPanel(BorderLayout())
+        descriptionTextPane.isEditable = false
+        descriptionTextPane.contentType = contentType
+        descriptionTextPane.maximumSize = Dimension(width, height)
+        descriptionPanel.add(descriptionTextPane)
+        contentPane.add(descriptionPanel)
+
+        val frame = JFrame(frameTitle)
+        frame.minimumSize = Dimension(width, height)
+        frame.contentPane = contentPane
+        frame.pack()
+        frame.isVisible = true
+    }
+
+    private fun initWindow() {
         setHyperLinkListener()
-        getMoviePlot(movie)
+        getMoviePlot()
     }
 
-    private fun getMoviePlot(movie: OmdbMovie) {
+    private fun getMoviePlot() {
         Thread(Runnable {
             val movieData = OtherInfoData(movie)
             var text = movieData.getText().replace("\\n", singleLineBreak)
