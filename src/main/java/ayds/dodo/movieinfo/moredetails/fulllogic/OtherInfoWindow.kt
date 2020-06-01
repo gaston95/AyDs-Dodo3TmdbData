@@ -49,39 +49,6 @@ class OtherInfoWindow(val movie: OmdbMovie) {
         getMoviePlot()
     }
 
-    private fun getPosterPathText(movieData: OtherInfoData) =
-            HTMLTags.linkOpen +
-            movieData.getPosterPath() +
-            HTMLTags.greaterThanSymbol +
-            HTMLTags.hyperlinkText +
-            HTMLTags.linkClose
-
-    private fun closeHTML(): String =
-            HTMLTags.bodyClose + HTMLTags.htmlClose
-
-    private fun getFormattedPlotText(movieData: OtherInfoData): String {
-        var formattedText = movieData.getText()
-        formattedText = replaceQuotationMarks(formattedText)
-        formattedText = textToHtml(formattedText)
-        formattedText += HTMLTags.singleLineBreak
-        formattedText += getPosterPathText(movieData)
-        formattedText += closeHTML()
-        return formattedText
-    }
-
-    private fun setDescriptionTextPane(text: String){
-        descriptionTextPane.text = text
-    }
-
-    private fun getMoviePlot() {
-        Thread(Runnable {
-            val movieData = OtherInfoData(movie)
-            setDescriptionTextPane(getFormattedPlotText(movieData))
-            setImage(movieData.getImageURL())
-            setLookAndFeel()
-        }).start()
-    }
-
     private fun setHyperLinkListener() {
         descriptionTextPane.addHyperlinkListener { e: HyperlinkEvent ->
             if (HyperlinkEvent.EventType.ACTIVATED == e.eventType) {
@@ -95,29 +62,37 @@ class OtherInfoWindow(val movie: OmdbMovie) {
         }
     }
 
-    private fun setLookAndFeel() {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
-        } catch (exception: Exception) {
-            exception.printStackTrace()
-        }
+    private fun getMoviePlot() {
+        Thread(Runnable {
+            val movieData = OtherInfoData(movie)
+            setDescriptionTextPane(getFormattedPlotText(movieData))
+            setImage(movieData.getImageURL())
+            setLookAndFeel()
+        }).start()
     }
 
-    private fun getImageIcon(path: String?): JLabel{
-        val url = URL(path)
-        val image = ImageIO.read(url)
-        return JLabel(ImageIcon(image))
+    private fun setDescriptionTextPane(text: String){
+        descriptionTextPane.text = text
     }
 
-    private fun setImage(path: String?) {
-        try {
-            imagePanel.add(getImageIcon(path))
-            contentPane.validate()
-            contentPane.repaint()
-        } catch (exception: Exception) {
-            exception.printStackTrace()
-        }
+    private fun getFormattedPlotText(movieData: OtherInfoData): String {
+        var formattedText = movieData.getText()
+        formattedText = replaceLineBreakMarks(formattedText)
+        formattedText = textToHtml(formattedText)
+        formattedText += HTMLTags.singleLineBreak
+        formattedText += getPosterPathText(movieData)
+        formattedText += closeHTML()
+        return formattedText
     }
+
+    private fun replaceLineBreakMarks(text: String) =
+            text.replace(HTMLTags.doubleBackSlashLineBreak, HTMLTags.singleLineBreak)
+
+    private fun replaceQuotes(text: String) = text.replace("'", "''")
+
+    private fun highlightTitle(text: String) =
+            text.replace( movie.title,
+                    HTMLTags.boldOpen + movie.title + HTMLTags.boldClose)
 
     private fun textToHtml(text: String): String {
         val builder = StringBuilder()
@@ -129,12 +104,37 @@ class OtherInfoWindow(val movie: OmdbMovie) {
         return builder.toString()
     }
 
-    private fun replaceQuotes(text: String) = text.replace("'", "''")
+    private fun getPosterPathText(movieData: OtherInfoData) =
+            HTMLTags.linkOpen +
+                    movieData.getPosterPath() +
+                    HTMLTags.greaterThanSymbol +
+                    HTMLTags.hyperlinkText +
+                    HTMLTags.linkClose
 
-    private fun highlightTitle(text: String) =
-            text.replace( movie.title,
-                    HTMLTags.boldOpen + movie.title + HTMLTags.boldClose)
+    private fun closeHTML(): String =
+            HTMLTags.bodyClose + HTMLTags.htmlClose
 
-    private fun replaceQuotationMarks(text: String) =
-            text.replace(HTMLTags.doubleBackSlashLineBreak, HTMLTags.singleLineBreak)
+    private fun setImage(path: String?) {
+        try {
+            imagePanel.add(getImageIcon(path))
+            contentPane.validate()
+            contentPane.repaint()
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+        }
+    }
+
+    private fun getImageIcon(path: String?): JLabel{
+        val url = URL(path)
+        val image = ImageIO.read(url)
+        return JLabel(ImageIcon(image))
+    }
+
+    private fun setLookAndFeel() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+        }
+    }
 }
