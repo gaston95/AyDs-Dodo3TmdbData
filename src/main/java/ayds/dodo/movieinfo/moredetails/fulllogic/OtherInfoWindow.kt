@@ -15,6 +15,8 @@ class OtherInfoWindow(val movie: OmdbMovie) {
     private val labelText = "Data from The Movie Data Base"
     private val width = 600
     private val height = 400
+    private val greaterThanSymbol = ">"
+    private val doubleBackSlashLineBreak = "\\n"
     private val singleLineBreak = "\n"
     private val linkOpen = "<a href="
     private val linkClose = "</a>"
@@ -56,12 +58,12 @@ class OtherInfoWindow(val movie: OmdbMovie) {
     }
 
     private fun getPosterPathText(movieData: OtherInfoData) =
-            linkOpen + movieData.getPosterPath() + ">" + hyperlinkText + linkClose
+            linkOpen + movieData.getPosterPath() + greaterThanSymbol + hyperlinkText + linkClose
 
 
     private fun getFormattedPlotText(movieData: OtherInfoData): String {
         var formattedText = movieData.getText()
-        formattedText = formattedText.replace("\\n", singleLineBreak)
+        formattedText = formattedText.replace(doubleBackSlashLineBreak, singleLineBreak)
         formattedText = textToHtml(formattedText)
         formattedText += singleLineBreak
         formattedText += getPosterPathText(movieData)
@@ -102,12 +104,15 @@ class OtherInfoWindow(val movie: OmdbMovie) {
         }
     }
 
+    private fun getImageIcon(path: String?): JLabel{
+        val url = URL(path)
+        val image = ImageIO.read(url)
+        return JLabel(ImageIcon(image))
+    }
+
     private fun setImage(path: String?) {
         try {
-            val url = URL(path)
-            val image = ImageIO.read(url)
-            val label = JLabel(ImageIcon(image))
-            imagePanel.add(label)
+            imagePanel.add(getImageIcon(path))
             contentPane.validate()
             contentPane.repaint()
         } catch (exception: Exception) {
@@ -132,9 +137,13 @@ class OtherInfoWindow(val movie: OmdbMovie) {
         return builder.toString()
     }
 
-    private fun replaceQuotes(text: String) = text.replace("'", "`")
+    private val quoteSymbol = "'"
+    private val doubleQuoteSymbols = "''"
+    private val caseInsensitiveRegexSymbol = "(?i)"
+
+    private fun replaceQuotes(text: String) = text.replace(quoteSymbol, doubleQuoteSymbols)
 
     private fun highlightTitle(text: String) =
-            text.replace("(?i)" + movie.title.toRegex(),
+            text.replace(caseInsensitiveRegexSymbol + movie.title.toRegex(),
                          boldOpen + movie.title.toUpperCase() + boldClose)
 }
