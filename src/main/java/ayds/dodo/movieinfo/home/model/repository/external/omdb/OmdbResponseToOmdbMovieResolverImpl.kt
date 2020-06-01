@@ -1,5 +1,6 @@
 package ayds.dodo.movieinfo.home.model.repository.external.omdb
 
+import ayds.dodo.movieinfo.home.model.entities.EmptyMovie
 import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
 import ayds.dodo.movieinfo.home.model.entities.Rating
 import com.google.gson.Gson
@@ -16,7 +17,7 @@ internal class OmdbResponseToOmdbMovieResolverImpl : OmdbResponseToOmdbMovieReso
     override fun getMovieFromExternalData(body: String?): OmdbMovie {
         val gson = Gson()
         val jsonObject = gson.fromJson(body, JsonObject::class.java)
-        val movie = OmdbMovie()
+        var movie = OmdbMovie()
         val response = jsonObject["Response"].asString
         if (response == "True") {
             movie.title = jsonObject["Title"].asString
@@ -30,7 +31,8 @@ internal class OmdbResponseToOmdbMovieResolverImpl : OmdbResponseToOmdbMovieReso
                 movie.posterUrl = jsonObject["Poster"].asString
             }
             movie.ratings = getRatingsFromJson(jsonObject)
-        }
+        } else
+            movie = EmptyMovie
         return movie
     }
 

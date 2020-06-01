@@ -20,13 +20,13 @@ internal class SqlQueriesImpl : SqlQueries {
                 "'${movie.posterUrl}')"
 
     override fun getInsertRatingQuery(movie: OmdbMovie, rating: Rating) =
-        "insert into ${SqlQueries.RATINGS_TABLE} values(null, '${movie.title}', '${rating.source}', '${rating.value}')"
+        "insert into ${SqlQueries.RATINGS_TABLE} values(null, '${getEscapedString(movie.title)}', '${rating.source}', '${rating.value}')"
 
     override fun getSelectMoviesByTermQuery(term: String) =
         "select * from ${SqlQueries.MOVIES_TABLE} WHERE ${SqlQueries.TERM_COLUMN} = '$term'"
 
     override fun getSelectRatingsByMovieQuery(movie: OmdbMovie) =
-        "select * from ${SqlQueries.RATINGS_TABLE} WHERE ${SqlQueries.TITLE_COLUMN} = '${movie.title}'"
+        "select * from ${SqlQueries.RATINGS_TABLE} WHERE ${SqlQueries.TITLE_COLUMN} = '${getEscapedString(movie.title)}'"
 
     override fun resultSetToMovieMapper(resultSet: ResultSet): OmdbMovie? =
         try {
