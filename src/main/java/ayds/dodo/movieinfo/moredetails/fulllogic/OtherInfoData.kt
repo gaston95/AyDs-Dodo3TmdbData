@@ -9,7 +9,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.IOException
 
 class OtherInfoData(val movie: OmdbMovie) {
-    
     private val overviewProperty = "overview"
     private val backdropPathProperty = "backdrop_path"
     private val posterPathProperty = "poster_path"

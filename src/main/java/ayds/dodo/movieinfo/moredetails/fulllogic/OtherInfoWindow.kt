@@ -119,7 +119,6 @@ class OtherInfoWindow(val movie: OmdbMovie) {
         }
     }
 
-
     private fun textToHtml(text: String): String {
         val builder = StringBuilder()
         builder.append(HTMLTags.htmlOpen + HTMLTags.bodyOpen)
@@ -129,7 +128,6 @@ class OtherInfoWindow(val movie: OmdbMovie) {
                 .append(HTMLTags.fontClose)
         return builder.toString()
     }
-
 
     private fun replaceQuotes(text: String) = text.replace("'", "''")
 
