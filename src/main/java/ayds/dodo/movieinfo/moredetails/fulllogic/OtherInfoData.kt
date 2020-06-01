@@ -42,7 +42,7 @@ class OtherInfoData(val movie: OmdbMovie) {
         val movieImageUrl = DataBase.getImageUrl(movie.title)
 
         if (movieExistsInDb(movieText, movieImageUrl)) {
-            text = getTextInDB(movieText)
+            text = markTextAsLocallyStored(movieText)
             imageUrl = movieImageUrl!!
         }
         else buildMovieInfoFromAPI()
@@ -77,7 +77,7 @@ class OtherInfoData(val movie: OmdbMovie) {
 
     private fun movieExistsInDb(text: String?, path: String?): Boolean = text != null && path != null
 
-    private fun getTextInDB(text: String?): String = localMovie + text
+    private fun markTextAsLocallyStored(text: String?): String = localMovie + text
 
     private fun isNotNull(element: JsonElement?): Boolean = element != null && !element.isJsonNull
 
