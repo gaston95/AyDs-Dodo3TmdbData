@@ -65,7 +65,7 @@ class OtherInfoWindow(val movie: OmdbMovie) {
     private fun getMoviePlot() {
         Thread(Runnable {
             val movieData = OtherInfoData(movie)
-            setDescriptionTextPane(getFormattedPlotText(movieData))
+            setDescriptionTextPane(HTMLFormatter.getFormattedPlotText(movieData))
             setImage(movieData.getImageURL())
             setLookAndFeel()
         }).start()
@@ -74,45 +74,6 @@ class OtherInfoWindow(val movie: OmdbMovie) {
     private fun setDescriptionTextPane(text: String){
         descriptionTextPane.text = text
     }
-
-    private fun getFormattedPlotText(movieData: OtherInfoData): String {
-        var formattedText = movieData.getText()
-        formattedText = replaceLineBreakMarks(formattedText)
-        formattedText = textToHtml(formattedText)
-        formattedText += HTMLTags.singleLineBreak
-        formattedText += getPosterPathText(movieData)
-        formattedText += closeHTML()
-        return formattedText
-    }
-
-    private fun replaceLineBreakMarks(text: String) =
-            text.replace(HTMLTags.doubleBackSlashLineBreak, HTMLTags.singleLineBreak)
-
-    private fun replaceQuotes(text: String) = text.replace("'", "''")
-
-    private fun highlightTitle(text: String) =
-            text.replace( movie.title,
-                    HTMLTags.boldOpen + movie.title + HTMLTags.boldClose)
-
-    private fun textToHtml(text: String): String {
-        val builder = StringBuilder()
-        builder.append(HTMLTags.htmlOpen + HTMLTags.bodyOpen)
-                .append(HTMLTags.fontOpen)
-        val textWithReplacedQuotes = replaceQuotes(text)
-        builder.append(highlightTitle(textWithReplacedQuotes))
-                .append(HTMLTags.fontClose)
-        return builder.toString()
-    }
-
-    private fun getPosterPathText(movieData: OtherInfoData) =
-            HTMLTags.linkOpen +
-                    movieData.getPosterPath() +
-                    HTMLTags.greaterThanSymbol +
-                    HTMLTags.hyperlinkText +
-                    HTMLTags.linkClose
-
-    private fun closeHTML(): String =
-            HTMLTags.bodyClose + HTMLTags.htmlClose
 
     private fun setImage(path: String?) {
         try {
