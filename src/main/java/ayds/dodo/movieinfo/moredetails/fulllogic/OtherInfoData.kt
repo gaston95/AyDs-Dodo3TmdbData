@@ -34,15 +34,15 @@ class OtherInfoData(val movie: OmdbMovie) {
     fun getPosterPath() = posterPath
 
     private fun buildMovieInfo() {
-            DataBase.createNewDatabase()
-            val movieText = DataBase.getOverview(movie.title)
-            val movieImageUrl = DataBase.getImageUrl(movie.title)
+        DataBase.createNewDatabase()
+        val movieText = DataBase.getOverview(movie.title)
+        val movieImageUrl = DataBase.getImageUrl(movie.title)
 
-            if (movieExistsInDb(movieText, movieImageUrl)) {
-                text = getTextInDB(movieText)
-                imageUrl = movieImageUrl!!
-            }
-            else buildMovieInfoFromAPI()
+        if (movieExistsInDb(movieText, movieImageUrl)) {
+            text = getTextInDB(movieText)
+            imageUrl = movieImageUrl!!
+        }
+        else buildMovieInfoFromAPI()
     }
 
     private fun buildMovieInfoFromAPI(){
@@ -82,8 +82,7 @@ class OtherInfoData(val movie: OmdbMovie) {
         val tmdbAPI = createAPI()
         try {
             val callResponse = tmdbAPI.getTerm(movie.title)?.execute()
-            val gson = Gson()
-            val jobj = gson.fromJson(callResponse?.body(), JsonObject::class.java)
+            val jobj = Gson().fromJson(callResponse?.body(), JsonObject::class.java)
             val resultIterator = jobj["results"].asJsonArray.iterator()
             var result: JsonObject
             while (resultIterator.hasNext()) {
