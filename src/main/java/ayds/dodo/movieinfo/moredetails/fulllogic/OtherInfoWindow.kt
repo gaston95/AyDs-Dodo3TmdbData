@@ -15,19 +15,9 @@ class OtherInfoWindow(val movie: OmdbMovie) {
     private val labelText = "Data from The Movie Data Base"
     private val width = 600
     private val height = 400
-    private val greaterThanSymbol = ">"
-    private val doubleBackSlashLineBreak = "\\n"
-    private val singleLineBreak = "\n"
-    private val linkOpen = "<a href="
-    private val linkClose = "</a>"
-    private val hyperlinkText = "View Movie Poster"
-    private val htmlClose = "</html>"
-    private val bodyClose = "</body>"
-
     private var contentPane = JPanel()
     private var descriptionTextPane = JTextPane()
     private var imagePanel = JPanel()
-
 
     init {
         createWindow()
@@ -60,16 +50,20 @@ class OtherInfoWindow(val movie: OmdbMovie) {
     }
 
     private fun getPosterPathText(movieData: OtherInfoData) =
-            linkOpen + movieData.getPosterPath() + greaterThanSymbol + hyperlinkText + linkClose
+            HTMLTags.linkOpen +
+            movieData.getPosterPath() +
+            HTMLTags.greaterThanSymbol +
+            HTMLTags.hyperlinkText +
+            HTMLTags.linkClose
 
     private fun closeHTML(): String =
-            bodyClose + htmlClose
+            HTMLTags.bodyClose + HTMLTags.htmlClose
 
     private fun getFormattedPlotText(movieData: OtherInfoData): String {
         var formattedText = movieData.getText()
-        formattedText = formattedText.replace(doubleBackSlashLineBreak, singleLineBreak)
+        formattedText = replaceQuotationMarks(formattedText)
         formattedText = textToHtml(formattedText)
-        formattedText += singleLineBreak
+        formattedText += HTMLTags.singleLineBreak
         formattedText += getPosterPathText(movieData)
         formattedText += closeHTML()
         return formattedText
@@ -125,28 +119,24 @@ class OtherInfoWindow(val movie: OmdbMovie) {
         }
     }
 
-    private val htmlOpen = "<html>"
-    private val bodyOpen = "<body style=\"width: 400px\">"
-    private val fontOpen = "<font face=\"arial\">"
-    private val fontClose = "</font>"
-    private val boldOpen = "<b>"
-    private val boldClose = "</b>"
 
     private fun textToHtml(text: String): String {
         val builder = StringBuilder()
-        builder.append(htmlOpen + bodyOpen)
-                .append(fontOpen)
+        builder.append(HTMLTags.htmlOpen + HTMLTags.bodyOpen)
+                .append(HTMLTags.fontOpen)
         val textWithReplacedQuotes = replaceQuotes(text)
         builder.append(highlightTitle(textWithReplacedQuotes))
-                .append(fontClose)
+                .append(HTMLTags.fontClose)
         return builder.toString()
     }
 
-    private val quoteSymbol = "'"
-    private val doubleQuoteSymbols = "''"
-    private fun replaceQuotes(text: String) = text.replace(quoteSymbol, doubleQuoteSymbols)
+
+    private fun replaceQuotes(text: String) = text.replace("'", "''")
 
     private fun highlightTitle(text: String) =
             text.replace( movie.title,
-                    boldOpen + movie.title + boldClose)
+                    HTMLTags.boldOpen + movie.title + HTMLTags.boldClose)
+
+    private fun replaceQuotationMarks(text: String) =
+            text.replace(HTMLTags.doubleBackSlashLineBreak, HTMLTags.singleLineBreak)
 }
