@@ -92,7 +92,7 @@ object DataBase {
     }
 
     private fun getInfoMovieByTitleQuery(title: String): String =
-            ("select * from info WHERE title = '$title'")
+            ("select * from info WHERE title = '${title.replaceQuotes()}'")
 
     private fun getMovieColumn(title: String, column: String): String? {
         var plot: String? = null
