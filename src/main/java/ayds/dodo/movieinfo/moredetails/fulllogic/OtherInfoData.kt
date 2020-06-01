@@ -9,7 +9,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.IOException
 
 class OtherInfoData(val movie: OmdbMovie) {
-    
     private val overviewProperty = "overview"
     private val backdropPathProperty = "backdrop_path"
     private val posterPathProperty = "poster_path"
@@ -19,6 +18,7 @@ class OtherInfoData(val movie: OmdbMovie) {
     private val apiUrl = "https://api.themoviedb.org/3/"
     private val localMovie = "[*]"
     private val noResults = "No results"
+    private var title = ""
     private var imageUrl:String = imageUrlDefault
     private var text:String = noResults
     private var posterPath:String = ""
@@ -26,6 +26,8 @@ class OtherInfoData(val movie: OmdbMovie) {
     init {
         buildMovieInfo()
     }
+
+    fun getTitle() = title
 
     fun getText() = text
 
@@ -35,6 +37,7 @@ class OtherInfoData(val movie: OmdbMovie) {
 
     private fun buildMovieInfo() {
         DataBase.createNewDatabase()
+        title = movie.title
         val movieText = DataBase.getOverview(movie.title)
         val movieImageUrl = DataBase.getImageUrl(movie.title)
 

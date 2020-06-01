@@ -5,7 +5,6 @@ import java.sql.*
 
 object DataBase {
     private lateinit var connection: Connection
-
     private val statement: Statement?
         get() {
             var statement: Statement? = null
