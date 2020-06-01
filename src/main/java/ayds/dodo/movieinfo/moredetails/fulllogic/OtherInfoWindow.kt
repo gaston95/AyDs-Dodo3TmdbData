@@ -55,17 +55,29 @@ class OtherInfoWindow(val movie: OmdbMovie) {
         getMoviePlot()
     }
 
+    private fun getPosterPathText(movieData: OtherInfoData) =
+            linkOpen + movieData.getPosterPath() + ">" + hyperlinkText + linkClose
+
+
+    private fun getFormattedPlotText(movieData: OtherInfoData): String {
+        var formattedText = movieData.getText()
+        formattedText = formattedText.replace("\\n", singleLineBreak)
+        formattedText = textToHtml(formattedText)
+        formattedText += singleLineBreak
+        formattedText += getPosterPathText(movieData)
+        return formattedText
+    }
+
+    private fun setDescriptionTextPane(text: String){
+        descriptionTextPane.text = text
+    }
+
     private fun getMoviePlot() {
         Thread(Runnable {
             val movieData = OtherInfoData(movie)
-            var text = movieData.getText().replace("\\n", singleLineBreak)
-            val imageUrl = movieData.getImageURL()
-            text = textToHtml(text, movie.title)
-            text += singleLineBreak + linkOpen + movieData.getPosterPath() +
-                   ">" + hyperlinkText + linkClose
-            descriptionTextPane.text = text
+            setDescriptionTextPane(getFormattedPlotText(movieData))
+            setImage(movieData.getImageURL())
             setLookAndFeel()
-            setImage(imageUrl)
         }).start()
     }
 
@@ -75,8 +87,8 @@ class OtherInfoWindow(val movie: OmdbMovie) {
                 val desktop = Desktop.getDesktop()
                 try {
                     desktop.browse(e.url.toURI())
-                } catch (ex: Exception) {
-                    ex.printStackTrace()
+                } catch (exception: Exception) {
+                    exception.printStackTrace()
                 }
             }
         }
@@ -85,7 +97,8 @@ class OtherInfoWindow(val movie: OmdbMovie) {
     private fun setLookAndFeel() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
-        } catch (ignored: Exception) {
+        } catch (exception: Exception) {
+            exception.printStackTrace()
         }
     }
 
@@ -97,8 +110,8 @@ class OtherInfoWindow(val movie: OmdbMovie) {
             imagePanel.add(label)
             contentPane.validate()
             contentPane.repaint()
-        } catch (exp: Exception) {
-            exp.printStackTrace()
+        } catch (exception: Exception) {
+            exception.printStackTrace()
         }
     }
 
@@ -109,18 +122,19 @@ class OtherInfoWindow(val movie: OmdbMovie) {
     private val boldOpen = "<b>"
     private val boldClose = "</b>"
 
-    private fun textToHtml(text: String, term: String): String {
+    private fun textToHtml(text: String): String {
         val builder = StringBuilder()
         builder.append(htmlOpen + bodyOpen)
                 .append(fontOpen)
         val textWithReplacedQuotes = replaceQuotes(text)
-        builder.append(makeTermBold(textWithReplacedQuotes, term))
+        builder.append(highlightTitle(textWithReplacedQuotes))
                 .append(fontClose)
         return builder.toString()
     }
 
     private fun replaceQuotes(text: String) = text.replace("'", "`")
 
-    private fun makeTermBold(text: String, term: String) = text.replace("(?i)" + term.toRegex(), boldOpen + term.toUpperCase() + boldClose)
-
+    private fun highlightTitle(text: String) =
+            text.replace("(?i)" + movie.title.toRegex(),
+                         boldOpen + movie.title.toUpperCase() + boldClose)
 }
