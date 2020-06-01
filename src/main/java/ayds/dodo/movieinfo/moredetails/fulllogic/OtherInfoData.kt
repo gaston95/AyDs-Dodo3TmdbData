@@ -41,31 +41,35 @@ class OtherInfoData(val movie: OmdbMovie) {
             if (movieExistsInDb(movieText, movieImageUrl)) {
                 text = getTextInDB(movieText)
                 imageUrl = movieImageUrl!!
-            } else {
-                buildMovieInfoFromAPI()
             }
+            else buildMovieInfoFromAPI()
     }
 
     private fun buildMovieInfoFromAPI(){
         val searchResult = searchMovie(movie)
-        if (searchResult != null) {
 
+        if (searchResult != null) {
             val extract = searchResult[overviewProperty]
 
             if (isNotNull(extract)) {
-
                 text = extract.asString
 
-                val backdropPathJson = searchResult[backdropPathProperty]
-                if (isNotNull(backdropPathJson))
-                    imageUrl = pathUrl + backdropPathJson.asString
-                val posterPathJSon = searchResult[posterPathProperty]
-                if (isNotNull(posterPathJSon))
-                    posterPath = pathUrl + posterPathJSon.asString
+                setImageUrlFromJson(searchResult[backdropPathProperty])
+                setPosterPathFromJSon(searchResult[posterPathProperty])
 
                 DataBase.saveMovieInfo(movie.title, text, imageUrl)
             }
         }
+    }
+
+    private fun setImageUrlFromJson(backdropPathJson: JsonElement){
+        if (isNotNull(backdropPathJson))
+            imageUrl = pathUrl + backdropPathJson.asString
+    }
+
+    private fun setPosterPathFromJSon(posterPathJSon: JsonElement) {
+        if (isNotNull(posterPathJSon))
+            posterPath = pathUrl + posterPathJSon.asString
     }
 
     private fun movieExistsInDb(text: String?, path: String?): Boolean = text != null && path != null
@@ -84,9 +88,7 @@ class OtherInfoData(val movie: OmdbMovie) {
             var result: JsonObject
             while (resultIterator.hasNext()) {
                 result = resultIterator.next().asJsonObject
-                if (areSameYear(result, movie.year)) {
-                    return result
-                }
+                if (areSameYear(result, movie.year)) return result
             }
         } catch (e: IOException) {
             e.printStackTrace()
