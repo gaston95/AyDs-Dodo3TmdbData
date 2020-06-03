@@ -18,12 +18,16 @@ class OtherInfoData(val movie: OmdbMovie) {
     private val apiUrl = "https://api.themoviedb.org/3/"
     private val localMovie = "[*]"
     private val noResults = "No results"
+
+    private val tmdbAPI : TheMovieDBAPI
+
     private var title = ""
     private var imageUrl:String = imageUrlDefault
     private var text:String = noResults
     private var posterPath:String = ""
 
     init {
+        tmdbAPI = createAPI()
         buildMovieInfo()
     }
 
@@ -51,7 +55,7 @@ class OtherInfoData(val movie: OmdbMovie) {
     private fun buildMovieInfoFromAPI(){
         val searchResult = searchMovie(movie)
 
-        if (searchResult != null) {
+        searchResult?.let {
             val extract = searchResult[overviewProperty]
 
             if (isNotNull(extract)) {
@@ -82,7 +86,6 @@ class OtherInfoData(val movie: OmdbMovie) {
     private fun isNotNull(element: JsonElement?): Boolean = element != null && !element.isJsonNull
 
     private fun searchMovie(movie: OmdbMovie): JsonObject? {
-        val tmdbAPI = createAPI()
         try {
             val callResponse = tmdbAPI.getTerm(movie.title)?.execute()
             val jobj = Gson().fromJson(callResponse?.body(), JsonObject::class.java)
