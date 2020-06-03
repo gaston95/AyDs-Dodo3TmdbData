@@ -59,7 +59,6 @@ object DataBase {
             createInfoTable()
     }
 
-    @JvmStatic
     fun createNewDatabase() {
         openConnectionToExtraInfo()
         createInfoTableIfNeeded()
@@ -83,7 +82,6 @@ object DataBase {
         }
     }
 
-    @JvmStatic
     fun saveMovieInfo(title: String, plot: String, imageUrl: String) {
         openConnectionToExtraInfo()
         insertMovieInfo(title,plot,imageUrl)
@@ -107,7 +105,6 @@ object DataBase {
         return plot
     }
 
-    @JvmStatic
     fun getOverview(title: String): String? {
         openConnectionToExtraInfo()
         val overview = getMovieColumn(title, plotColumn)
@@ -115,7 +112,6 @@ object DataBase {
         return overview
     }
 
-    @JvmStatic
     fun getImageUrl(title: String): String? {
         openConnectionToExtraInfo()
         val imageUrl = getMovieColumn(title, imageUrlColumn)
