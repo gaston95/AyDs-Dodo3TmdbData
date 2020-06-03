@@ -48,6 +48,7 @@ class OtherInfoData(val movie: OmdbMovie) {
         if (movieExistsInDb(movieText, movieImageUrl)) {
             text = markTextAsLocallyStored(movieText)
             imageUrl = movieImageUrl!!
+
         }
         else buildMovieInfoFromAPI()
     }
@@ -64,7 +65,8 @@ class OtherInfoData(val movie: OmdbMovie) {
                 setImageUrlFromJson(searchResult[backdropPathProperty])
                 setPosterPathFromJSon(searchResult[posterPathProperty])
 
-                DataBase.saveMovieInfo(movie.title, text, imageUrl)
+                val newMovie = TMDBMovie(movie.title, text, imageUrl )
+                DataBase.saveMovieInfo(newMovie)
             }
         }
     }
