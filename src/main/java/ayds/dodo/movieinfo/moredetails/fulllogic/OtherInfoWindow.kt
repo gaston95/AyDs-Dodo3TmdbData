@@ -63,12 +63,12 @@ class OtherInfoWindow(private val movie: OmdbMovie) {
     }
 
     private fun getMoviePlot() {
-        Thread(Runnable {
+        Thread {
             val movieData = OtherInfoData(movie)
             setDescriptionTextPane(HTMLFormatter.getFormattedPlotText(movieData))
             setImage(movieData.getImageURL())
             setLookAndFeel()
-        }).start()
+        }.start()
     }
 
     private fun setDescriptionTextPane(text: String){
