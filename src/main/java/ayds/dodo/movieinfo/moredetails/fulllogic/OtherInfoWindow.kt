@@ -9,7 +9,7 @@ import javax.imageio.ImageIO
 import javax.swing.*
 import javax.swing.event.HyperlinkEvent
 
-class OtherInfoWindow(val movie: OmdbMovie) {
+class OtherInfoWindow(private val movie: OmdbMovie) {
     private val contentType = "text/html"
     private val frameTitle = "Movie Info Dodo"
     private val labelText = "Data from The Movie Data Base"
