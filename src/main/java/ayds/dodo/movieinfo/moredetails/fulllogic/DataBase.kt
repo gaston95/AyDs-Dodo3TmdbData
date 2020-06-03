@@ -16,16 +16,11 @@ object DataBase {
             return statement
         }
 
-    private const val extraInfoDBURL = "jdbc:sqlite:./extra_info.db"
-    private const val plotColumn = "plot"
-    private const val imageUrlColumn = "image_url"
-    private const val createTableQuery = "create table if not exists info (id INTEGER PRIMARY KEY AUTOINCREMENT, title string, plot string, image_url string, source integer)"
-
     private fun openConnectionToExtraInfo() {
         try {
-            connection = DriverManager.getConnection(extraInfoDBURL)
+            connection = DriverManager.getConnection(SQLQueries.EXTRAINFO_DB_URL)
         } catch (e: SQLException) {
-            println("Could not create connection $extraInfoDBURL $e")
+            println("Could not create connection ${SQLQueries.EXTRAINFO_DB_URL} $e")
         }
     }
 
@@ -48,7 +43,7 @@ object DataBase {
 
     private fun createInfoTable(){
         try {
-            statement?.executeUpdate(createTableQuery)
+            statement?.executeUpdate(SQLQueries.CREATE_INFO_TABLE)
         } catch (e: SQLException) {
             println(e.message)
         }
@@ -65,18 +60,10 @@ object DataBase {
         closeConnectionToExtraInfo()
     }
     
-    private fun String.replaceQuotes() = this.replace("'", "''")
-
-    private fun getInsertMovieInfoQuery(title:String, plot: String, imageUrl: String): String =
-            "insert into info values(null," +
-                    " '${title.replaceQuotes()}'," +
-                    " '${plot.replaceQuotes()}'," +
-                    " '$imageUrl'," +
-                    " 1)"
 
     private fun insertMovieInfo(title:String, plot: String, imageUrl: String){
         try {
-            statement?.executeUpdate(getInsertMovieInfoQuery(title, plot,imageUrl))
+            statement?.executeUpdate(SQLQueries.getInsertMovieInfoQuery(title, plot,imageUrl))
         } catch (e: SQLException) {
             println("Error saving " + e.message)
         }
@@ -88,13 +75,10 @@ object DataBase {
         closeConnectionToExtraInfo()
     }
 
-    private fun getInfoMovieByTitleQuery(title: String): String =
-            ("select * from info WHERE title = '${title.replaceQuotes()}'")
-
     private fun getMovieColumn(title: String, column: String): String? {
         var plot: String? = null
         try {
-            val movieInfoResultSet = statement?.executeQuery(getInfoMovieByTitleQuery(title))
+            val movieInfoResultSet = statement?.executeQuery(SQLQueries.getInfoMovieByTitleQuery(title))
             movieInfoResultSet?.let {
                 if(it.next())
                     plot = it.getString(column)
@@ -107,14 +91,14 @@ object DataBase {
 
     fun getOverview(title: String): String? {
         openConnectionToExtraInfo()
-        val overview = getMovieColumn(title, plotColumn)
+        val overview = getMovieColumn(title, SQLQueries.PLOT_COLUMN)
         closeConnectionToExtraInfo()
         return overview
     }
 
     fun getImageUrl(title: String): String? {
         openConnectionToExtraInfo()
-        val imageUrl = getMovieColumn(title, imageUrlColumn)
+        val imageUrl = getMovieColumn(title, SQLQueries.IMAGEURL_COLUMN)
         closeConnectionToExtraInfo()
         return imageUrl
     }
