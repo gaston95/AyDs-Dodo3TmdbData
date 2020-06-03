@@ -1,6 +1,5 @@
 package ayds.dodo.movieinfo.moredetails.fulllogic
 
-import ayds.dodo.movieinfo.home.model.repository.local.sqldb.SqlQueries
 import java.sql.*
 
 object DataBase {
@@ -17,12 +16,16 @@ object DataBase {
             return statement
         }
 
+    private const val extraInfoDBURL = "jdbc:sqlite:./extra_info.db"
+    private const val plotColumn = "plot"
+    private const val imageUrlColumn = "image_url"
+    private const val createTableQuery = "create table if not exists info (id INTEGER PRIMARY KEY AUTOINCREMENT, title string, plot string, image_url string, source integer)"
 
     private fun openConnectionToExtraInfo() {
         try {
-            connection = DriverManager.getConnection(SqlQueries.EXTRAINFO_DB_URL)
+            connection = DriverManager.getConnection(extraInfoDBURL)
         } catch (e: SQLException) {
-            println("Could not create connection $SqlQueries.EXTRAINFO_DB_URL $e")
+            println("Could not create connection $extraInfoDBURL $e")
         }
     }
 
@@ -45,7 +48,7 @@ object DataBase {
 
     private fun createInfoTable(){
         try {
-            statement?.executeUpdate(SqlQueries.CREATE_INFO_TABLE)
+            statement?.executeUpdate(createTableQuery)
         } catch (e: SQLException) {
             println(e.message)
         }
@@ -107,7 +110,7 @@ object DataBase {
     @JvmStatic
     fun getOverview(title: String): String? {
         openConnectionToExtraInfo()
-        val overview = getMovieColumn(title, SqlQueries.PLOT_COLUMN)
+        val overview = getMovieColumn(title, plotColumn)
         closeConnectionToExtraInfo()
         return overview
     }
@@ -115,7 +118,7 @@ object DataBase {
     @JvmStatic
     fun getImageUrl(title: String): String? {
         openConnectionToExtraInfo()
-        val imageUrl = getMovieColumn(title, SqlQueries.IMAGEURL_COLUMN)
+        val imageUrl = getMovieColumn(title, imageUrlColumn)
         closeConnectionToExtraInfo()
         return imageUrl
     }

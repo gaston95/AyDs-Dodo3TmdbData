@@ -14,11 +14,9 @@ internal interface SqlQueries {
     fun resultSetToRatingsMapper(resultSet: ResultSet): List<Rating>
 
     companion object {
-        const val EXTRAINFO_DB_URL = "jdbc:sqlite:./extra_info.db"
         const val DB_URL = "jdbc:sqlite:./movies.db"
         const val MOVIES_TABLE = "movies"
         const val RATINGS_TABLE = "ratings"
-        const val INFO_TABLE = "info"
         const val ID_COLUMN = "id"
         const val TERM_COLUMN = "term"
         const val TITLE_COLUMN = "title"
@@ -30,8 +28,6 @@ internal interface SqlQueries {
         const val POSTER_URL_COLUMN = "posterUrl"
         const val SOURCE_COLUMN = "source"
         const val VALUE_COLUMN = "value"
-        const val IMAGEURL_COLUMN = "image_url"
-
         const val CREATE_MOVIES_TABLE = "create table " + MOVIES_TABLE + " (" +
                 ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 TERM_COLUMN + " string, " +
@@ -49,12 +45,5 @@ internal interface SqlQueries {
                 SOURCE_COLUMN + " string, " +
                 VALUE_COLUMN + " string" +
                 ")"
-
-        const val CREATE_INFO_TABLE = "create table if not exists " + INFO_TABLE + "(" +
-                ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                TITLE_COLUMN + " string, " +
-                PLOT_COLUMN + " string, " +
-                IMAGEURL_COLUMN + " string, " +
-                SOURCE_COLUMN + " integer)"
     }
 }
