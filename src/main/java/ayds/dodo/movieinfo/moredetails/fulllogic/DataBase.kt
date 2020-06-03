@@ -61,17 +61,17 @@ object DataBase {
     }
     
 
-    private fun insertMovieInfo(title:String, plot: String, imageUrl: String){
+    private fun insertMovieInfo(movie: TMDBMovie){
         try {
-            statement?.executeUpdate(SQLQueries.getInsertMovieInfoQuery(title, plot,imageUrl))
+            statement?.executeUpdate(SQLQueries.getInsertMovieInfoQuery(movie))
         } catch (e: SQLException) {
             println("Error saving " + e.message)
         }
     }
 
-    fun saveMovieInfo(title: String, plot: String, imageUrl: String) {
+    fun saveMovieInfo(movie: TMDBMovie) {
         openConnectionToExtraInfo()
-        insertMovieInfo(title,plot,imageUrl)
+        insertMovieInfo(movie)
         closeConnectionToExtraInfo()
     }
 

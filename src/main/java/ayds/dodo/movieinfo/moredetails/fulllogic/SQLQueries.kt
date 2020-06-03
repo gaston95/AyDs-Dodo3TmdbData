@@ -19,11 +19,11 @@ object SQLQueries {
      fun getInfoMovieByTitleQuery(title: String): String =
             ("select * from info WHERE title = '${title.replaceQuotes()}'")
 
-    fun getInsertMovieInfoQuery(title:String, plot: String, imageUrl: String): String =
+    fun getInsertMovieInfoQuery(movie: TMDBMovie): String =
             "insert into info values(null," +
-                    " '${title.replaceQuotes()}'," +
-                    " '${plot.replaceQuotes()}'," +
-                    " '$imageUrl'," +
+                    " '${movie.title.replaceQuotes()}'," +
+                    " '${movie.plot.replaceQuotes()}'," +
+                    " '${movie.imageUrl}'," +
                     " 1)"
 
     private fun String.replaceQuotes() = this.replace("'", "''")
