@@ -64,10 +64,9 @@ class OtherInfoWindow(private val movie: OmdbMovie) {
 
     private fun getMoviePlot() {
         Thread {
-            val movieData = TMDBMovieResolver(movie)
-            val movie = movieData.getMovie()
-            setDescriptionTextPane(movie.plot)
-            setImage(movie.imageUrl)
+            val movieData = TMDBMovieResolver(movie).getMovie()
+            setDescriptionTextPane(movieData.plot)
+            setImage(movieData.imageUrl)
             setLookAndFeel()
         }.start()
     }
