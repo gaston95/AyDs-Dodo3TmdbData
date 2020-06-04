@@ -56,7 +56,7 @@ class TMDBMovieResolver(val movie: OmdbMovie) {
                 movieData.imageUrl = getImageUrlFromJson(searchResult[backdropPathProperty])
 
                 val posterPath = getPosterPathFromJSon(searchResult[posterPathProperty])
-                HTMLFormatter.getFormattedPlotText(movieData, posterPath)
+                movieData.plot = HTMLFormatter.getFormattedPlotText(movieData, posterPath)
 
                 DataBase.saveMovieInfo(movieData)
             }

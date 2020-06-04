@@ -2,7 +2,7 @@ package ayds.dodo.movieinfo.moredetails.fulllogic
 
 object HTMLFormatter {
 
-    fun getFormattedPlotText(movieData: TMDBMovie, posterPath: String) {
+    fun getFormattedPlotText(movieData: TMDBMovie, posterPath: String): String {
         var formattedText = movieData.plot
         formattedText = replaceLineBreakMarks(formattedText)
         formattedText = textToHtml(formattedText)
@@ -10,7 +10,7 @@ object HTMLFormatter {
         formattedText += HTMLTags.singleLineBreak
         formattedText += getPosterPathText(posterPath)
         formattedText += closeHTML()
-        movieData.plot = formattedText
+        return formattedText
     }
 
     private fun replaceLineBreakMarks(text: String) =
