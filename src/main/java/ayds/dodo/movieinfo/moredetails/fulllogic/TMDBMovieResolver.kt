@@ -53,10 +53,9 @@ class TMDBMovieResolver(val movie: OmdbMovie) {
 
             if (isNotNull(extract)) {
                 movieData.plot = extract.asString
+                movieData.imageUrl = getImageUrlFromJson(searchResult[backdropPathProperty])
 
-                setImageUrlFromJson(searchResult[backdropPathProperty])
-                val posterPath = setPosterPathFromJSon(searchResult[posterPathProperty])
-
+                val posterPath = getPosterPathFromJSon(searchResult[posterPathProperty])
                 HTMLFormatter.getFormattedPlotText(movieData, posterPath)
 
                 DataBase.saveMovieInfo(movieData)
@@ -64,13 +63,12 @@ class TMDBMovieResolver(val movie: OmdbMovie) {
         }
     }
 
-    private fun setImageUrlFromJson(backdropPathJson: JsonElement){
-        if (isNotNull(backdropPathJson))
-            movieData.imageUrl = pathUrl + backdropPathJson.asString
-    }
+    private fun getImageUrlFromJson(backdropPathJson: JsonElement) =
+            if (isNotNull(backdropPathJson)) pathUrl + backdropPathJson.asString else imageUrlDefault
 
-    private fun setPosterPathFromJSon(posterPathJSon: JsonElement) =
-        if (isNotNull(posterPathJSon)) pathUrl + posterPathJSon.asString else ""
+
+    private fun getPosterPathFromJSon(posterPathJSon: JsonElement) =
+            if (isNotNull(posterPathJSon)) pathUrl + posterPathJSon.asString else ""
 
 
     private fun movieExistsInDb(text: String?, path: String?): Boolean = text != null && path != null
