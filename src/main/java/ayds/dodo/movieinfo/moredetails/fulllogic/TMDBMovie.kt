@@ -1,3 +1,3 @@
 package ayds.dodo.movieinfo.moredetails.fulllogic
 
-class TMDBMovie(val title: String, val plot: String, val imageUrl: String)
+class TMDBMovie(var title: String, var plot: String, var imageUrl: String)

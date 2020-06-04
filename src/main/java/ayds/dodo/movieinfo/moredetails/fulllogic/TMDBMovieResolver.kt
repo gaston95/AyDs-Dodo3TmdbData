@@ -8,7 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.IOException
 
-class OtherInfoData(val movie: OmdbMovie) {
+class TMDBMovieResolver(val movie: OmdbMovie) {
     private val overviewProperty = "overview"
     private val backdropPathProperty = "backdrop_path"
     private val posterPathProperty = "poster_path"
@@ -20,38 +20,30 @@ class OtherInfoData(val movie: OmdbMovie) {
     private val noResults = "No results"
 
     private val tmdbAPI : TheMovieDBAPI
-
-    private var title = ""
-    private var imageUrl:String = imageUrlDefault
-    private var text:String = noResults
-    private var posterPath:String = ""
+    private var movieData : TMDBMovie
 
     init {
         tmdbAPI = createAPI()
+        movieData = TMDBMovie("",noResults,imageUrlDefault)
         buildMovieInfo()
     }
 
-    fun getTitle() = title
-
-    fun getText() = text
-
-    fun getImageURL() = imageUrl
-
-    fun getPosterPath() = posterPath
 
     private fun buildMovieInfo() {
         DataBase.createNewDatabase()
-        title = movie.title
+        movieData.title = movie.title
         val movieText = DataBase.getOverview(movie.title)
         val movieImageUrl = DataBase.getImageUrl(movie.title)
 
         if (movieExistsInDb(movieText, movieImageUrl)) {
-            text = markTextAsLocallyStored(movieText)
-            imageUrl = movieImageUrl!!
+            movieData.plot = markTextAsLocallyStored(movieText)
+            movieData.imageUrl = movieImageUrl!!
 
         }
         else buildMovieInfoFromAPI()
     }
+
+    fun getMovie() = movieData
 
     private fun buildMovieInfoFromAPI(){
         val searchResult = searchMovie(movie)
@@ -60,26 +52,26 @@ class OtherInfoData(val movie: OmdbMovie) {
             val extract = searchResult[overviewProperty]
 
             if (isNotNull(extract)) {
-                text = extract.asString
+                movieData.plot = extract.asString
 
                 setImageUrlFromJson(searchResult[backdropPathProperty])
-                setPosterPathFromJSon(searchResult[posterPathProperty])
+                val posterPath = setPosterPathFromJSon(searchResult[posterPathProperty])
 
-                val newMovie = TMDBMovie(movie.title, text, imageUrl )
-                DataBase.saveMovieInfo(newMovie)
+                HTMLFormatter.getFormattedPlotText(movieData, posterPath)
+
+                DataBase.saveMovieInfo(movieData)
             }
         }
     }
 
     private fun setImageUrlFromJson(backdropPathJson: JsonElement){
         if (isNotNull(backdropPathJson))
-            imageUrl = pathUrl + backdropPathJson.asString
+            movieData.imageUrl = pathUrl + backdropPathJson.asString
     }
 
-    private fun setPosterPathFromJSon(posterPathJSon: JsonElement) {
-        if (isNotNull(posterPathJSon))
-            posterPath = pathUrl + posterPathJSon.asString
-    }
+    private fun setPosterPathFromJSon(posterPathJSon: JsonElement) =
+        if (isNotNull(posterPathJSon)) pathUrl + posterPathJSon.asString else ""
+
 
     private fun movieExistsInDb(text: String?, path: String?): Boolean = text != null && path != null
 

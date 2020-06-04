@@ -1,15 +1,16 @@
 package ayds.dodo.movieinfo.moredetails.fulllogic
 
 object HTMLFormatter {
-    fun getFormattedPlotText(movieData: OtherInfoData): String {
-        var formattedText = movieData.getText()
+
+    fun getFormattedPlotText(movieData: TMDBMovie, posterPath: String) {
+        var formattedText = movieData.plot
         formattedText = replaceLineBreakMarks(formattedText)
         formattedText = textToHtml(formattedText)
-        formattedText = highlightTitle(formattedText, movieData.getTitle())
+        formattedText = highlightTitle(formattedText, movieData.title)
         formattedText += HTMLTags.singleLineBreak
-        formattedText += getPosterPathText(movieData)
+        formattedText += getPosterPathText(posterPath)
         formattedText += closeHTML()
-        return formattedText
+        movieData.plot = formattedText
     }
 
     private fun replaceLineBreakMarks(text: String) =
@@ -30,9 +31,9 @@ object HTMLFormatter {
         return builder.toString()
     }
 
-    private fun getPosterPathText(movieData: OtherInfoData) =
+    private fun getPosterPathText(posterPath: String) =
             HTMLTags.linkOpen +
-                    movieData.getPosterPath() +
+                    posterPath +
                     HTMLTags.greaterThanSymbol +
                     HTMLTags.hyperlinkText +
                     HTMLTags.linkClose
