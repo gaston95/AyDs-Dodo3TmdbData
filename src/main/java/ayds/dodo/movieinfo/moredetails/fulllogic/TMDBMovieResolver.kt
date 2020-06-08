@@ -17,7 +17,6 @@ class TMDBMovieResolver(val movie: OmdbMovie) {
     private val pathUrl = "https://image.tmdb.org/t/p/w400/"
     private val apiUrl = "https://api.themoviedb.org/3/"
     private val localMovie = "[*]"
-    private val noResults = "No results"
     private val tmdbAPI : TheMovieDBAPI
 
     init {
@@ -51,10 +50,8 @@ class TMDBMovieResolver(val movie: OmdbMovie) {
         var movieData = buildMovieInfoFromAPI()
         if(movieData != null)
             DataBase.saveMovieInfo(movieData)
-        else{
-            movieData = TMDBMovie()
-            setMovieAsDefault(movieData)
-        }
+        else
+            movieData = DefaultMovie
         return movieData
     }
 
@@ -97,12 +94,6 @@ class TMDBMovieResolver(val movie: OmdbMovie) {
         val yearJson = result["release_date"]
         val year = yearJson?.asString?.split("-")?.toTypedArray()?.get(0) ?: ""
         return year == movieYear
-    }
-
-    private fun setMovieAsDefault(movieData:TMDBMovie){
-        movieData.title = noResults
-        movieData.imageUrl = imageUrlDefault
-        movieData.plot = noResults
     }
 
     private fun isNotNull(element: JsonElement?): Boolean = element != null && !element.isJsonNull
