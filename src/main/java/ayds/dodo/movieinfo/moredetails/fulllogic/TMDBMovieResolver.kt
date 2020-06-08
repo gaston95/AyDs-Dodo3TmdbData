@@ -25,17 +25,15 @@ class TMDBMovieResolver(val movie: OmdbMovie) {
     }
 
     fun getMovie(): TMDBMovie {
-        var movieData = getMovieFromDb(movie.title)
-        if(movieData!=null) {
-            movieData.plot = markTextAsLocallyStored(movieData.plot)
-        }
-        else {
-            movieData = buildMovieInfoFromAPI()
-            if(movieData.title!=noResults)
-                DataBase.saveMovieInfo(movieData)
-        }
-        return movieData
+        val movieData = getMovieFromDataBase(movie.title)
+        return movieData?.let { setMovieTextAsLocallyStored(it) } ?: buildMovieInfo()
+    }
 
+    private fun buildMovieInfo(): TMDBMovie {
+        val movieData = buildMovieInfoFromAPI()
+        if(movieData.title!=noResults)
+            DataBase.saveMovieInfo(movieData)
+        return movieData
     }
 
     private fun buildMovieInfoFromAPI(): TMDBMovie {
@@ -70,12 +68,15 @@ class TMDBMovieResolver(val movie: OmdbMovie) {
     private fun getPosterPathFromJSon(posterPathJSon: JsonElement) =
             if (isNotNull(posterPathJSon)) pathUrl + posterPathJSon.asString else ""
 
-    private fun getMovieFromDb(titulo: String): TMDBMovie? {
+    private fun getMovieFromDataBase(titulo: String): TMDBMovie? {
         DataBase.createNewDatabase()
         return DataBase.getMovieInfo(titulo)
     }
 
-    private fun markTextAsLocallyStored(text: String?): String = localMovie + text
+    private fun setMovieTextAsLocallyStored(movie: TMDBMovie): TMDBMovie {
+        movie.plot = localMovie + movie.plot
+        return movie
+    }
 
     private fun isNotNull(element: JsonElement?): Boolean = element != null && !element.isJsonNull
 
