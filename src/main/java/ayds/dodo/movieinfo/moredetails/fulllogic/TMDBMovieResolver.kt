@@ -34,7 +34,7 @@ class TMDBMovieResolver(val movie: OmdbMovie) {
 
     fun getMovie(): TMDBMovie {
         val movieData = getMovieFromDataBase(movie.title)
-        return movieData?.let { getMovieMarkedAsLocallyStored(it) } ?: buildMovieInfo()
+        return movieData?.let { getMovieMarkedAsLocallyStored(it) } ?: getMovieFromAPI()
     }
 
     private fun getMovieFromDataBase(titulo: String): TMDBMovie? {
@@ -47,9 +47,9 @@ class TMDBMovieResolver(val movie: OmdbMovie) {
         return movie
     }
 
-    private fun buildMovieInfo(): TMDBMovie {
+    private fun getMovieFromAPI(): TMDBMovie {
         var movieData = buildMovieInfoFromAPI()
-        if(movieData!=null)
+        if(movieData != null)
             DataBase.saveMovieInfo(movieData)
         else{
             movieData = TMDBMovie()
