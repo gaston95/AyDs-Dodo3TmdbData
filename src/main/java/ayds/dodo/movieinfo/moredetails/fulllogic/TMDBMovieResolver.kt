@@ -48,20 +48,22 @@ class TMDBMovieResolver(val movie: OmdbMovie) {
     }
 
     private fun buildMovieInfo(): TMDBMovie {
-        val movieData = buildMovieInfoFromAPI()
-        if(movieData.title != noResults)
+        var movieData = buildMovieInfoFromAPI()
+        if(movieData!=null)
             DataBase.saveMovieInfo(movieData)
+        else{
+            movieData = TMDBMovie()
+            setMovieAsDefault(movieData)
+        }
         return movieData
     }
 
-    private fun buildMovieInfoFromAPI(): TMDBMovie {
+    private fun buildMovieInfoFromAPI(): TMDBMovie? {
         val searchResult = searchMovie(movie)
         val movieData = TMDBMovie()
-        setMovieAsDefault(movieData)
 
         searchResult?.let {
             val extract = searchResult[overviewProperty]
-
             if (isNotNull(extract)) {
                 movieData.title = movie.title
                 movieData.plot = extract.asString
@@ -69,9 +71,10 @@ class TMDBMovieResolver(val movie: OmdbMovie) {
 
                 val posterPath = getPosterPathFromJSon(searchResult[posterPathProperty])
                 movieData.plot = HTMLFormatter.getFormattedPlotText(movieData, posterPath)
+                return movieData
             }
         }
-        return movieData
+        return null
     }
 
     private fun searchMovie(movie: OmdbMovie): JsonObject? {
