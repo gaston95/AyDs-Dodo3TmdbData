@@ -24,14 +24,32 @@ class TMDBMovieResolver(val movie: OmdbMovie) {
         tmdbAPI = createAPI()
     }
 
+    private fun createAPI(): TheMovieDBAPI {
+        val retrofit = Retrofit.Builder()
+                .baseUrl(apiUrl)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build()
+        return retrofit.create(TheMovieDBAPI::class.java)
+    }
+
     fun getMovie(): TMDBMovie {
         val movieData = getMovieFromDataBase(movie.title)
-        return movieData?.let { setMovieTextAsLocallyStored(it) } ?: buildMovieInfo()
+        return movieData?.let { getMovieMarkedAsLocallyStored(it) } ?: buildMovieInfo()
+    }
+
+    private fun getMovieFromDataBase(titulo: String): TMDBMovie? {
+        DataBase.createNewDatabase()
+        return DataBase.getMovieInfo(titulo)
+    }
+
+    private fun getMovieMarkedAsLocallyStored(movie: TMDBMovie): TMDBMovie {
+        movie.plot = localMovie + movie.plot
+        return movie
     }
 
     private fun buildMovieInfo(): TMDBMovie {
         val movieData = buildMovieInfoFromAPI()
-        if(movieData.title!=noResults)
+        if(movieData.title != noResults)
             DataBase.saveMovieInfo(movieData)
         return movieData
     }
@@ -56,30 +74,6 @@ class TMDBMovieResolver(val movie: OmdbMovie) {
         return movieData
     }
 
-    private fun setMovieAsDefault(movieData:TMDBMovie){
-        movieData.title = noResults
-        movieData.imageUrl = imageUrlDefault
-        movieData.plot = noResults
-    }
-
-    private fun getImageUrlFromJson(backdropPathJson: JsonElement) =
-            if (isNotNull(backdropPathJson)) pathUrl + backdropPathJson.asString else imageUrlDefault
-
-    private fun getPosterPathFromJSon(posterPathJSon: JsonElement) =
-            if (isNotNull(posterPathJSon)) pathUrl + posterPathJSon.asString else ""
-
-    private fun getMovieFromDataBase(titulo: String): TMDBMovie? {
-        DataBase.createNewDatabase()
-        return DataBase.getMovieInfo(titulo)
-    }
-
-    private fun setMovieTextAsLocallyStored(movie: TMDBMovie): TMDBMovie {
-        movie.plot = localMovie + movie.plot
-        return movie
-    }
-
-    private fun isNotNull(element: JsonElement?): Boolean = element != null && !element.isJsonNull
-
     private fun searchMovie(movie: OmdbMovie): JsonObject? {
         try {
             val callResponse = tmdbAPI.getTerm(movie.title)?.execute()
@@ -96,17 +90,23 @@ class TMDBMovieResolver(val movie: OmdbMovie) {
         return null
     }
 
-    private fun createAPI(): TheMovieDBAPI {
-        val retrofit = Retrofit.Builder()
-                .baseUrl(apiUrl)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build()
-        return retrofit.create(TheMovieDBAPI::class.java)
-    }
-
     private fun areSameYear(result: JsonObject, movieYear: String): Boolean {
         val yearJson = result["release_date"]
         val year = yearJson?.asString?.split("-")?.toTypedArray()?.get(0) ?: ""
         return year == movieYear
     }
+
+    private fun setMovieAsDefault(movieData:TMDBMovie){
+        movieData.title = noResults
+        movieData.imageUrl = imageUrlDefault
+        movieData.plot = noResults
+    }
+
+    private fun isNotNull(element: JsonElement?): Boolean = element != null && !element.isJsonNull
+
+    private fun getImageUrlFromJson(backdropPathJson: JsonElement) =
+            if (isNotNull(backdropPathJson)) pathUrl + backdropPathJson.asString else imageUrlDefault
+
+    private fun getPosterPathFromJSon(posterPathJSon: JsonElement) =
+            if (isNotNull(posterPathJSon)) pathUrl + posterPathJSon.asString else ""
 }
