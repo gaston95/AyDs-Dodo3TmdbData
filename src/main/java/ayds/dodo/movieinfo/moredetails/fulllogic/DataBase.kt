@@ -1,6 +1,5 @@
 package ayds.dodo.movieinfo.moredetails.fulllogic
 
-import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
 import java.sql.*
 
 object DataBase {
