@@ -20,26 +20,17 @@ class TMDBMovieResolver(val movie: OmdbMovie) {
     private val noResults = "No results"
 
     private val tmdbAPI : TheMovieDBAPI
-    private var movieData : TMDBMovie
+    private var movieData : TMDBMovie? = null
 
     init {
         tmdbAPI = createAPI()
-        movieData = TMDBMovie("",noResults,imageUrlDefault)
         buildMovieInfo()
     }
 
-
     private fun buildMovieInfo() {
         DataBase.createNewDatabase()
-        movieData.title = movie.title
-        val movieText = DataBase.getOverview(movie.title)
-        val movieImageUrl = DataBase.getImageUrl(movie.title)
-
-        if (movieExistsInDb(movieText, movieImageUrl)) {
-            movieData.plot = markTextAsLocallyStored(movieText)
-            movieData.imageUrl = movieImageUrl!!
-
-        }
+        movieData = DataBase.getMovieInfo(movie.title)
+        if(movieData!=null) movieData!!.plot = markTextAsLocallyStored(movieData!!.plot)
         else buildMovieInfoFromAPI()
     }
 
@@ -50,15 +41,16 @@ class TMDBMovieResolver(val movie: OmdbMovie) {
 
         searchResult?.let {
             val extract = searchResult[overviewProperty]
-
+            movieData = TMDBMovie()
             if (isNotNull(extract)) {
-                movieData.plot = extract.asString
-                movieData.imageUrl = getImageUrlFromJson(searchResult[backdropPathProperty])
+                movieData!!.title = movie.title
+                movieData!!.plot = extract.asString
+                movieData!!.imageUrl = getImageUrlFromJson(searchResult[backdropPathProperty])
 
                 val posterPath = getPosterPathFromJSon(searchResult[posterPathProperty])
-                movieData.plot = HTMLFormatter.getFormattedPlotText(movieData, posterPath)
+                movieData!!.plot = HTMLFormatter.getFormattedPlotText(movieData!!, posterPath)
 
-                DataBase.saveMovieInfo(movieData)
+                DataBase.saveMovieInfo(movieData!!)
             }
         }
     }
