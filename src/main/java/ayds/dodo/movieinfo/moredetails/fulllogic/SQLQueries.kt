@@ -1,5 +1,10 @@
 package ayds.dodo.movieinfo.moredetails.fulllogic
 
+import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
+import ayds.dodo.movieinfo.home.model.repository.local.sqldb.SqlQueries
+import java.sql.ResultSet
+import java.sql.SQLException
+
 object SQLQueries {
     const val EXTRAINFO_DB_URL = "jdbc:sqlite:./extra_info.db"
     const val INFO_TABLE = "info"
@@ -25,6 +30,22 @@ object SQLQueries {
                     " '${movie.plot.replaceQuotes()}'," +
                     " '${movie.imageUrl}'," +
                     " 1)"
+
+    fun resultSetToMovieMapper(resultSet: ResultSet): TMDBMovie? =
+            try {
+                if (resultSet.next()) {
+                    TMDBMovie().apply {
+                        title = resultSet.getString(TITLE_COLUMN)
+                        plot = resultSet.getString(PLOT_COLUMN)
+                        imageUrl = resultSet.getString(IMAGEURL_COLUMN)
+                    }
+                } else {
+                    null
+                }
+            } catch (e: SQLException) {
+                e.printStackTrace()
+                null
+            }
 
     private fun String.replaceQuotes() = this.replace("'", "''")
 }

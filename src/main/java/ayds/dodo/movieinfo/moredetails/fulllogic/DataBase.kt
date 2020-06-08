@@ -1,5 +1,6 @@
 package ayds.dodo.movieinfo.moredetails.fulllogic
 
+import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
 import java.sql.*
 
 object DataBase {
@@ -75,31 +76,22 @@ object DataBase {
         closeConnectionToExtraInfo()
     }
 
-    private fun getMovieColumn(title: String, column: String): String? {
-        var plot: String? = null
+    fun getMovieInfo(title: String): TMDBMovie? {
+        openConnectionToExtraInfo()
+        val movie = selectMovie(title)
+        closeConnectionToExtraInfo()
+        return movie
+    }
+
+    private fun selectMovie(title: String): TMDBMovie? {
+        var movie: TMDBMovie? = null
         try {
-            val movieInfoResultSet = statement?.executeQuery(SQLQueries.getInfoMovieByTitleQuery(title))
-            movieInfoResultSet?.let {
-                if(it.next())
-                    plot = it.getString(column)
-            }
+            val titleSql = title.replace("'","''")
+            val moviesResultSet = statement?.executeQuery(SQLQueries.getInfoMovieByTitleQuery(titleSql))
+            movie = moviesResultSet?.let { SQLQueries.resultSetToMovieMapper(it) }
         } catch (e: SQLException) {
-            System.err.println("Get movie plot error " + e.message)
+            System.err.println("Get movie by title error " + e.message)
         }
-        return plot
-    }
-
-    fun getOverview(title: String): String? {
-        openConnectionToExtraInfo()
-        val overview = getMovieColumn(title, SQLQueries.PLOT_COLUMN)
-        closeConnectionToExtraInfo()
-        return overview
-    }
-
-    fun getImageUrl(title: String): String? {
-        openConnectionToExtraInfo()
-        val imageUrl = getMovieColumn(title, SQLQueries.IMAGEURL_COLUMN)
-        closeConnectionToExtraInfo()
-        return imageUrl
+        return movie
     }
 }
