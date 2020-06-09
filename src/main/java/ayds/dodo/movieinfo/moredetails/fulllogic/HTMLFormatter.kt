@@ -1,5 +1,7 @@
 package ayds.dodo.movieinfo.moredetails.fulllogic
 
+import ayds.dodo.movieinfo.moredetails.fulllogic.model.entities.TMDBMovie
+
 object HTMLFormatter {
 
     fun getFormattedPlotText(movieData: TMDBMovie, posterPath: String): String {

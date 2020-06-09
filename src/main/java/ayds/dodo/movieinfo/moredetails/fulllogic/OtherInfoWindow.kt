@@ -1,6 +1,7 @@
 package ayds.dodo.movieinfo.moredetails.fulllogic
 
 import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
+import ayds.dodo.movieinfo.moredetails.fulllogic.model.repository.external.tmdb.TMDBMovieResolver
 import java.awt.BorderLayout
 import java.awt.Desktop
 import java.awt.Dimension
@@ -64,7 +65,9 @@ class OtherInfoWindow(private val movie: OmdbMovie) {
 
     private fun getMoviePlot() {
         Thread {
-            val movieData = TMDBMovieResolver(movie).getMovie()
+            val movieData = TMDBMovieResolver(
+                movie
+            ).getMovie()
             setDescriptionTextPane(movieData.plot)
             setImage(movieData.imageUrl)
             setLookAndFeel()

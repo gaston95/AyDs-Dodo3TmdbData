@@ -2,7 +2,7 @@ package ayds.dodo.movieinfo.moredetails.fulllogic.model.repository.local.sqldb
 
 
 
-import ayds.dodo.movieinfo.moredetails.fulllogic.TMDBMovie
+import ayds.dodo.movieinfo.moredetails.fulllogic.model.entities.TMDBMovie
 import ayds.dodo.movieinfo.moredetails.fulllogic.model.repository.local.MoreDetailsLocalStorage
 import java.sql.SQLException
 

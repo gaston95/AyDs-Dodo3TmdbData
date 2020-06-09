@@ -1,7 +1,6 @@
 package ayds.dodo.movieinfo.moredetails.fulllogic.model.repository.local
 
-import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
-import ayds.dodo.movieinfo.moredetails.fulllogic.TMDBMovie
+import ayds.dodo.movieinfo.moredetails.fulllogic.model.entities.TMDBMovie
 
 interface MoreDetailsLocalStorage {
 
