@@ -4,5 +4,5 @@ import ayds.dodo.movieinfo.moredetails.fulllogic.model.entities.TMDBMovie
 
 
 interface TMDBRepository {
-    fun getMovie(title: String): TMDBMovie?
+    fun getMovie(title: String, year: String): TMDBMovie
 }
