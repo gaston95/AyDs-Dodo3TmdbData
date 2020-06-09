@@ -1,14 +1,10 @@
 package ayds.dodo.movieinfo.moredetails.fulllogic.model.repository.local.sqldb
 
-
-
 import ayds.dodo.movieinfo.moredetails.fulllogic.model.entities.TMDBMovie
 import ayds.dodo.movieinfo.moredetails.fulllogic.model.repository.local.MoreDetailsLocalStorage
 import java.sql.SQLException
 
-
-
-internal class SqlDBImp (private val sqlQueries: SQLQueries) : SqlDB(), MoreDetailsLocalStorage {
+internal class SqlDBImp (private val SqlQueries: SQLQueries) : SqlDB(), MoreDetailsLocalStorage {
         override val dbUrl = SQLQueries.EXTRAINFO_DB_URL
 
     init {
@@ -36,7 +32,7 @@ internal class SqlDBImp (private val sqlQueries: SQLQueries) : SqlDB(), MoreDeta
 
     private fun insertMovieInfo(movie: TMDBMovie){
         try {
-            statement?.executeUpdate(SQLQueries.getInsertMovieInfoQuery(movie))
+            statement?.executeUpdate(SqlQueries.getInsertMovieInfoQuery(movie))
         } catch (e: SQLException) {
             println("Error saving " + e.message)
         }
@@ -59,8 +55,8 @@ internal class SqlDBImp (private val sqlQueries: SQLQueries) : SqlDB(), MoreDeta
         var movie: TMDBMovie? = null
         try {
             val titleSql = title.replace("'","''")
-            val moviesResultSet = statement?.executeQuery(SQLQueries.getInfoMovieByTitleQuery(titleSql))
-            movie = moviesResultSet?.let { SQLQueries.resultSetToMovieMapper(it) }
+            val moviesResultSet = statement?.executeQuery(SqlQueries.getInfoMovieByTitleQuery(titleSql))
+            movie = moviesResultSet?.let { SqlQueries.resultSetToMovieMapper(it) }
         } catch (e: SQLException) {
             System.err.println("Get movie by title error " + e.message)
         }

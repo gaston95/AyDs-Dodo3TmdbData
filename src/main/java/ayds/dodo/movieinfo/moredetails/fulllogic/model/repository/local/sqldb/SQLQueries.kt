@@ -27,10 +27,4 @@ internal interface SQLQueries {
                 SOURCE_COLUMN + " integer)"
 
     }
-
-
-
-
-
-
 }
