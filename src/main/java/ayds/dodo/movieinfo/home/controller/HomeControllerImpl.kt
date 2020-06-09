@@ -32,6 +32,6 @@ internal class HomeControllerImpl(
     }
 
     private fun onMoreDetailsAction() {
-        OtherInfoWindow.open(homeModel.getLastMovie())
+        homeModel.getLastMovie()?.let { OtherInfoWindow(it)}
     }
 }
