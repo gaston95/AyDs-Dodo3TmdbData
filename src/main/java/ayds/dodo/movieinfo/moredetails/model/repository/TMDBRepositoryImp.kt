@@ -9,18 +9,40 @@ class TMDBRepositoryImp (
         private val externalService: ExternalService
 ) : TMDBRepository {
 
-    private val localMovie = "[*]"
+    private val localMovie = "*"
 
     override fun getMovie(title: String, year: String): TMDBMovie {
-        val movieData = localStorage.getMovieInfo(title)
-        return movieData?.let { getMovieMarkedAsLocallyStored(it) } ?: externalService.getMovie(title,year)
-    }
+        var movie = localStorage.getMovieInfo(title)
 
-    private fun getMovieMarkedAsLocallyStored(movie: TMDBMovie): TMDBMovie {
-        movie.plot = localMovie + movie.plot
+        when {
+            movie != null -> markMovieAsLocal(movie)
+            else -> {
+                movie = externalService.getMovie(title, year)
+                localStorage.saveMovieInfo(movie)
+
+            }
+        }
         return movie
     }
 
-
-
+    private fun markMovieAsLocal(movie: TMDBMovie):TMDBMovie {
+        movie.plot = localMovie + movie.plot
+        return movie
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
