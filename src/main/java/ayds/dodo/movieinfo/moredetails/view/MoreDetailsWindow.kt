@@ -10,7 +10,8 @@ import javax.imageio.ImageIO
 import javax.swing.*
 import javax.swing.event.HyperlinkEvent
 
-class MoreDetailsWindow(private val movie: OmdbMovie) : MoreDetailsView {
+class MoreDetailsWindow : MoreDetailsView {
+    private lateinit var movie :OmdbMovie
     private val contentType = "text/html"
     private val frameTitle = "Movie Info Dodo"
     private val labelText = "Data from The Movie Data Base"
@@ -20,7 +21,8 @@ class MoreDetailsWindow(private val movie: OmdbMovie) : MoreDetailsView {
     private var descriptionTextPane = JTextPane()
     private var imagePanel = JPanel()
 
-    override fun openView(){
+    override fun openView(movie: OmdbMovie){
+        this.movie=movie
         createWindow()
         initWindow()
     }
