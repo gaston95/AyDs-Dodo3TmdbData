@@ -1,9 +1,6 @@
 package ayds.dodo.movieinfo.moredetails.view
 
-import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
-import ayds.dodo.movieinfo.moredetails.model.MoreDetailsModelModule
 import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
-import ayds.dodo.movieinfo.moredetails.model.repository.external.tmdb.TMDBMovieResolver
 import java.awt.BorderLayout
 import java.awt.Desktop
 import java.awt.Dimension
