@@ -1,7 +1,7 @@
 package ayds.dodo.movieinfo.moredetails.view
 
-import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
+import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
 
 interface MoreDetailsView {
-    fun openView(movie: OmdbMovie)
+    fun openView(movieData: TMDBMovie)
 }

@@ -2,6 +2,7 @@ package ayds.dodo.movieinfo.moredetails.view
 
 import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
 import ayds.dodo.movieinfo.moredetails.model.MoreDetailsModelModule
+import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
 import ayds.dodo.movieinfo.moredetails.model.repository.external.tmdb.TMDBMovieResolver
 import java.awt.BorderLayout
 import java.awt.Desktop
@@ -21,10 +22,10 @@ class MoreDetailsWindow : MoreDetailsView {
     private var descriptionTextPane = JTextPane()
     private var imagePanel = JPanel()
 
-    override fun openView(movie: OmdbMovie){
+    override fun openView(movieData: TMDBMovie){
         createWindow()
         setHyperLinkListener()
-        getMoviePlot(movie)
+        getMoviePlot(movieData)
     }
 
     private fun createWindow() {
@@ -60,13 +61,10 @@ class MoreDetailsWindow : MoreDetailsView {
         }
     }
 
-    private fun getMoviePlot(movie: OmdbMovie) {
-        Thread {
-            val movieData = MoreDetailsModelModule.MoreDetailsModel.searchMovie (movie.title,movie.year)
-            setDescriptionTextPane(movieData.plot)
-            setImage(movieData.imageUrl)
-            setLookAndFeel()
-        }.start()
+    private fun getMoviePlot(movieData: TMDBMovie) {
+        setDescriptionTextPane(movieData.plot)
+        setImage(movieData.imageUrl)
+        setLookAndFeel()
     }
 
     private fun setDescriptionTextPane(text: String){
