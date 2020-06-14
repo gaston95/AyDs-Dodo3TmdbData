@@ -11,7 +11,6 @@ import javax.swing.*
 import javax.swing.event.HyperlinkEvent
 
 class MoreDetailsWindow : MoreDetailsView {
-    private lateinit var movie :OmdbMovie
     private val contentType = "text/html"
     private val frameTitle = "Movie Info Dodo"
     private val labelText = "Data from The Movie Data Base"
@@ -22,9 +21,9 @@ class MoreDetailsWindow : MoreDetailsView {
     private var imagePanel = JPanel()
 
     override fun openView(movie: OmdbMovie){
-        this.movie=movie
         createWindow()
-        initWindow()
+        setHyperLinkListener()
+        getMoviePlot(movie)
     }
 
     private fun createWindow() {
@@ -47,11 +46,6 @@ class MoreDetailsWindow : MoreDetailsView {
         frame.isVisible = true
     }
 
-    private fun initWindow() {
-        setHyperLinkListener()
-        getMoviePlot()
-    }
-
     private fun setHyperLinkListener() {
         descriptionTextPane.addHyperlinkListener { e: HyperlinkEvent ->
             if (HyperlinkEvent.EventType.ACTIVATED == e.eventType) {
@@ -65,7 +59,7 @@ class MoreDetailsWindow : MoreDetailsView {
         }
     }
 
-    private fun getMoviePlot() {
+    private fun getMoviePlot(movie: OmdbMovie) {
         Thread {
             val movieData = TMDBMovieResolver(
                     movie
