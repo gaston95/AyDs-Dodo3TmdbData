@@ -17,6 +17,7 @@ internal interface TMDBMovieResolver {
 
 internal class TMDBMovieResolverImp :TMDBMovieResolver {
 
+    private val titleProperty = "title"
     private val overviewProperty = "overview"
     private val backdropPathProperty = "backdrop_path"
     private val posterPathProperty = "poster_path"
@@ -28,11 +29,11 @@ internal class TMDBMovieResolverImp :TMDBMovieResolver {
     override fun getMovie(body: String?,year: String): TMDBMovie {
         val searchResult = searchMovie(body, year)
         val movieData = TMDBMovie()
-
+        println(searchResult)
         searchResult?.let {
             val extract = searchResult[overviewProperty]
             if (isNotNull(extract)) {
-                movieData.title = searchResult["Title"].asString
+                movieData.title = getTitleFromJson(searchResult[titleProperty])
                 movieData.plot = extract.asString
                 movieData.imageUrl = getImageUrlFromJson(searchResult[backdropPathProperty])
 
@@ -69,6 +70,9 @@ internal class TMDBMovieResolverImp :TMDBMovieResolver {
         return year == movieYear
     }
     private fun isNotNull(element: JsonElement?): Boolean = element != null && !element.isJsonNull
+
+    private fun getTitleFromJson(titleJson: JsonElement) =
+            if (isNotNull(titleJson)) titleJson.asString else ""
 
     private fun getImageUrlFromJson(backdropPathJson: JsonElement) =
             if (isNotNull(backdropPathJson)) pathUrl + backdropPathJson.asString else imageUrlDefault
