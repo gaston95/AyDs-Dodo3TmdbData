@@ -3,7 +3,7 @@ package ayds.dodo.movieinfo.home.controller
 import ayds.dodo.movieinfo.home.model.HomeModel
 import ayds.dodo.movieinfo.home.view.HomeView
 import ayds.dodo.movieinfo.home.view.UiEvent
-import ayds.dodo.movieinfo.moredetails.OtherInfoWindow
+import ayds.dodo.movieinfo.moredetails.view.OtherInfoWindow
 import ayds.observer.Observer
 
 interface HomeController

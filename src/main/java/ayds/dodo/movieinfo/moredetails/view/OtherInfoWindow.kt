@@ -1,4 +1,4 @@
-package ayds.dodo.movieinfo.moredetails
+package ayds.dodo.movieinfo.moredetails.view
 
 import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
 import ayds.dodo.movieinfo.moredetails.model.repository.external.tmdb.TMDBMovieResolver
