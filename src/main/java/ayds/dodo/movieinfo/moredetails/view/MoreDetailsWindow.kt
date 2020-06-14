@@ -1,6 +1,7 @@
 package ayds.dodo.movieinfo.moredetails.view
 
 import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
+import ayds.dodo.movieinfo.moredetails.model.MoreDetailsModelModule
 import ayds.dodo.movieinfo.moredetails.model.repository.external.tmdb.TMDBMovieResolver
 import java.awt.BorderLayout
 import java.awt.Desktop
@@ -61,9 +62,7 @@ class MoreDetailsWindow : MoreDetailsView {
 
     private fun getMoviePlot(movie: OmdbMovie) {
         Thread {
-            val movieData = TMDBMovieResolver(
-                    movie
-            ).getMovie()
+            val movieData = MoreDetailsModelModule.MoreDetailsModel.searchMovie (movie.title,movie.year)
             setDescriptionTextPane(movieData.plot)
             setImage(movieData.imageUrl)
             setLookAndFeel()
