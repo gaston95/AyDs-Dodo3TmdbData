@@ -1,4 +1,4 @@
-package ayds.dodo.movieinfo.moredetails.fulllogic.model.repository.local.sqldb
+package ayds.dodo.movieinfo.moredetails.model.repository.local.sqldb
 
 
 import java.sql.Connection

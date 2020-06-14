@@ -1,10 +1,10 @@
-package ayds.dodo.movieinfo.moredetails.fulllogic.model.repository.external.tmdb
+package ayds.dodo.movieinfo.moredetails.model.repository.external.tmdb
 
 
-import ayds.dodo.movieinfo.moredetails.fulllogic.HTMLFormatter
-import ayds.dodo.movieinfo.moredetails.fulllogic.model.entities.DefaultMovie
-import ayds.dodo.movieinfo.moredetails.fulllogic.model.entities.TMDBMovie
-import ayds.dodo.movieinfo.moredetails.fulllogic.model.repository.external.ExternalService
+import ayds.dodo.movieinfo.moredetails.HTMLFormatter
+import ayds.dodo.movieinfo.moredetails.model.entities.DefaultMovie
+import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
+import ayds.dodo.movieinfo.moredetails.model.repository.external.ExternalService
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject

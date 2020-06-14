@@ -1,7 +1,7 @@
-package ayds.dodo.movieinfo.moredetails.fulllogic.model.repository.local.sqldb
+package ayds.dodo.movieinfo.moredetails.model.repository.local.sqldb
 
-import ayds.dodo.movieinfo.moredetails.fulllogic.model.entities.TMDBMovie
-import ayds.dodo.movieinfo.moredetails.fulllogic.model.repository.local.MoreDetailsLocalStorage
+import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
+import ayds.dodo.movieinfo.moredetails.model.repository.local.MoreDetailsLocalStorage
 import java.sql.SQLException
 
 internal class SqlDBImp (private val SqlQueries: SQLQueries) : SqlDB(), MoreDetailsLocalStorage {

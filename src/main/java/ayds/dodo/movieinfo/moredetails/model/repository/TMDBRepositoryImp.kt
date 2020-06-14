@@ -1,13 +1,13 @@
-package ayds.dodo.movieinfo.moredetails.fulllogic.model.repository
+package ayds.dodo.movieinfo.moredetails.model.repository
 
-import ayds.dodo.movieinfo.moredetails.fulllogic.model.entities.TMDBMovie
-import ayds.dodo.movieinfo.moredetails.fulllogic.model.repository.external.ExternalService
-import ayds.dodo.movieinfo.moredetails.fulllogic.model.repository.local.MoreDetailsLocalStorage
+import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
+import ayds.dodo.movieinfo.moredetails.model.repository.external.ExternalService
+import ayds.dodo.movieinfo.moredetails.model.repository.local.MoreDetailsLocalStorage
 
 class TMDBRepositoryImp (
         private val localStorage: MoreDetailsLocalStorage,
         private val externalService: ExternalService
-) : TMDBRepository{
+) : TMDBRepository {
 
     private val localMovie = "[*]"
 

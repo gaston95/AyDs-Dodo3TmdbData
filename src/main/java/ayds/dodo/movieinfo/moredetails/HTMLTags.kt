@@ -1,4 +1,4 @@
-package ayds.dodo.movieinfo.moredetails.fulllogic
+package ayds.dodo.movieinfo.moredetails
 
 object HTMLTags {
     const val greaterThanSymbol = ">"

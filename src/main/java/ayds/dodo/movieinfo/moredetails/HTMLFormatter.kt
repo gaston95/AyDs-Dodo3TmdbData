@@ -1,6 +1,6 @@
-package ayds.dodo.movieinfo.moredetails.fulllogic
+package ayds.dodo.movieinfo.moredetails
 
-import ayds.dodo.movieinfo.moredetails.fulllogic.model.entities.TMDBMovie
+import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
 
 object HTMLFormatter {
 
