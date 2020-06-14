@@ -33,7 +33,7 @@ internal class HomeControllerImpl(
 
     private fun onMoreDetailsAction() {
         homeModel.getLastMovie()?.let {
-            MoreDetailsWindow(it)
+            MoreDetailsWindow()
         }
 
     }
