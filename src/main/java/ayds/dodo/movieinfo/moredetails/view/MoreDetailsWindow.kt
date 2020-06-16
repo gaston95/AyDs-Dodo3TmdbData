@@ -32,6 +32,7 @@ class MoreDetailsWindow : MoreDetailsView {
     private fun createWindow() {
         contentPane.removeAll()
         imagePanel.removeAll()
+
         contentPane.layout = BoxLayout(contentPane, BoxLayout.PAGE_AXIS)
         contentPane.add(JLabel(labelText))
 
@@ -59,7 +60,7 @@ class MoreDetailsWindow : MoreDetailsView {
     }
 
     private fun getMoviePlot(movieData: TMDBMovie) {
-        setDescriptionTextPane(movieData.plot)
+        setDescriptionTextPane(HTMLFormatter.getFormattedPlotText(movieData))
         setImage(movieData.imageUrl)
         setLookAndFeel()
     }

@@ -1,6 +1,5 @@
 package ayds.dodo.movieinfo.moredetails.model.repository.external.tmdb
 
-import ayds.dodo.movieinfo.moredetails.HTMLFormatter
 import ayds.dodo.movieinfo.moredetails.model.entities.DefaultMovie
 import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
 import com.google.gson.Gson
