@@ -1,8 +1,5 @@
 package ayds.dodo.movieinfo.moredetails.model
 
-
-
-
 import ayds.dodo.movieinfo.moredetails.model.repository.TMDBRepositoryImp
 import ayds.dodo.movieinfo.moredetails.model.repository.external.tmdb.TMDBMovieResolverImp
 import ayds.dodo.movieinfo.moredetails.model.repository.external.tmdb.TMDBService
@@ -13,7 +10,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object MoreDetailsModelModule {
-
 
     private val apiUrl = "https://api.themoviedb.org/3/"
 

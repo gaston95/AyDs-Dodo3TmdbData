@@ -1,6 +1,5 @@
 package ayds.dodo.movieinfo.moredetails.model.repository.external.tmdb
 
-
 import ayds.dodo.movieinfo.moredetails.HTMLFormatter
 import ayds.dodo.movieinfo.moredetails.model.entities.DefaultMovie
 import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
@@ -29,7 +28,7 @@ internal class TMDBMovieResolverImp :TMDBMovieResolver {
     override fun getMovie(body: String?,year: String): TMDBMovie {
         val searchResult = searchMovie(body, year)
         val movieData = TMDBMovie()
-        println(searchResult)
+
         searchResult?.let {
             val extract = searchResult[overviewProperty]
             if (isNotNull(extract)) {

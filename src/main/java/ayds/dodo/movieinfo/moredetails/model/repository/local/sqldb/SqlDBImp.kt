@@ -2,6 +2,7 @@ package ayds.dodo.movieinfo.moredetails.model.repository.local.sqldb
 
 import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
 import ayds.dodo.movieinfo.moredetails.model.repository.local.MoreDetailsLocalStorage
+import ayds.dodo.movieinfo.utils.sql.SqlDB
 import java.sql.SQLException
 
 internal class SqlDBImp (private val SqlQueries: SQLQueries) : SqlDB(), MoreDetailsLocalStorage {
@@ -12,9 +13,9 @@ internal class SqlDBImp (private val SqlQueries: SQLQueries) : SqlDB(), MoreDeta
     }
 
     private fun initDatabase() {
-        openConnectionToExtraInfo()
+        openConnection()
         createInfoTableIfNeeded()
-        closeConnectionToExtraInfo()
+        closeConnection()
     }
     private fun createInfoTable(){
         try {
@@ -25,7 +26,7 @@ internal class SqlDBImp (private val SqlQueries: SQLQueries) : SqlDB(), MoreDeta
     }
 
     private fun createInfoTableIfNeeded(){
-        if(!isInfoTableCreated())
+        if(!tableCreated(SQLQueries.INFO_TABLE))
             createInfoTable()
     }
 
@@ -39,15 +40,15 @@ internal class SqlDBImp (private val SqlQueries: SQLQueries) : SqlDB(), MoreDeta
     }
 
     override fun saveMovieInfo(movie: TMDBMovie) {
-        openConnectionToExtraInfo()
+        openConnection()
         insertMovieInfo(movie)
-        closeConnectionToExtraInfo()
+        closeConnection()
     }
 
-    override fun getMovieInfo(title: String): TMDBMovie? {
-        openConnectionToExtraInfo()
-        val movie = selectMovie(title)
-        closeConnectionToExtraInfo()
+    override fun getMovieInfo(term: String): TMDBMovie? {
+        openConnection()
+        val movie = selectMovie(term)
+        closeConnection()
         return movie
     }
 

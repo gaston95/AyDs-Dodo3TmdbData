@@ -2,6 +2,7 @@ package ayds.dodo.movieinfo.home.model.repository.local.sqldb
 
 import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
 import ayds.dodo.movieinfo.home.model.repository.local.LocalStorage
+import ayds.dodo.movieinfo.utils.sql.SqlDB
 import java.sql.SQLException
 
 internal class SqlDBImpl(private val sqlQueries: SqlQueries) : SqlDB(), LocalStorage {

@@ -9,7 +9,7 @@ class TMDBRepositoryImp (
         private val externalService: ExternalService
 ) : TMDBRepository {
 
-    private val localMovie = "*"
+    private val localMovie = "[*]"
 
     override fun getMovie(title: String, year: String): TMDBMovie {
         var movie = localStorage.getMovieInfo(title)
@@ -30,19 +30,3 @@ class TMDBRepositoryImp (
         return movie
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

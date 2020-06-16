@@ -1,4 +1,4 @@
-package ayds.dodo.movieinfo.home.model.repository.local.sqldb
+package ayds.dodo.movieinfo.utils.sql
 
 import java.sql.Connection
 import java.sql.DriverManager
