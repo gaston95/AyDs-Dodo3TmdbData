@@ -44,7 +44,6 @@ internal interface SqlQueries {
                 TITLE_COLUMN + " string, " +
                 SOURCE_COLUMN + " string, " +
                 VALUE_COLUMN + " string" +
-                POSTER_URL_COLUMN + " string" +
                 ")"
     }
 }
