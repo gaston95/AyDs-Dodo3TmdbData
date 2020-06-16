@@ -25,6 +25,7 @@ class SQLQueriesImp : SQLQueries {
                     title = resultSet.getString(SQLQueries.TITLE_COLUMN)
                     plot = resultSet.getString(SQLQueries.PLOT_COLUMN)
                     imageUrl = resultSet.getString(SQLQueries.IMAGEURL_COLUMN)
+                    posterPath = resultSet.getString(SQLQueries.POSTER_URL_COLUMN)
                 }
             } else {
                 null
