@@ -18,13 +18,16 @@ internal interface SQLQueries {
         const val TITLE_COLUMN = "title"
         const val PLOT_COLUMN = "plot"
         const val SOURCE_COLUMN = "source"
+        const val POSTER_URL_COLUMN = "posterUrl"
 
         const val CREATE_INFO_TABLE = "create table if not exists " + INFO_TABLE + "(" +
                 ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 TITLE_COLUMN + " string, " +
                 PLOT_COLUMN + " string, " +
                 IMAGEURL_COLUMN + " string, " +
-                SOURCE_COLUMN + " integer)"
+                SOURCE_COLUMN + " integer," +
+                POSTER_URL_COLUMN + " string " +
+                " )"
 
     }
 }
