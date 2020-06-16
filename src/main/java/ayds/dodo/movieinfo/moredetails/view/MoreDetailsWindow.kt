@@ -1,6 +1,8 @@
 package ayds.dodo.movieinfo.moredetails.view
 
 import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
+import ayds.observer.Observable
+import ayds.observer.Subject
 import java.awt.BorderLayout
 import java.awt.Desktop
 import java.awt.Dimension
@@ -10,6 +12,8 @@ import javax.swing.*
 import javax.swing.event.HyperlinkEvent
 
 class MoreDetailsWindow : MoreDetailsView {
+    private val onActionSubject = Subject<UiEvent>()
+
     private val contentType = "text/html"
     private val frameTitle = "Movie Info Dodo"
     private val labelText = "Data from The Movie Data Base"
@@ -26,6 +30,8 @@ class MoreDetailsWindow : MoreDetailsView {
     }
 
     private fun createWindow() {
+        contentPane.removeAll()
+        imagePanel.removeAll()
         contentPane.layout = BoxLayout(contentPane, BoxLayout.PAGE_AXIS)
         contentPane.add(JLabel(labelText))
 
@@ -47,14 +53,8 @@ class MoreDetailsWindow : MoreDetailsView {
 
     private fun setHyperLinkListener() {
         descriptionTextPane.addHyperlinkListener { e: HyperlinkEvent ->
-            if (HyperlinkEvent.EventType.ACTIVATED == e.eventType) {
-                val desktop = Desktop.getDesktop()
-                try {
-                    desktop.browse(e.url.toURI())
-                } catch (exception: Exception) {
-                    exception.printStackTrace()
-                }
-            }
+            if (HyperlinkEvent.EventType.ACTIVATED == e.eventType)
+                onActionSubject.notify(UiEvent.HYPER_LINK_ACTION)
         }
     }
 
