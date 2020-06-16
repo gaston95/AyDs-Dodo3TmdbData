@@ -4,6 +4,7 @@ open class TMDBMovie {
     open var title = ""
     open var plot = ""
     open var imageUrl = ""
+    open var posterPath = ""
 }
 
 object DefaultMovie: TMDBMovie() {

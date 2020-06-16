@@ -20,10 +20,8 @@ internal class TMDBMovieResolverImp :TMDBMovieResolver {
     private val overviewProperty = "overview"
     private val backdropPathProperty = "backdrop_path"
     private val posterPathProperty = "poster_path"
-    private val imageUrlDefault = "https://www.themoviedb.org/assets/2/v4/logos/" +
-            "256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png"
+    private val releaseDateProperty = "release_date"
     private val pathUrl = "https://image.tmdb.org/t/p/w400/"
-    private val apiUrl = "https://api.themoviedb.org/3/"
 
     override fun getMovie(body: String?,year: String): TMDBMovie {
         val searchResult = searchMovie(body, year)
@@ -35,13 +33,8 @@ internal class TMDBMovieResolverImp :TMDBMovieResolver {
                 movieData.title = getTitleFromJson(searchResult[titleProperty])
                 movieData.plot = extract.asString
                 movieData.imageUrl = getImageUrlFromJson(searchResult[backdropPathProperty])
+                movieData.posterPath = getPosterPathFromJSon(searchResult[posterPathProperty])
 
-                val posterPath = getPosterPathFromJSon(searchResult[posterPathProperty])
-                movieData.plot =
-                        HTMLFormatter.getFormattedPlotText(
-                                movieData,
-                                posterPath
-                        )
                 return movieData
             }
         }
@@ -64,19 +57,19 @@ internal class TMDBMovieResolverImp :TMDBMovieResolver {
     }
 
     private fun areSameYear(result: JsonObject, movieYear: String): Boolean {
-        val yearJson = result["release_date"]
+        val yearJson = result[releaseDateProperty]
         val year = yearJson?.asString?.split("-")?.toTypedArray()?.get(0) ?: ""
         return year == movieYear
     }
-    private fun isNotNull(element: JsonElement?): Boolean = element != null && !element.isJsonNull
+    private fun isNotNull(element: JsonElement?): Boolean =
+            element != null && !element.isJsonNull
 
     private fun getTitleFromJson(titleJson: JsonElement) =
             if (isNotNull(titleJson)) titleJson.asString else ""
 
     private fun getImageUrlFromJson(backdropPathJson: JsonElement) =
-            if (isNotNull(backdropPathJson)) pathUrl + backdropPathJson.asString else imageUrlDefault
+            if (isNotNull(backdropPathJson)) pathUrl + backdropPathJson.asString else ""
 
     private fun getPosterPathFromJSon(posterPathJSon: JsonElement) =
             if (isNotNull(posterPathJSon)) pathUrl + posterPathJSon.asString else ""
-
 }
