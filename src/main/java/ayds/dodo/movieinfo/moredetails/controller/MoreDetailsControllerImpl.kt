@@ -26,6 +26,10 @@ internal class MoreDetailsControllerImpl(
         }
     }
 
+    init {
+        moreDetailsView.onUiEvent().subscribe(observer)
+    }
+
     override fun createMoreDetails(movie: OmdbMovie){
         Thread {
             moreDetailsModel.searchMovie (movie.title,movie.year)

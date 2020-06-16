@@ -4,7 +4,6 @@ import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
 import ayds.observer.Observable
 import ayds.observer.Subject
 import java.awt.BorderLayout
-import java.awt.Desktop
 import java.awt.Dimension
 import java.net.URL
 import javax.imageio.ImageIO
@@ -27,6 +26,10 @@ class MoreDetailsWindow : MoreDetailsView {
         createWindow()
         setHyperLinkListener()
         getMoviePlot(movieData)
+    }
+
+    override fun onUiEvent(): Observable<UiEvent> {
+        return onActionSubject
     }
 
     private fun createWindow() {
