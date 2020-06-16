@@ -14,7 +14,9 @@ class SQLQueriesImp : SQLQueries {
                 " '${movie.title.replaceQuotes()}'," +
                 " '${movie.plot.replaceQuotes()}'," +
                 " '${movie.imageUrl}'," +
-                " 1)"
+                " 1 " +
+                " '${movie.posterPath}' " +
+                ")"
 
     override fun resultSetToMovieMapper(resultSet: ResultSet): TMDBMovie? =
         try {
