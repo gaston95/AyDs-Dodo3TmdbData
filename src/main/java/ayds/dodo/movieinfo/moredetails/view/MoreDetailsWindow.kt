@@ -10,7 +10,7 @@ import javax.imageio.ImageIO
 import javax.swing.*
 import javax.swing.event.HyperlinkEvent
 
-class MoreDetailsWindow : MoreDetailsView {
+class MoreDetailsWindow(private val formatter:Formatter) : MoreDetailsView {
     private val onActionSubject = Subject<UiEvent>()
 
     private val contentType = "text/html"
@@ -63,7 +63,7 @@ class MoreDetailsWindow : MoreDetailsView {
     }
 
     private fun getMoviePlot(movieData: TMDBMovie) {
-        setDescriptionTextPane(HTMLFormatter.getFormattedPlotText(movieData))
+        setDescriptionTextPane(formatter.getFormattedPlotText(movieData))
         setImage(movieData.imageUrl)
         setLookAndFeel()
     }

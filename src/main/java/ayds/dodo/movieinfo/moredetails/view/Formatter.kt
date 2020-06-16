@@ -2,23 +2,27 @@ package ayds.dodo.movieinfo.moredetails.view
 
 import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
 
-object HTMLFormatter {
-    const val greaterThanSymbol = ">"
-    const val doubleBackSlashLineBreak = "\\n"
-    const val singleLineBreak = "\n"
-    const val linkOpen = "<a href="
-    const val linkClose = "</a>"
-    const val hyperlinkText = "View Movie Poster"
-    const val htmlClose = "</html>"
-    const val bodyClose = "</body>"
-    const val htmlOpen = "<html>"
-    const val bodyOpen = "<body style=\"width: 400px\">"
-    const val fontOpen = "<font face=\"arial\">"
-    const val fontClose = "</font>"
-    const val boldOpen = "<b>"
-    const val boldClose = "</b>"
+interface Formatter{
+    fun getFormattedPlotText(movieData: TMDBMovie): String
+}
 
-    fun getFormattedPlotText(movieData: TMDBMovie): String {
+internal class HTMLFormatter: Formatter {
+    val greaterThanSymbol = ">"
+    val doubleBackSlashLineBreak = "\\n"
+    val singleLineBreak = "\n"
+    val linkOpen = "<a href="
+    val linkClose = "</a>"
+    val hyperlinkText = "View Movie Poster"
+    val htmlClose = "</html>"
+    val bodyClose = "</body>"
+    val htmlOpen = "<html>"
+    val bodyOpen = "<body style=\"width: 400px\">"
+    val fontOpen = "<font face=\"arial\">"
+    val fontClose = "</font>"
+    val boldOpen = "<b>"
+    val boldClose = "</b>"
+
+    override fun getFormattedPlotText(movieData: TMDBMovie): String {
         var formattedText = movieData.plot
         formattedText = replaceLineBreakMarks(formattedText)
         formattedText = textToHtml(formattedText)
