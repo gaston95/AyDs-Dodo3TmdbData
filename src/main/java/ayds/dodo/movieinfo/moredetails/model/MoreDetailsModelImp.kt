@@ -5,12 +5,18 @@ import ayds.dodo.movieinfo.moredetails.model.repository.TMDBRepository
 
 interface MoreDetailsModel{
 
-    fun searchMovie(title: String, year: String) : TMDBMovie
+    fun searchMovie(title: String, year: String)
 
+    fun getLastMovie(): TMDBMovie?
 }
 
 internal class MoreDetailsModelImpl(private val repository: TMDBRepository) : MoreDetailsModel {
 
-    override fun searchMovie(title: String, year: String) =
-         repository.getMovie(title, year)
+    private var lastMovie: TMDBMovie? = null
+
+    override fun searchMovie(title: String, year: String) {
+        lastMovie = repository.getMovie(title, year)
+    }
+
+    override fun getLastMovie(): TMDBMovie? = lastMovie
 }
