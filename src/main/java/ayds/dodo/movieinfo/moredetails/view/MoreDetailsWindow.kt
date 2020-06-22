@@ -1,5 +1,6 @@
 package ayds.dodo.movieinfo.moredetails.view
 
+import ayds.dodo.movieinfo.moredetails.model.MoreDetailsModel
 import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
 import ayds.observer.Observable
 import ayds.observer.Subject
@@ -10,9 +11,8 @@ import javax.imageio.ImageIO
 import javax.swing.*
 import javax.swing.event.HyperlinkEvent
 
-class MoreDetailsWindow(private val formatter:Formatter) : MoreDetailsView {
+class MoreDetailsWindow(private val homeModel: MoreDetailsModel, private val formatter:Formatter) : MoreDetailsView {
     private val onActionSubject = Subject<UiEvent>()
-
     private val contentType = "text/html"
     private val frameTitle = "Movie Info Dodo"
     private val labelText = "Data from The Movie Data Base"
@@ -22,10 +22,10 @@ class MoreDetailsWindow(private val formatter:Formatter) : MoreDetailsView {
     private var descriptionTextPane = JTextPane()
     private var imagePanel = JPanel()
 
-    override fun openView(movieData: TMDBMovie){
+    override fun openView(){
         createWindow()
-        setHyperLinkListener()
-        getMoviePlot(movieData)
+        initListeners()
+        initObservers()
     }
 
     override fun onUiEvent(): Observable<UiEvent> {
@@ -55,14 +55,18 @@ class MoreDetailsWindow(private val formatter:Formatter) : MoreDetailsView {
         frame.isVisible = true
     }
 
-    private fun setHyperLinkListener() {
+    private fun initListeners() {
         descriptionTextPane.addHyperlinkListener { e: HyperlinkEvent ->
             if (HyperlinkEvent.EventType.ACTIVATED == e.eventType)
                 onActionSubject.notify(UiEvent.HYPER_LINK_ACTION)
         }
     }
 
-    private fun getMoviePlot(movieData: TMDBMovie) {
+    private fun initObservers(){
+
+    }
+
+    private fun updateMovieDetails(movieData: TMDBMovie) {
         setDescriptionTextPane(formatter.getFormattedPlotText(movieData))
         setImage(movieData.imageUrl)
         setLookAndFeel()
