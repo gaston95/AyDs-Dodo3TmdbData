@@ -7,20 +7,20 @@ interface Formatter{
 }
 
 internal class HTMLFormatter: Formatter {
-    val greaterThanSymbol = ">"
-    val doubleBackSlashLineBreak = "\\n"
-    val singleLineBreak = "\n"
-    val linkOpen = "<a href="
-    val linkClose = "</a>"
-    val hyperlinkText = "View Movie Poster"
-    val htmlClose = "</html>"
-    val bodyClose = "</body>"
-    val htmlOpen = "<html>"
-    val bodyOpen = "<body style=\"width: 400px\">"
-    val fontOpen = "<font face=\"arial\">"
-    val fontClose = "</font>"
-    val boldOpen = "<b>"
-    val boldClose = "</b>"
+    private val greaterThanSymbol = ">"
+    private val doubleBackSlashLineBreak = "\\n"
+    private val singleLineBreak = "\n"
+    private val linkOpen = "<a href="
+    private val linkClose = "</a>"
+    private val hyperlinkText = "View Movie Poster"
+    private val htmlClose = "</html>"
+    private val bodyClose = "</body>"
+    private val htmlOpen = "<html>"
+    private val bodyOpen = "<body style=\"width: 400px\">"
+    private val fontOpen = "<font face=\"arial\">"
+    private val fontClose = "</font>"
+    private val boldOpen = "<b>"
+    private val boldClose = "</b>"
 
     override fun getFormattedPlotText(movieData: TMDBMovie): String {
         var formattedText = movieData.plot

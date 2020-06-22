@@ -11,7 +11,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object MoreDetailsModelModule {
 
-    private val apiUrl = "https://api.themoviedb.org/3/"
+    private const val apiUrl = "https://api.themoviedb.org/3/"
 
     private val retrofit = Retrofit.Builder()
                 .baseUrl(apiUrl)
