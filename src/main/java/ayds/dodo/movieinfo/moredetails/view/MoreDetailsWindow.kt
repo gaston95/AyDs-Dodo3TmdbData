@@ -3,6 +3,7 @@ package ayds.dodo.movieinfo.moredetails.view
 import ayds.dodo.movieinfo.moredetails.model.MoreDetailsModel
 import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
 import ayds.observer.Observable
+import ayds.observer.Observer
 import ayds.observer.Subject
 import java.awt.BorderLayout
 import java.awt.Dimension
@@ -10,7 +11,6 @@ import java.net.URL
 import javax.imageio.ImageIO
 import javax.swing.*
 import javax.swing.event.HyperlinkEvent
-
 
 class MoreDetailsWindow(private val homeModel: MoreDetailsModel, private val formatter:Formatter) : MoreDetailsView {
 
@@ -24,9 +24,12 @@ class MoreDetailsWindow(private val homeModel: MoreDetailsModel, private val for
     private var descriptionTextPane = JTextPane()
     private var imagePanel = JPanel()
 
+    init {
+        initListeners()
+    }
+
     override fun openView(){
         createWindow()
-        initListeners()
         initObservers()
     }
 
@@ -64,8 +67,14 @@ class MoreDetailsWindow(private val homeModel: MoreDetailsModel, private val for
         }
     }
 
-    private fun initObservers(){
+    private val observer: Observer<TMDBMovie> = object : Observer<TMDBMovie> {
+        override fun update(value: TMDBMovie) {
+            updateMovieDetails(value)
+        }
+    }
 
+    private fun initObservers(){
+        homeModel.movieObservable().subscribe(observer)
     }
 
     private fun updateMovieDetails(movieData: TMDBMovie) {
