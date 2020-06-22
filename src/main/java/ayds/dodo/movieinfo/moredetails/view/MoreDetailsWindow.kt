@@ -11,14 +11,10 @@ import javax.imageio.ImageIO
 import javax.swing.*
 import javax.swing.event.HyperlinkEvent
 
-<<<<<<< HEAD
+
 class MoreDetailsWindow(private val homeModel: MoreDetailsModel, private val formatter:Formatter) : MoreDetailsView {
-    private val onActionSubject = Subject<UiEvent>()
-=======
-class MoreDetailsWindow(private val formatter:Formatter) : MoreDetailsView {
 
     private val onActionSubject = Subject<MoreDetailsUiEvent>()
->>>>>>> c382e78cc1f4ba09f34dcf57add5f44995885a72
     private val contentType = "text/html"
     private val frameTitle = "Movie Info Dodo"
     private val labelText = "Data from The Movie Data Base"

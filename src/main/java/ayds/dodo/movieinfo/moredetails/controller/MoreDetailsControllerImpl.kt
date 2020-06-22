@@ -33,7 +33,7 @@ internal class MoreDetailsControllerImpl(
     override fun createMoreDetails(movie: OmdbMovie){
         moreDetailsView.openView()
         Thread {
-            moreDetailsModel.searchMovie (movie.title,movie.year)
+            moreDetailsModel.searchMovie(movie.title,movie.year)
         }.start()
     }
 
