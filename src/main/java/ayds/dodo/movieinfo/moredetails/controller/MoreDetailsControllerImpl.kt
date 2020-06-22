@@ -7,7 +7,6 @@ import ayds.dodo.movieinfo.moredetails.view.MoreDetailsUiEvent
 import ayds.dodo.movieinfo.moredetails.view.MoreDetailsView
 import ayds.observer.Observer
 import java.awt.Desktop
-import java.net.URL
 
 interface MoreDetailsController{
     fun createMoreDetails(movie: OmdbMovie)
