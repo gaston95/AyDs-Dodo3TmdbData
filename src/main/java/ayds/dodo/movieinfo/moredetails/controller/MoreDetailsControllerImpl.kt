@@ -2,12 +2,12 @@ package ayds.dodo.movieinfo.moredetails.controller
 
 import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
 import ayds.dodo.movieinfo.moredetails.model.MoreDetailsModel
-import ayds.dodo.movieinfo.moredetails.view.HyperLinkAction
-import ayds.dodo.movieinfo.moredetails.view.MoreDetailsUiEvent
 import ayds.dodo.movieinfo.moredetails.view.MoreDetailsView
+import ayds.dodo.movieinfo.moredetails.view.UiEvent
 import ayds.observer.Observer
 import java.awt.Desktop
 import java.net.URL
+
 
 interface MoreDetailsController{
     fun createMoreDetails(movie: OmdbMovie)
@@ -18,10 +18,10 @@ internal class MoreDetailsControllerImpl(
         private val moreDetailsModel: MoreDetailsModel
 ) : MoreDetailsController{
 
-    private val observer: Observer<MoreDetailsUiEvent> = object : Observer<MoreDetailsUiEvent> {
-        override fun update(value: MoreDetailsUiEvent) {
+    private val observer: Observer<UiEvent> = object : Observer<UiEvent> {
+        override fun update(value: UiEvent) {
             when (value) {
-                is HyperLinkAction -> onPosterPathAction()
+                UiEvent.HYPER_LINK_ACTION -> onPosterPathAction()
             }
         }
     }

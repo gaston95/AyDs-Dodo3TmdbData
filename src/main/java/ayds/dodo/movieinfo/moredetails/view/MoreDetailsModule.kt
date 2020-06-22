@@ -1,5 +1,5 @@
 package ayds.dodo.movieinfo.moredetails.view
 
-object MoreDetailsViewModule {
+object MoreDetailsModule {
     val moreDetailsView = MoreDetailsWindow(HTMLFormatter())
 }
