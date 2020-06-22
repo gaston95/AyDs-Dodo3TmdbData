@@ -5,5 +5,5 @@ import ayds.observer.Observable
 
 interface MoreDetailsView {
     fun openView(movieData: TMDBMovie)
-    fun onUiEvent(): Observable<UiEvent>
+    fun onUiEvent(): Observable<MoreDetailsUiEvent>
 }

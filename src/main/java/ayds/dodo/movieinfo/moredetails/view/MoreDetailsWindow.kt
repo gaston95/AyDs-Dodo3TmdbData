@@ -11,8 +11,8 @@ import javax.swing.*
 import javax.swing.event.HyperlinkEvent
 
 class MoreDetailsWindow(private val formatter:Formatter) : MoreDetailsView {
-    private val onActionSubject = Subject<UiEvent>()
 
+    private val onActionSubject = Subject<MoreDetailsUiEvent>()
     private val contentType = "text/html"
     private val frameTitle = "Movie Info Dodo"
     private val labelText = "Data from The Movie Data Base"
@@ -28,7 +28,7 @@ class MoreDetailsWindow(private val formatter:Formatter) : MoreDetailsView {
         getMoviePlot(movieData)
     }
 
-    override fun onUiEvent(): Observable<UiEvent> {
+    override fun onUiEvent(): Observable<MoreDetailsUiEvent> {
         return onActionSubject
     }
 
@@ -58,7 +58,7 @@ class MoreDetailsWindow(private val formatter:Formatter) : MoreDetailsView {
     private fun setHyperLinkListener() {
         descriptionTextPane.addHyperlinkListener { e: HyperlinkEvent ->
             if (HyperlinkEvent.EventType.ACTIVATED == e.eventType)
-                onActionSubject.notify(UiEvent.HYPER_LINK_ACTION)
+                onActionSubject.notify(HyperLinkAction(e))
         }
     }
 
