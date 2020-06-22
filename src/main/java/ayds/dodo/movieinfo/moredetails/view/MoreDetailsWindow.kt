@@ -12,7 +12,6 @@ import javax.imageio.ImageIO
 import javax.swing.*
 import javax.swing.event.HyperlinkEvent
 
-
 class MoreDetailsWindow(private val homeModel: MoreDetailsModel, private val formatter:Formatter) : MoreDetailsView {
 
     private val onActionSubject = Subject<MoreDetailsUiEvent>()
@@ -25,11 +24,12 @@ class MoreDetailsWindow(private val homeModel: MoreDetailsModel, private val for
     private var descriptionTextPane = JTextPane()
     private var imagePanel = JPanel()
 
-
+    init {
+        initListeners()
+    }
 
     override fun openView(){
         createWindow()
-        initListeners()
         initObservers()
     }
 
