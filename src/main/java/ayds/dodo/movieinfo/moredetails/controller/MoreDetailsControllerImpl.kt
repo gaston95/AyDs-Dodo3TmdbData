@@ -21,7 +21,7 @@ internal class MoreDetailsControllerImpl(
     private val observer: Observer<MoreDetailsUiEvent> = object : Observer<MoreDetailsUiEvent> {
         override fun update(value: MoreDetailsUiEvent) {
             when (value) {
-                is HyperLinkAction -> onPosterPathAction()
+                is HyperLinkAction -> onPosterPathAction(value)
             }
         }
     }
@@ -37,10 +37,10 @@ internal class MoreDetailsControllerImpl(
         }.start()
     }
 
-    private fun onPosterPathAction() {
+    private fun onPosterPathAction(hyperLink: HyperLinkAction) {
         val desktop = Desktop.getDesktop()
         try {
-            val url = URL(moreDetailsModel.getLastMovie()?.posterPath)
+            val url = hyperLink.hyperLink.url
             desktop.browse(url.toURI())
         } catch (exception: Exception) {
             exception.printStackTrace()
