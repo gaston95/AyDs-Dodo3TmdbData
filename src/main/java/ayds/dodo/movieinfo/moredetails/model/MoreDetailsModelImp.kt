@@ -2,21 +2,28 @@ package ayds.dodo.movieinfo.moredetails.model
 
 import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
 import ayds.dodo.movieinfo.moredetails.model.repository.TMDBRepository
+import ayds.observer.Observable
+import ayds.observer.Subject
 
 interface MoreDetailsModel{
 
     fun searchMovie(title: String, year: String)
 
-    fun getLastMovie(): TMDBMovie?
+    fun movieObservable() : Observable<TMDBMovie>
 }
 
 internal class MoreDetailsModelImpl(private val repository: TMDBRepository) : MoreDetailsModel {
 
-    private var lastMovie: TMDBMovie? = null
+    private var movieSubject = Subject<TMDBMovie>()
 
     override fun searchMovie(title: String, year: String) {
-        lastMovie = repository.getMovie(title, year)
+        repository.getMovie(title, year).let {
+            movieSubject.notify(it)
+        }
     }
 
-    override fun getLastMovie(): TMDBMovie? = lastMovie
+    override fun movieObservable(): Observable<TMDBMovie> = movieSubject
+
+
+
 }
