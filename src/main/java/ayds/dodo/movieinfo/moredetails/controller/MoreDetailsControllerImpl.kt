@@ -2,7 +2,7 @@ package ayds.dodo.movieinfo.moredetails.controller
 
 import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
 import ayds.dodo.movieinfo.moredetails.model.MoreDetailsModel
-import ayds.dodo.movieinfo.moredetails.view.HyperLinkAction
+import ayds.dodo.movieinfo.moredetails.view.HyperLink
 import ayds.dodo.movieinfo.moredetails.view.MoreDetailsUiEvent
 import ayds.dodo.movieinfo.moredetails.view.MoreDetailsView
 import ayds.observer.Observer
@@ -21,7 +21,7 @@ internal class MoreDetailsControllerImpl(
     private val observer: Observer<MoreDetailsUiEvent> = object : Observer<MoreDetailsUiEvent> {
         override fun update(value: MoreDetailsUiEvent) {
             when (value) {
-                is HyperlinkEvent -> openHyperLink(value)
+                is HyperLink -> openHyperLink(value)
             }
         }
     }
@@ -37,11 +37,11 @@ internal class MoreDetailsControllerImpl(
         }.start()
     }
 
-    private fun openHyperLink(hyperLink: HyperlinkEvent) {
-        if (HyperlinkEvent.EventType.ACTIVATED == hyperLink.eventType) {
+    private fun openHyperLink(hyperLink: HyperLink) {
+        if (HyperlinkEvent.EventType.ACTIVATED == hyperLink.event.eventType) {
             val desktop = Desktop.getDesktop()
             try {
-                val url = HyperLinkAction(hyperLink).hyperLink.url
+                val url = hyperLink.event.url
                 desktop.browse(url.toURI())
             } catch (exception: Exception) {
                 exception.printStackTrace()

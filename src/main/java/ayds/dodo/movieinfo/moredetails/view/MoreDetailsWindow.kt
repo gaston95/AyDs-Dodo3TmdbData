@@ -63,7 +63,7 @@ class MoreDetailsWindow(private val homeModel: MoreDetailsModel, private val for
     private fun initListeners() {
         descriptionTextPane.addHyperlinkListener { e: HyperlinkEvent ->
             if (HyperlinkEvent.EventType.ACTIVATED == e.eventType)
-                onActionSubject.notify(HyperLinkAction(e))
+                onActionSubject.notify(HyperLink(e))
         }
     }
 
