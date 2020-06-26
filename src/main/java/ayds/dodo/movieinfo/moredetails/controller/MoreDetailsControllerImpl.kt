@@ -20,7 +20,7 @@ internal class MoreDetailsControllerImpl(
     private val observer: Observer<MoreDetailsUiEvent> = object : Observer<MoreDetailsUiEvent> {
         override fun update(value: MoreDetailsUiEvent) {
             when (value) {
-                is HyperLinkAction -> onPosterPathAction(value)
+                is HyperLinkAction -> openHyperLink(value)
             }
         }
     }
@@ -36,7 +36,7 @@ internal class MoreDetailsControllerImpl(
         }.start()
     }
 
-    private fun onPosterPathAction(hyperLink: HyperLinkAction) {
+    private fun openHyperLink(hyperLink: HyperLinkAction) {
         val desktop = Desktop.getDesktop()
         try {
             val url = hyperLink.hyperLink.url
