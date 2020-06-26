@@ -10,7 +10,7 @@ import ayds.observer.Observer
 interface HomeController
 
 internal class HomeControllerImpl(
-    private val homeView: HomeView, private val homeModel: HomeModel
+    private val homeView: HomeView, private val homeModel: HomeModel, private val moreDetailsController: MoreDetailsControllerModule
 ) : HomeController {
 
     private val observer: Observer<UiEvent> = object : Observer<UiEvent> {
@@ -34,7 +34,7 @@ internal class HomeControllerImpl(
 
     private fun onMoreDetailsAction() {
         homeModel.getLastMovie()?.let {
-            MoreDetailsControllerModule.createMoreDetails(it)
+            moreDetailsController.createMoreDetails(it)
         }
 
     }
