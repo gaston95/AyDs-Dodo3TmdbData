@@ -24,7 +24,7 @@ internal class HTMLFormatter: Formatter {
     private val localMovie = "[*]"
 
     override fun getFormattedPlotText(movieData: TMDBMovie): String {
-        var formattedText = movieData.plot
+        var formattedText = movieData.getPlot()
         formattedText = replaceLineBreakMarks(formattedText)
         formattedText = textToHtml(formattedText)
         formattedText = highlightTitle(formattedText, movieData.title)
