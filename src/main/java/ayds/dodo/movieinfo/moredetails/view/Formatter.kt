@@ -21,9 +21,10 @@ internal class HTMLFormatter: Formatter {
     private val fontClose = "</font>"
     private val boldOpen = "<b>"
     private val boldClose = "</b>"
+    private val localMovie = "[*]"
 
     override fun getFormattedPlotText(movieData: TMDBMovie): String {
-        var formattedText = movieData.plot
+        var formattedText = movieData.getPlot()
         formattedText = replaceLineBreakMarks(formattedText)
         formattedText = textToHtml(formattedText)
         formattedText = highlightTitle(formattedText, movieData.title)
@@ -32,6 +33,12 @@ internal class HTMLFormatter: Formatter {
         formattedText += closeHTML()
         return formattedText
     }
+
+    private fun TMDBMovie.getPlot() =
+            when {
+                isLocallyStoraged -> localMovie + plot
+                else -> plot
+            }
 
     private fun replaceLineBreakMarks(text: String) =
             text.replace(doubleBackSlashLineBreak, singleLineBreak)

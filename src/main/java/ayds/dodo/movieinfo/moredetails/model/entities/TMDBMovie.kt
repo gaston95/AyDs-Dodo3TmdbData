@@ -5,6 +5,7 @@ open class TMDBMovie {
     open var plot = ""
     open var imageUrl = ""
     open var posterPath = ""
+    open var isLocallyStoraged = false
 }
 
 object DefaultMovie: TMDBMovie() {

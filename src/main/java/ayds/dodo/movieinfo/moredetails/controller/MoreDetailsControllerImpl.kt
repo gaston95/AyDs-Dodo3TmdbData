@@ -2,11 +2,12 @@ package ayds.dodo.movieinfo.moredetails.controller
 
 import ayds.dodo.movieinfo.home.model.entities.OmdbMovie
 import ayds.dodo.movieinfo.moredetails.model.MoreDetailsModel
-import ayds.dodo.movieinfo.moredetails.view.HyperLinkAction
+import ayds.dodo.movieinfo.moredetails.view.HyperLink
 import ayds.dodo.movieinfo.moredetails.view.MoreDetailsUiEvent
 import ayds.dodo.movieinfo.moredetails.view.MoreDetailsView
 import ayds.observer.Observer
 import java.awt.Desktop
+import javax.swing.event.HyperlinkEvent
 
 interface MoreDetailsController{
     fun createMoreDetails(movie: OmdbMovie)
@@ -20,7 +21,7 @@ internal class MoreDetailsControllerImpl(
     private val observer: Observer<MoreDetailsUiEvent> = object : Observer<MoreDetailsUiEvent> {
         override fun update(value: MoreDetailsUiEvent) {
             when (value) {
-                is HyperLinkAction -> onPosterPathAction(value)
+                is HyperLink -> openHyperLink(value)
             }
         }
     }
@@ -36,13 +37,15 @@ internal class MoreDetailsControllerImpl(
         }.start()
     }
 
-    private fun onPosterPathAction(hyperLink: HyperLinkAction) {
-        val desktop = Desktop.getDesktop()
-        try {
-            val url = hyperLink.hyperLink.url
-            desktop.browse(url.toURI())
-        } catch (exception: Exception) {
-            exception.printStackTrace()
+    private fun openHyperLink(hyperLink: HyperLink) {
+        if (HyperlinkEvent.EventType.ACTIVATED == hyperLink.event.eventType) {
+            val desktop = Desktop.getDesktop()
+            try {
+                val url = hyperLink.event.url
+                desktop.browse(url.toURI())
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+            }
         }
     }
 
