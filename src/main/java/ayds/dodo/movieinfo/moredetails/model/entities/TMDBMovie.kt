@@ -4,7 +4,7 @@ open class TMDBMovie {
     open var title = ""
     open var plot = ""
     open var imageUrl = ""
-    open var posterPath = ""
+    open var posterPath: String? = null
     open var isLocallyStoraged = false
 }
 

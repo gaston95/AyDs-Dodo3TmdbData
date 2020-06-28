@@ -29,7 +29,7 @@ internal class HTMLFormatter: Formatter {
         formattedText = textToHtml(formattedText)
         formattedText = highlightTitle(formattedText, movieData.title)
         formattedText += singleLineBreak
-        formattedText += getPosterPathText(movieData.posterPath)
+        formattedText += getPosterPathText(movieData)
         formattedText += closeHTML()
         return formattedText
     }
@@ -58,12 +58,18 @@ internal class HTMLFormatter: Formatter {
         return builder.toString()
     }
 
-    private fun getPosterPathText(posterPath: String) =
-            linkOpen +
-                    posterPath +
-                    greaterThanSymbol +
-                    hyperlinkText +
-                    linkClose
+    private fun getPosterPathText(movieData: TMDBMovie): String {
+        var posterPath = ""
+        movieData.posterPath?.let{
+            posterPath += linkOpen +
+                            it +
+                            greaterThanSymbol +
+                            hyperlinkText +
+                            linkClose
+        }
+        return posterPath
+    }
+
 
     private fun closeHTML(): String =
             bodyClose + htmlClose
