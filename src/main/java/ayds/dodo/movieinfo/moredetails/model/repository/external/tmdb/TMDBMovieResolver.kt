@@ -28,9 +28,9 @@ internal class TMDBMovieResolverImp :TMDBMovieResolver {
 
         searchResult?.let {
             val extract = searchResult[overviewProperty]
-            if (isNotNull(extract)) {
+            extract.getOrNull()?.let {
                 movieData.title = getTitleFromJson(searchResult[titleProperty])
-                movieData.plot = extract.asString
+                movieData.plot = it.asString
                 movieData.imageUrl = getImageUrlFromJson(searchResult[backdropPathProperty])
                 movieData.posterPath = getPosterPathFromJSon(searchResult[posterPathProperty])
 
@@ -60,15 +60,17 @@ internal class TMDBMovieResolverImp :TMDBMovieResolver {
         val year = yearJson?.asString?.split("-")?.toTypedArray()?.get(0) ?: ""
         return year == movieYear
     }
-    private fun isNotNull(element: JsonElement?): Boolean =
-            element != null && !element.isJsonNull
+
+    private fun JsonElement?.getOrNull(): JsonElement? =
+            if (this != null && !isJsonNull) this
+            else null
 
     private fun getTitleFromJson(titleJson: JsonElement) =
-            if (isNotNull(titleJson)) titleJson.asString else ""
+            titleJson.getOrNull()?.asString ?: ""
 
     private fun getImageUrlFromJson(backdropPathJson: JsonElement) =
-            if (isNotNull(backdropPathJson)) pathUrl + backdropPathJson.asString else ""
+            backdropPathJson.getOrNull()?.let { pathUrl + it.asString } ?: ""
 
     private fun getPosterPathFromJSon(posterPathJSon: JsonElement) =
-            if (isNotNull(posterPathJSon)) pathUrl + posterPathJSon.asString else ""
+            posterPathJSon.getOrNull()?.let { pathUrl + it.asString } ?: ""
 }

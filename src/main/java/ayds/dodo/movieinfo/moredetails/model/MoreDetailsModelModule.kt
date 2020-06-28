@@ -25,5 +25,5 @@ object MoreDetailsModelModule {
             TMDBMovieResolverImp()
     ))
 
-    val MoreDetailsModel: MoreDetailsModel = MoreDetailsModelImpl(repository)
+    val moreDetailsModel: MoreDetailsModel = MoreDetailsModelImpl(repository)
 }

@@ -17,7 +17,7 @@ internal class MoreDetailsModelImpl(private val repository: TMDBRepository) : Mo
     private var movieSubject = Subject<TMDBMovie>()
 
     override fun searchMovie(title: String, year: String) {
-        repository.getMovie(title, year).let {
+        repository.getMovie(title, year)?.let {
             movieSubject.notify(it)
         }
     }
