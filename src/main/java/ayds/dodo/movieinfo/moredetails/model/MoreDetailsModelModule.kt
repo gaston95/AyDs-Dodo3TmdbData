@@ -1,9 +1,9 @@
 package ayds.dodo.movieinfo.moredetails.model
 
 import ayds.dodo.movieinfo.moredetails.model.repository.TMDBRepositoryImp
-import ayds.dodo.movieinfo.moredetails.model.repository.external.tmdb.TMDBMovieResolverImp
-import ayds.dodo.movieinfo.moredetails.model.repository.external.tmdb.TMDBService
-import ayds.dodo.movieinfo.moredetails.model.repository.external.tmdb.TheMovieDBAPI
+import ayds.dodo3.tmdbdata.external.tmdb.TMDBMovieResolverImp
+import ayds.dodo3.tmdbdata.external.tmdb.TMDBService
+import ayds.dodo3.tmdbdata.external.tmdb.TheMovieDBAPI
 import ayds.dodo.movieinfo.moredetails.model.repository.local.sqldb.SQLQueriesImp
 import ayds.dodo.movieinfo.moredetails.model.repository.local.sqldb.SqlDBImp
 import retrofit2.Retrofit

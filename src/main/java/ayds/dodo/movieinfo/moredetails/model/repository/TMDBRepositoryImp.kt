@@ -2,7 +2,7 @@ package ayds.dodo.movieinfo.moredetails.model.repository
 
 import ayds.dodo.movieinfo.moredetails.model.entities.DefaultMovie
 import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
-import ayds.dodo.movieinfo.moredetails.model.repository.external.ExternalService
+import ayds.dodo3.tmdbdata.external.ExternalService
 import ayds.dodo.movieinfo.moredetails.model.repository.local.MoreDetailsLocalStorage
 import java.lang.Exception
 
