@@ -39,7 +39,6 @@ class MoreDetailsWindow(private val homeModel: MoreDetailsModel, private val for
 
     private fun createWindow() {
         contentPane.removeAll()
-        imagePanel.removeAll()
 
         contentPane.layout = BoxLayout(contentPane, BoxLayout.PAGE_AXIS)
         contentPane.add(JLabel(labelText))
@@ -89,6 +88,7 @@ class MoreDetailsWindow(private val homeModel: MoreDetailsModel, private val for
 
     private fun setImage(path: String?) {
         try {
+            imagePanel.removeAll()
             imagePanel.add(getImageIcon(path))
             contentPane.validate()
             contentPane.repaint()
