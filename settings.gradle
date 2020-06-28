@@ -1,4 +1,6 @@
 rootProject.name = 'JK Movie Info Dodo'
 
 include 'observer'
+include 'libs:TmdbData'
+findProject(':libs:TmdbData')?.name = 'TmdbData'
 
