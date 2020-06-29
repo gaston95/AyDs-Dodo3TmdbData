@@ -1,8 +1,9 @@
 package ayds.dodo3.tmdb.external
 
 
-import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
+
+import ayds.dodo3.tmdb.external.tmdb.TMDBMovieResponse
 
 interface ExternalService {
-    fun getMovie(title: String , year : String): TMDBMovie
+    fun getMovie(title: String , year : String): TMDBMovieResponse
 }

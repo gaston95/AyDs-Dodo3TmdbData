@@ -1,7 +1,7 @@
 package ayds.dodo3.tmdb.external.tmdb
 
 
-import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
+
 import ayds.dodo3.tmdb.external.ExternalService
 import retrofit2.Response
 
@@ -9,7 +9,7 @@ internal class TMDBService (private val tmdbAPI: TheMovieDBAPI,
                             private val tmdbMovieResolver: TMDBMovieResolver
 ) : ExternalService {
 
-    override fun getMovie(title: String, year: String): TMDBMovie {
+    override fun getMovie(title: String, year: String): TMDBMovieResponse {
         val callResponse = getTMDBMovieFromService(title)
         return tmdbMovieResolver.getMovie(callResponse.body(),year)
     }

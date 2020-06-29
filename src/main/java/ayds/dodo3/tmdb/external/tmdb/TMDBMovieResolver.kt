@@ -1,7 +1,6 @@
 package ayds.dodo3.tmdb.external.tmdb
 
-import ayds.dodo.movieinfo.moredetails.model.entities.DefaultMovie
-import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
+
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -9,7 +8,7 @@ import java.io.IOException
 
 internal interface TMDBMovieResolver {
 
-    fun getMovie(body: String?, year: String): TMDBMovie
+    fun getMovie(body: String?, year: String): TMDBMovieResponse
 
 }
 
@@ -22,9 +21,9 @@ internal class TMDBMovieResolverImp :TMDBMovieResolver {
     private val releaseDateProperty = "release_date"
     private val pathUrl = "https://image.tmdb.org/t/p/w400/"
 
-    override fun getMovie(body: String?,year: String): TMDBMovie {
+    override fun getMovie(body: String?,year: String): TMDBMovieResponse {
         val searchResult = searchMovie(body, year)
-        val movieData = TMDBMovie()
+        val movieData = TMDBMovieResponse()
 
         searchResult?.let {
             val extract = searchResult[overviewProperty]
