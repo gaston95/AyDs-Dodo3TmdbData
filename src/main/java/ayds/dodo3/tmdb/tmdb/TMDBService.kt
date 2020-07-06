@@ -1,8 +1,7 @@
-package ayds.dodo3.tmdb.external.tmdb
+package ayds.dodo3.tmdb.tmdb
 
 
 
-import ayds.dodo3.tmdb.external.ExternalService
 import retrofit2.Response
 
 internal class TMDBService (private val tmdbAPI: TheMovieDBAPI,

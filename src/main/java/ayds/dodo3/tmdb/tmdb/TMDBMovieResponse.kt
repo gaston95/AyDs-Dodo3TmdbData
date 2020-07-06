@@ -1,4 +1,4 @@
-package ayds.dodo3.tmdb.external.tmdb
+package ayds.dodo3.tmdb.tmdb
 
 open class TMDBMovieResponse {
     open var title = ""

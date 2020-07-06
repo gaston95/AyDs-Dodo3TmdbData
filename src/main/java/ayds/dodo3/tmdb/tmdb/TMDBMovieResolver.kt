@@ -1,4 +1,4 @@
-package ayds.dodo3.tmdb.external.tmdb
+package ayds.dodo3.tmdb.tmdb
 
 
 import com.google.gson.Gson

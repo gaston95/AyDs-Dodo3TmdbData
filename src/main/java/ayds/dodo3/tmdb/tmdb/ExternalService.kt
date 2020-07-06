@@ -1,8 +1,8 @@
-package ayds.dodo3.tmdb.external
+package ayds.dodo3.tmdb.tmdb
 
 
 
-import ayds.dodo3.tmdb.external.tmdb.TMDBMovieResponse
+import ayds.dodo3.tmdb.tmdb.TMDBMovieResponse
 
 interface ExternalService {
     fun getMovie(title: String , year : String): TMDBMovieResponse

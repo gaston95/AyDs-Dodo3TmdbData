@@ -1,12 +1,9 @@
-package ayds.dodo3.tmdb.external
+package ayds.dodo3.tmdb.tmdb
 
-import ayds.dodo3.tmdb.external.tmdb.TMDBMovieResolverImp
-import ayds.dodo3.tmdb.external.tmdb.TMDBService
-import ayds.dodo3.tmdb.external.tmdb.TheMovieDBAPI
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
-object TmdbDataModule {
+object TMDBDataModule {
 
     private const val apiUrl = "https://api.themoviedb.org/3/"
 
@@ -17,6 +14,6 @@ object TmdbDataModule {
 
     private fun getTMDBAPI(): TheMovieDBAPI = retrofit.create(TheMovieDBAPI::class.java)
 
-    val tmdbService:ExternalService= TMDBService(getTMDBAPI(),
-        TMDBMovieResolverImp())
+    val tmdbService: ExternalService = TMDBService(getTMDBAPI(),
+            TMDBMovieResolverImp())
 }
