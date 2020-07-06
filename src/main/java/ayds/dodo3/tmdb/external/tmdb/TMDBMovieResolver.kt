@@ -1,6 +1,7 @@
-package ayds.dodo3.tmdb.external.tmdb
+package ayds.dodo.movieinfo.moredetails.model.repository.external.tmdb
 
-
+import ayds.dodo.movieinfo.moredetails.model.entities.DefaultMovie
+import ayds.dodo.movieinfo.moredetails.model.entities.TMDBMovie
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -8,7 +9,7 @@ import java.io.IOException
 
 internal interface TMDBMovieResolver {
 
-    fun getMovie(body: String?, year: String): TMDBMovieResponse
+    fun getMovie(body: String?, year: String): TMDBMovie
 
 }
 
@@ -20,10 +21,12 @@ internal class TMDBMovieResolverImp :TMDBMovieResolver {
     private val posterPathProperty = "poster_path"
     private val releaseDateProperty = "release_date"
     private val pathUrl = "https://image.tmdb.org/t/p/w400/"
+    private var defaultImageUrl = "https://www.themoviedb.org/assets/2/v4/logos/" +
+            "256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png"
 
-    override fun getMovie(body: String?,year: String): TMDBMovieResponse {
+    override fun getMovie(body: String?,year: String): TMDBMovie {
         val searchResult = searchMovie(body, year)
-        val movieData = TMDBMovieResponse()
+        val movieData = TMDBMovie()
 
         searchResult?.let {
             val extract = searchResult[overviewProperty]
@@ -61,15 +64,15 @@ internal class TMDBMovieResolverImp :TMDBMovieResolver {
     }
 
     private fun JsonElement?.getOrNull(): JsonElement? =
-            if (this != null && !isJsonNull) this
-            else null
+        if (this != null && !isJsonNull) this
+        else null
 
     private fun getTitleFromJson(titleJson: JsonElement) =
-            titleJson.getOrNull()?.asString ?: ""
+        titleJson.getOrNull()?.asString ?: ""
 
     private fun getImageUrlFromJson(backdropPathJson: JsonElement) =
-            backdropPathJson.getOrNull()?.let { pathUrl + it.asString } ?: ""
+        backdropPathJson.getOrNull()?.let { pathUrl + it.asString } ?: defaultImageUrl
 
     private fun getPosterPathFromJSon(posterPathJSon: JsonElement) =
-            posterPathJSon.getOrNull()?.let { pathUrl + it.asString } ?: ""
+        posterPathJSon.getOrNull()?.let { pathUrl + it.asString }
 }
