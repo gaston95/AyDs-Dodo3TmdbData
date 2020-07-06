@@ -1,8 +1,6 @@
-package ayds.dodo.movieinfo.moredetails.model.repository.external.tmdb
+package ayds.dodo3.tmdb.external.tmdb
 
 
-import ayds.dodo3.tmdb.external.tmdb.DefaultMovie
-import ayds.dodo3.tmdb.external.tmdb.TMDBMovieResponse
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -14,7 +12,7 @@ internal interface TMDBMovieResolver {
 
 }
 
-internal class TMDBMovieResolverImp :TMDBMovieResolver {
+internal class TMDBMovieResolverImp : TMDBMovieResolver {
 
     private val titleProperty = "title"
     private val overviewProperty = "overview"
