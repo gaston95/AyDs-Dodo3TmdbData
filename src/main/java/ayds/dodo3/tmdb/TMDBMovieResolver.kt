@@ -6,7 +6,7 @@ import com.google.gson.JsonObject
 import java.io.IOException
 
 internal interface TMDBMovieResolver {
-    fun getMovie(body: String?, year: String): TMDBMovieResponse
+    fun getMovie(body: String?, year: String): TMDBMovie
 }
 
 internal class TMDBMovieResolverImpl : TMDBMovieResolver {
@@ -20,9 +20,9 @@ internal class TMDBMovieResolverImpl : TMDBMovieResolver {
     private var defaultImageUrl = "https://www.themoviedb.org/assets/2/v4/logos/" +
             "256x256-dark-bg-01a111196ed89d59b90c31440b0f77523e9d9a9acac04a7bac00c27c6ce511a9.png"
 
-    override fun getMovie(body: String?,year: String): TMDBMovieResponse {
+    override fun getMovie(body: String?,year: String): TMDBMovie {
         val searchResult = searchMovie(body, year)
-        val movieData = TMDBMovieResponse()
+        val movieData = TMDBMovie()
 
         searchResult?.let {
             val extract = searchResult[overviewProperty]

@@ -20,15 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a18c41b8-722e-4f21-aef6-955f2bdcefb0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ayds/dodo3/tmdb/tmdb/ExternalService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ayds/dodo3/tmdb/TMDBService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ayds/dodo3/tmdb/tmdb/TMDBDataModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ayds/dodo3/tmdb/TMDBDataModule.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ayds/dodo3/tmdb/tmdb/TMDBMovieResolver.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ayds/dodo3/tmdb/TMDBMovieResolver.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ayds/dodo3/tmdb/tmdb/TMDBMovieResponse.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ayds/dodo3/tmdb/TMDBMovie.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ayds/dodo3/tmdb/tmdb/TMDBService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ayds/dodo3/tmdb/TMDBServiceImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ayds/dodo3/tmdb/tmdb/TheMovieDBAPI.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ayds/dodo3/tmdb/TheMovieDBAPI.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -8,7 +8,7 @@ internal class TMDBServiceImpl (private val tmdbAPI: TheMovieDBAPI,
                                 private val tmdbMovieResolver: TMDBMovieResolver
 ) : TMDBService {
 
-    override fun getMovie(title: String, year: String): TMDBMovieResponse {
+    override fun getMovie(title: String, year: String): TMDBMovie {
         val callResponse = getTMDBMovieFromService(title)
         return tmdbMovieResolver.getMovie(callResponse.body(),year)
     }
