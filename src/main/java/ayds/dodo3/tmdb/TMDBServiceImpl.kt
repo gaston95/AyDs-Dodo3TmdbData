@@ -1,12 +1,12 @@
-package ayds.dodo3.tmdb.tmdb
+package ayds.dodo3.tmdb
 
 
 
 import retrofit2.Response
 
-internal class TMDBService (private val tmdbAPI: TheMovieDBAPI,
-                            private val tmdbMovieResolver: TMDBMovieResolver
-) : ExternalService {
+internal class TMDBServiceImpl (private val tmdbAPI: TheMovieDBAPI,
+                                private val tmdbMovieResolver: TMDBMovieResolver
+) : TMDBService {
 
     override fun getMovie(title: String, year: String): TMDBMovieResponse {
         val callResponse = getTMDBMovieFromService(title)

@@ -1,14 +1,13 @@
-package ayds.dodo3.tmdb.tmdb
+package ayds.dodo3.tmdb
 
-open class TMDBMovieResponse {
+open class TMDBMovie {
     open var title = ""
     open var plot = ""
     open var imageUrl = ""
     open var posterPath: String? = null
-    open var isLocallyStoraged = false
 }
 
-object DefaultMovie: TMDBMovieResponse() {
+object DefaultMovie: TMDBMovie() {
     override var title = "No results"
     override var plot = "No results"
     override var imageUrl = "https://www.themoviedb.org/assets/2/v4/logos/" +

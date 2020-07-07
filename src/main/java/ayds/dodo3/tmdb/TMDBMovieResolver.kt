@@ -1,5 +1,4 @@
-package ayds.dodo3.tmdb.tmdb
-
+package ayds.dodo3.tmdb
 
 import com.google.gson.Gson
 import com.google.gson.JsonElement
@@ -7,12 +6,10 @@ import com.google.gson.JsonObject
 import java.io.IOException
 
 internal interface TMDBMovieResolver {
-
     fun getMovie(body: String?, year: String): TMDBMovieResponse
-
 }
 
-internal class TMDBMovieResolverImp : TMDBMovieResolver {
+internal class TMDBMovieResolverImpl : TMDBMovieResolver {
 
     private val titleProperty = "title"
     private val overviewProperty = "overview"

@@ -1,4 +1,4 @@
-package ayds.dodo3.tmdb.tmdb
+package ayds.dodo3.tmdb
 
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -14,6 +14,6 @@ object TMDBDataModule {
 
     private fun getTMDBAPI(): TheMovieDBAPI = retrofit.create(TheMovieDBAPI::class.java)
 
-    val tmdbService: ExternalService = TMDBService(getTMDBAPI(),
-            TMDBMovieResolverImp())
+    val tmdbService: TMDBService = TMDBServiceImpl(getTMDBAPI(),
+            TMDBMovieResolverImpl())
 }
